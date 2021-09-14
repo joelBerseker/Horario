@@ -15,7 +15,7 @@
 
 <script>
 import axios from "axios";
- var urlUsers = 'localhost:80/Horario/backend/index.php';
+ var urlUsers = 'http://localhost:80/Horario/backend/index.php';
 //const url = process.env.VUE_APP_RUTA_API;
 /*import {
   Module,
