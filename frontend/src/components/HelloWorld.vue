@@ -9,7 +9,7 @@
       >.
     </p>
     <h3>Ecosystem</h3>
-      <p>{{respuesta}}</p>
+      <p>{{this.respuesta}}</p>
   </div>
 </template>
 
@@ -38,7 +38,7 @@ export default {
   },*/
   async created() {
     axios.get(urlUsers).then(response => {
-      this.lists = response.data
+      this.respuesta = response.data
     }).catch(function (error) {
       console.log(error);
     });
