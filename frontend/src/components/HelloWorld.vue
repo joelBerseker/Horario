@@ -16,7 +16,7 @@
 
 <script>
 import axios from "axios";
- var urlUsers = 'http://localhost:80/Horario/backend/index.php';
+ var urlUsers = 'http://localhost:80/Horario/backend/';
 //const url = process.env.VUE_APP_RUTA_API;
 /*import {
   Module,
@@ -38,6 +38,7 @@ export default {
     },
   },*/
   async created() {
+    
     axios.get(urlUsers).then(response => {
       this.respuesta = response.data
     }).catch(function (error) {
