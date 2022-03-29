@@ -5,14 +5,23 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "start": "node serve.js"
   },
   "dependencies": {
-    "axios": "^0.21.4",
+    "@popperjs/core": "^2.10.2",
+    "axios": "^0.24.0",
+    "bootstrap": "^4.5.3",
+    "bootstrap-vue": "^2.21.2",
     "core-js": "^3.6.5",
-    "vue": "^3.0.0",
-    "vue-router": "^4.0.0-0",
-    "vuex": "^4.0.0-0"
+    "jscharting-vue": "^2.1.0",
+    "portal-vue": "^2.1.7",
+    "sweetalert": "^2.1.2",
+    "vue": "^2.6.14",
+    "vue-bot-ui": "^0.2.8",
+    "vue-router": "^3.2.0",
+    "vuex": "^3.4.0",
+    "vuex-persistedstate": "^4.1.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
@@ -20,13 +29,12 @@
     "@vue/cli-plugin-router": "~4.5.0",
     "@vue/cli-plugin-vuex": "~4.5.0",
     "@vue/cli-service": "~4.5.0",
-    "@vue/compiler-sfc": "^3.0.0",
-    "@vue/eslint-config-prettier": "^6.0.0",
     "babel-eslint": "^10.1.0",
     "eslint": "^6.7.2",
-    "eslint-plugin-prettier": "^3.3.1",
-    "eslint-plugin-vue": "^7.0.0",
-    "prettier": "^2.2.1"
+    "eslint-plugin-vue": "^6.2.2",
+    "stylus": "^0.54.7",
+    "stylus-loader": "^3.0.2",
+    "vue-template-compiler": "^2.6.11"
   },
   "eslintConfig": {
     "root": true,
@@ -34,9 +42,8 @@
       "node": true
     },
     "extends": [
-      "plugin:vue/vue3-essential",
-      "eslint:recommended",
-      "@vue/prettier"
+      "plugin:vue/essential",
+      "eslint:recommended"
     ],
     "parserOptions": {
       "parser": "babel-eslint"
