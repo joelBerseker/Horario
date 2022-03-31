@@ -11,7 +11,8 @@ use PDOException;
 class TypeProduct extends Model{
 
     private string $id;
-    private array $posts;
+    private int $TypeProEstReg;
+    private $TypeProFecAct;
     private string $TypeProImg;
 
     public function __construct(
@@ -20,11 +21,12 @@ class TypeProduct extends Model{
     )
     {
         parent::__construct();
-        $this->posts = [];
         $this->TypeProImg = '';
+        $this->TypeProEstReg=0;
+        $this->TypeProFecAct='';
     }
 
-    public static function exists($TypeProName){
+    /*public static function exists($TypeProName){
         try{
             $db = new Database();
             $query = $db->connect()->prepare('SELECT TypeProName FROM typeproduct WHERE TypeProName = :TypeProName');
@@ -39,10 +41,13 @@ class TypeProduct extends Model{
             echo $e;
             return false;
         }
-    }
+    }*/
 
    
-
+    /**
+     * @description Guardar Datos
+     * 
+     */
     public function save(){
         try{
             
@@ -57,8 +62,24 @@ class TypeProduct extends Model{
             error_log($e);
             return false;
         }
+    }
+    public function update(){
+        try{
+            $query = $this->prepare('UPDATE typeproduct SET TypeProName =:TypeProName, TypeProDes=:TypeProDes, TypeProImg= :TypeProImg, TypeProEstReg=:TypeProEstReg WHERE TypeProID=:TypeProID');
+            return $query->execute([
+                'TypeProName'  => $this->TypeProName, 
+                'TypeProDes'  => $this->TypeProDes,
+                'TypeProImg'  => $this->TypeProImg,
+                'TypeProEstReg' =>$this->TypeProEstReg,
+                'TypeProID'=> $this->id,
+                ]);
+        }catch(PDOException $e){
+            error_log($e);
+            return false;
+        }
     } 
 
+    
     public static function get($TypeProName){
         try{
             $db = new Database();
@@ -75,7 +96,20 @@ class TypeProduct extends Model{
             return false;
         }
     }
-
+    public static function delete($TypeProID){
+        try{
+            $db = new Database();
+            $query = $db->connect()->prepare('DELETE FROM typeproduct WHERE TypeProID = :TypeProID');
+            if ($query->execute([ 'TypeProID' => $TypeProID])){
+                return true;
+            }
+            else
+                return false;
+        }catch(PDOException $e){
+            echo "yo falso";
+            return false;
+        } 
+    }
     public static function getById($TypeProID){
         try{
             $db = new Database();
@@ -85,29 +119,47 @@ class TypeProduct extends Model{
             $typeProduct = new TypeProduct($data['TypeProName'], $data['TypeProDes']);
             $typeProduct->setId($data['TypeProID']);
             $typeProduct->setTypeProImg($data['TypeProImg']);
+            $typeProduct->setTypeProEstReg($data['TypeProEstReg']);
+            $typeProduct->setTypeProFecAct($data['TypeProFecAct']);
+            return $typeProduct->toArray();
+        }catch(PDOException $e){
+            return false;
+        }
+    }
+    public static function getByIds($TypeProID){
+        try{
+            $db = new Database();
+            $query = $db->connect()->prepare('SELECT * FROM typeproduct WHERE TypeProID = :TypeProID');
+            $query->execute([ 'TypeProID' => $TypeProID]);
+            $data = $query->fetch(PDO::FETCH_ASSOC);
+            $typeProduct = new TypeProduct($data['TypeProName'], $data['TypeProDes']);
+            $typeProduct->setId($data['TypeProID']);
+            $typeProduct->setTypeProImg($data['TypeProImg']);
+            $typeProduct->setTypeProEstReg($data['TypeProEstReg']);
+            $typeProduct->setTypeProFecAct($data['TypeProFecAct']);
             return $typeProduct;
         }catch(PDOException $e){
             return false;
         }
     }
 
-    public function getAll(){
+    public static function getAll(){
         $items = [];
-
         try{
-            $query = $this->query('SELECT * FROM typeproduct');
-
+            $db = new Database();
+            $query = $db->connect()->query('SELECT * FROM typeproduct ORDER BY TypeProFecAct DESC');
             while($p = $query->fetch(PDO::FETCH_ASSOC)){
                 $item = new TypeProduct($p['TypeProName'], $p['TypeProDes']);
                 $item->setId($p['TypeProID']);
                 $item->setTypeProImg($p['TypeProImg']);
-
-                array_push($items, $item);
+                $item->setTypeProEstReg($p['TypeProEstReg']);
+                $item->setTypeProFecAct($p['TypeProFecAct']);
+                
+                array_push($items, $item->toArray());
             }
             return $items;
-
-
         }catch(PDOException $e){
+            echo "error";
             echo $e;
         }
     }
@@ -119,17 +171,33 @@ class TypeProduct extends Model{
     public function setId(string $value){
         $this->id = $value;
     }
-
+    public function getTypeProEstReg():int{
+        return $this->TypeProEstReg;
+    }
+    public function setTypeProEstReg(int $value){
+        $this->TypeProEstReg = $value;
+    }
+    public function getTypeProFecAct():string{
+        return $this->TypeProFecAct;
+    }
+    public function setTypeProFecAct(string $value){
+        $this->TypeProFecAct = $value;
+    }
+    public function toArray():array{
+        $arr = array("id"=>$this->id,"name"=>$this->TypeProName,"image"=>$this->TypeProImg,"description"=>$this->TypeProDes,"state"=>$this->TypeProEstReg,"UpdateDate"=>$this->TypeProFecAct);
+        return $arr;
+    }
     public function getTypeProName(){
         return $this->TypeProName;
     }
-
-    public function getPosts(){
-        return $this->posts;
+    public function setTypeProName($value){
+        $this->TypeProName = $value;
     }
-
-    public function setPosts($value){
-        $this->posts = $value;
+    public function getTypeProDes(){
+        return $this->TypeProDes;
+    }
+    public function setTypeProDes($value){
+        $this->TypeProDes = $value;
     }
 
     public function setTypeProImg($value){
@@ -139,60 +207,4 @@ class TypeProduct extends Model{
     public function getTypeProImg(){
         return $this->TypeProImg;
     }
-
-    /*public function publish(Post $post){
-        $res = $post->publish($this->id);
-        array_push($this->posts, $res);
-    }
-
-    public function fetchPosts(){
-        $this->posts = PostImage::getAll($this->getId());
-    }
-
-    /* 
-    public function getTypeProName():string{
-        return $this->TypeProName;
-    } */
-
-    /*  */
-
-   /*  public function getPosts():array{
-        return $this->posts;
-    }
-    public function getFollowers():array{
-        return $this->followers;
-    }
-    public function showPosts(){
-        foreach($this->posts as $post){
-            var_dump($post->toString());
-        }
-    }
-    private function hasFollower(User $typeProduct){
-        $found = array_filter(
-            $this->followers, 
-            fn (User $follower) => $follower->id === $typeProduct->id
-        );
-        return count($found) === 1;
-    }
-    public function addFollower(User $typeProduct){
-        if(!$this->hasFollower($typeProduct)){
-            if($this->id === $typeProduct->id){
-                print_r("No te puedes agregar a ti mismo como follower \n");
-            }else{
-                array_push($this->followers, $typeProduct);
-            }
-        }else{
-            print_r("El usuario $typeProduct->TypeProName ya es un follower \n");
-        }
-    }
-    public static function showTypeProImg(User $typeProduct){
-        $TypeProImg = "Nombre: $typeProduct->TypeProName \n";
-        $TypeProImg .= "Followers: " . count($typeProduct->followers) . "\n";
-        $TypeProImg .= "Posts: " . count($typeProduct->posts) . "\n\n";
-        return $TypeProImg;
-    } */
-
-
-    
-
 }
