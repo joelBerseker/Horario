@@ -1,12 +1,13 @@
 <?php
-
+use User\Backend\controllers\Home;
 $router = new \Bramus\Router\Router();
 session_start();
 
 
 
 $router ->get('/',function(){
-    echo "Inicio como estamos";
+    $controller = new Home();
+    $controller->index();
 });
 $router ->post('/login',function(){
     echo "Hello World";
