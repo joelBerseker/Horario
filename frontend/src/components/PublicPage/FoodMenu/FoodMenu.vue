@@ -2,10 +2,12 @@
   <div class="pt-5">
     <b-row>
       <b-col cols="3">
-        <div class="food-title mt-4 general-padding">
-          <h5 class="m-0 p-0">Categorias</h5>
+        <div class="gpl">
+          <div class="food-title mt-4">
+            <h5 class="m-0 p-0">Categorias</h5>
+          </div>
         </div>
-        <div>
+        <div class="gpl">
           <b-list-group>
             <b-list-group-item>Sopas</b-list-group-item>
             <b-list-group-item>Platos tipicos</b-list-group-item>
@@ -16,12 +18,19 @@
         </div>
       </b-col>
       <b-col cols="9">
-        <div class="food-title mt-4 general-padding">
-          <h5 class="m-0 p-0">Platos tipicos</h5>
+        <div class="gpr">
+          <div class="food-title mt-4">
+            <h5 class="m-0 p-0">Platos tipicos</h5>
+          </div>
         </div>
-        <div class="general-padding">
+        <div class="gpr">
           <b-row class="mt-4">
-            <b-col cols="4" v-for="item in nav_items" :key="item.value">
+            <b-col
+              class="mb-4"
+              cols="4"
+              v-for="item in nav_items"
+              :key="item.value"
+            >
               <div>
                 <div class="">
                   <div class="food-price">

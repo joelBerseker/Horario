@@ -6,6 +6,7 @@ import Home from "@/components/PublicPage/Home";
 import Contact from "@/components/PublicPage/Contact";
 import About from "@/components/PublicPage/About";
 import FoodMenu from "@/components/PublicPage/FoodMenu/FoodMenu";
+import Promotion from "@/components/PublicPage/Promotion";
 
 Vue.use(VueRouter)
 
@@ -16,7 +17,7 @@ const routes = [
     component: Navbar,
     children: [
       {
-        path: "/home",
+        path: "/",
         name: "Home",
         component: Home,
         props: true
@@ -37,6 +38,12 @@ const routes = [
         path: "/food_menu",
         name: "FoodMenu",
         component: FoodMenu,
+        props: true
+      },
+      {
+        path: "/promotion",
+        name: "Promotion",
+        component: Promotion,
         props: true
       },
     ]
