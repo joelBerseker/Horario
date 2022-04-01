@@ -1,30 +1,7 @@
 <template>
-  <div>
-    <b-carousel
-      id="carousel-1"
-      v-model="slide"
-      :interval="10000"
-      controls
-      indicators
-      background="#ababab"
-      img-width="1024"
-      img-height="180"
-      style="text-shadow: 1px 1px 2px #333"
-      @sliding-start="onSlideStart"
-      @sliding-end="onSlideEnd"
-    >
-      <b-carousel-slide v-for="item in img_items" :key="item.value">
-        <template #img>
-          <div
-            class="background-image"
-            :style="'background-image: url(' + item.img + '); height: 60vh;'"
-          ></div>
-        </template>
-      </b-carousel-slide>
-    </b-carousel>
-
+  <div class="pt-5">
     <div class="food-title mt-4 gp">
-      <h5 class="m-0 p-0">Mejores promociones</h5>
+      <h5 class="m-0 p-0">Todas nuestras promociones</h5>
     </div>
     <div class="gp">
       <b-row class="mt-4">
@@ -45,11 +22,7 @@
             </div>
           </div>
         </b-col>
-        <b-col>
-          <b-button class="mt-4 float-right" variant="primary" :to="{ name: 'Promotion' }">
-            Ver mas promociones
-          </b-button>
-        </b-col>
+      
       </b-row>
     </div>
   </div>
@@ -92,12 +65,7 @@ export default {
       ],
     };
   },
-  methods: {
-    imagenDir(img) {
-      return "background-image: url('" + img + "');";
-    },
-  },
-};
+}
 </script>
 
 <style scoped>
