@@ -11,56 +11,34 @@ use PDOException;
 class User extends Model{
 
     private string $id;
-    private array $posts;
-    private string $profile;
+    private int $UserEstReg;
+    private $UserFecAct;
 
     public function __construct(
-        private string $username,
-        private string $password
+        private int $UserRoleID,
+        private string $UserName,
+        private string $UserNickName,
+        private string $UserPass,
     )
     {
         parent::__construct();
-        $this->posts = [];
-        $this->profile = '';
-    }
-
-    public static function exists($username){
-        try{
-            $db = new Database();
-            $query = $db->connect()->prepare('SELECT username FROM users WHERE username = :username');
-            $query->execute( ['username' => $username]);
-            
-            if($query->rowCount() > 0){
-                return true;
-            }else{
-                return false;
-            }
-        }catch(PDOException $e){
-            echo $e;
-            return false;
-        }
+        $this->UserEstReg=0;
+        $this->UserFecAct='';
     }
 
     private function getHashedPassword($password){
         return password_hash($password, PASSWORD_DEFAULT, ['cost' => 10]);
     }
 
-    public function comparePasswords($current){
-        try{
-            return password_verify($current, $this->password);
-        }catch(PDOException $e){
-            return NULL;
-        }
-    }
-
     public function save(){
         try{
-            $hash = $this->getHashedPassword($this->password);
-            $query = $this->prepare('INSERT INTO users (username, password, profile) VALUES(:username, :password, :profile)');
+            $hash = $this->getHashedPassword($this->UserPass);
+            $query = $this->prepare('INSERT INTO User (UserRoleID, UserName, UserNickName, UserPass) VALUES(:UserRoleID, :UserName, :UserNickName, :UserPass)');
             $query->execute([
-                'username'  => $this->username, 
-                'password'  => $hash,
-                'profile'  => $this->profile,
+                'UserRoleID'  => $this->UserRoleID, 
+                'UserName'  => $this->UserName, 
+                'UserNickName'  => $this->UserNickName, 
+                'UserPass'  => $hash,
                 ]);
             return true;
         }catch(PDOException $e){
@@ -69,55 +47,114 @@ class User extends Model{
         }
     } 
 
-    public static function get($username){
+    public function update(){
+        try{
+            $hash = $this->getHashedPassword($this->UserPass);
+            $query = $this->prepare('UPDATE User SET UserRoleID =:UserRoleID, UserName =:UserName, UserNickName =:UserNickName, UserPass =:UserPass, UserEstReg=:UserEstReg WHERE UserID=:UserID');
+            return $query->execute([
+                'UserRoleID'  => $this->UserRoleID,
+                'UserName'  => $this->UserName,
+                'UserNickName'  => $this->UserNickName,
+                'UserPass'  => $this->hash,
+                'UserEstReg' =>$this->UserEstReg,
+                'UserID'=> $this->id,
+                ]);
+        }catch(PDOException $e){
+            error_log($e);
+            return false;
+        }
+    } 
+
+    public static function get($UserName){
         try{
             $db = new Database();
-            $query = $db->connect()->prepare('SELECT * FROM users WHERE username = :username');
-            $query->execute([ 'username' => $username]);
+            $query = $db->connect()->prepare('SELECT * FROM user WHERE UserName = :UserName');
+            $query->execute([ 'UserName' => $UserName]);
             $data = $query->fetch(PDO::FETCH_ASSOC);
-            error_log($data['username']);
-            error_log($data['password']);
-            $user = new User($data['username'], $data['password']);
-            $user->setId($data['user_id']);
-            $user->setProfile($data['profile']);
+            error_log($data['UserRoleID']);
+            error_log($data['UserName']);
+            error_log($data['UserNickName']);
+            error_log($data['UserPass']);
+            $user = new User($data['UserRoleID'], $data['UserName'],$data['UserRoleID'], $data['UserPass']);
+            $user->setId($data['UserID']);
+            $user->setUserRoleID($data['UserRoleID']);
+            $user->setUserNickName($data['UserNickName']);
+            $user->setUserPass($data['UserPass']);
             return $user;
         }catch(PDOException $e){
             return false;
         }
     }
 
-    public static function getById($user_id){
+    public static function delete($UserID){
         try{
             $db = new Database();
-            $query = $db->connect()->prepare('SELECT * FROM users WHERE user_id = :user_id');
-            $query->execute([ 'user_id' => $user_id]);
+            $query = $db->connect()->prepare('DELETE FROM User WHERE UserID = :UserID');
+            if ($query->execute([ 'UserID' => $UserID])){
+                return true;
+            }
+            else
+                return false;
+        }catch(PDOException $e){
+            return false;
+        } 
+    }
+    public static function getById($UserID){
+        try{
+            $db = new Database();
+            $query = $db->connect()->prepare('SELECT * FROM user WHERE UserID = :UserID');
+            $query->execute([ 'UserID' => $UserID]);
             $data = $query->fetch(PDO::FETCH_ASSOC);
-            $user = new User($data['username'], $data['password']);
-            $user->setId($data['user_id']);
-            $user->setProfile($data['profile']);
+            $user = new User($data['UserRoleID'], $data['UserName'],$data['UserNickName'],$data['UserPass']);
+            $user->setId($data['UserID']);
+            $user->setUserRoleID($data['UserRoleID']);
+            $user->setUserNickName($data['UserNickName']);
+            $user->setUserPass($data['UserPass']);
+            $user->setUserEstReg($data['UserEstReg']);
+            $user->setUserFecAct($data['UserFecAct']);
+            return $user->toArray();
+        }catch(PDOException $e){
+            return false;
+        }
+    }
+    public static function getByIds($UserID){
+        try{
+            $db = new Database();
+            $query = $db->connect()->prepare('SELECT * FROM user WHERE UserID = :UserID');
+            $query->execute([ 'UserID' => $UserID]);
+            $data = $query->fetch(PDO::FETCH_ASSOC);
+            $user = new User($data['UserRoleID'], $data['UserName'],$data['UserNickName'],$data['UserPass']);
+            $user->setId($data['UserID']);
+            $user->setUserRoleID($data['UserRoleID']);
+            $user->setUserNickName($data['UserNickName']);
+            $user->setUserPass($data['UserPass']);
+            $user->setUserEstReg($data['UserEstReg']);
+            $user->setUserFecAct($data['UserFecAct']);
             return $user;
         }catch(PDOException $e){
             return false;
         }
     }
 
-    public function getAll(){
+    public static function getAll(){
         $items = [];
-
         try{
-            $query = $this->query('SELECT * FROM users');
-
+            $db = new Database();
+            $query = $db->connect()->query('SELECT * FROM User ORDER BY UserFecAct DESC');
             while($p = $query->fetch(PDO::FETCH_ASSOC)){
-                $item = new User($p['username'], $p['password']);
-                $item->setId($p['user_id']);
-                $item->setProfile($p['profile']);
-
-                array_push($items, $item);
+                $item = new User($p['UserRoleID'],$p['UserName'],$p['UserNickName'],$p['UserPass']);
+                $item->setId($p['AccID']);
+                $item->setUserRoleID($p['UserRoleID']);
+                $item->setUserName($p['UserName']);
+                $item->setUserNickName($p['UserNickName']);
+                $item->setUserPass($p['UserPass']);
+                $item->setUserEstReg($p['UserEstReg']);
+                $item->setUserFecAct($p['UserFecAct']);
+                array_push($items, $item->toArray());
             }
             return $items;
-
-
         }catch(PDOException $e){
+            echo "error";
             echo $e;
         }
     }
@@ -129,80 +166,44 @@ class User extends Model{
     public function setId(string $value){
         $this->id = $value;
     }
-
-    public function getUsername(){
-        return $this->username;
+    public function getUserEstReg():int{
+        return $this->UserEstReg;
     }
-
-    public function getPosts(){
-        return $this->posts;
+    public function setUserEstReg(int $value){
+        $this->UserEstReg = $value;
     }
-
-    public function setPosts($value){
-        $this->posts = $value;
+    public function getUserFecAct():string{
+        return $this->UserFecAct;
     }
-
-    public function setProfile($value){
-        $this->profile = $value;
+    public function setUserFecAct(string $value){
+        $this->UserFecAct = $value;
     }
-
-    public function getProfile(){
-        return $this->profile;
+    public function toArray():array{
+        $arr = array("id"=>$this->id,"name"=>$this->UserName,"roleid"=>$this->UserRoleID,"nickname"=>$this->UserNickName,"password"=>$this->UserPass,"state"=>$this->UserEstReg,"UpdateDate"=>$this->UserFecAct);
+        return $arr;
     }
-
-    /*public function publish(Post $post){
-        $res = $post->publish($this->id);
-        array_push($this->posts, $res);
+    public function getUserName(){
+        return $this->UserName;
     }
-
-    public function fetchPosts(){
-        $this->posts = PostImage::getAll($this->getId());
+    public function setUserName($value){
+        $this->UserName = $value;
     }
-
-    /* 
-    public function getUsername():string{
-        return $this->username;
-    } */
-
-    /*  */
-
-   /*  public function getPosts():array{
-        return $this->posts;
+    public function getUserRoleID(){
+        return $this->UserRoleID;
     }
-    public function getFollowers():array{
-        return $this->followers;
+    public function setUserRoleID($value){
+        $this->UserRoleID = $value;
     }
-    public function showPosts(){
-        foreach($this->posts as $post){
-            var_dump($post->toString());
-        }
+    public function getUserNickName(){
+        return $this->UserNickName;
     }
-    private function hasFollower(User $user){
-        $found = array_filter(
-            $this->followers, 
-            fn (User $follower) => $follower->id === $user->id
-        );
-        return count($found) === 1;
+    public function setUserNickName($value){
+        $this->UserNickName = $value;
     }
-    public function addFollower(User $user){
-        if(!$this->hasFollower($user)){
-            if($this->id === $user->id){
-                print_r("No te puedes agregar a ti mismo como follower \n");
-            }else{
-                array_push($this->followers, $user);
-            }
-        }else{
-            print_r("El usuario $user->username ya es un follower \n");
-        }
+    public function getUserPass(){
+        return $this->UserPass;
     }
-    public static function showProfile(User $user){
-        $profile = "Nombre: $user->username \n";
-        $profile .= "Followers: " . count($user->followers) . "\n";
-        $profile .= "Posts: " . count($user->posts) . "\n\n";
-        return $profile;
-    } */
-
-
-    
-
+    public function setUserPass($value){
+        $this->UserPass = $value;
+    }
 }
