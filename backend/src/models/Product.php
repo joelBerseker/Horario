@@ -17,45 +17,29 @@ class Product extends Model{
 
     public function __construct(
         private string $ProName,
-        private string $ProDes
+        private string $ProDes,
+        private int $ProTypeProID,
+        private int $ProPre
     )
     {
         parent::__construct();
         $this->ProImg = '';
         $this->ProEstReg=0;
         $this->ProFecAct='';
+        $this->ProProm=0;
     }
 
-    /*public static function exists($ProName){
-        try{
-            $db = new Database();
-            $query = $db->connect()->prepare('SELECT ProName FROM product WHERE ProName = :ProName');
-            $query->execute( ['ProName' => $ProName]);
-            
-            if($query->rowCount() > 0){
-                return true;
-            }else{
-                return false;
-            }
-        }catch(PDOException $e){
-            echo $e;
-            return false;
-        }
-    }*/
-
-   
-    /**
-     * @description Guardar Datos
-     * 
-     */
     public function save(){
         try{
             
-            $query = $this->prepare('INSERT INTO product (ProName, ProDes, ProImg) VALUES(:ProName, :ProDes, :ProImg)');
+            $query = $this->prepare('INSERT INTO Product (ProName, ProDes, ProTypeProID, ProImg, ProPre, ProProm) VALUES(:ProName, :ProDes, :ProTypeProID, :ProImg, :ProPre, :ProProm)');
             $query->execute([
                 'ProName'  => $this->ProName, 
                 'ProDes'  => $this->ProDes,
+                'ProTypeProID'  => $this->ProTypeProID,
                 'ProImg'  => $this->ProImg,
+                'ProPre'  => $this->ProPre,
+                'ProProm'  => $this->ProProm,
                 ]);
             return true;
         }catch(PDOException $e){
@@ -65,11 +49,14 @@ class Product extends Model{
     }
     public function update(){
         try{
-            $query = $this->prepare('UPDATE product SET ProName =:ProName, ProDes=:ProDes, ProImg= :ProImg, ProEstReg=:ProEstReg WHERE ProID=:ProID');
+            $query = $this->prepare('UPDATE Product SET ProName =:ProName, ProDes=:ProDes, ProTypeProID=: ProTypeProID, ProImg= :ProImg, ProPre= :ProPre, ProProm= :ProProm, ProEstReg=:ProEstReg WHERE ProID=:ProID');
             return $query->execute([
                 'ProName'  => $this->ProName, 
                 'ProDes'  => $this->ProDes,
+                'ProTypeProID'  => $this->ProTypeProID,
                 'ProImg'  => $this->ProImg,
+                'ProPre'  => $this->ProPre,
+                'ProProm'  => $this->ProProm,
                 'ProEstReg' =>$this->ProEstReg,
                 'ProID'=> $this->id,
                 ]);
@@ -83,12 +70,15 @@ class Product extends Model{
     public static function get($ProName){
         try{
             $db = new Database();
-            $query = $db->connect()->prepare('SELECT * FROM product WHERE ProName = :ProName');
+            $query = $db->connect()->prepare('SELECT * FROM Product WHERE ProName = :ProName');
             $query->execute([ 'ProName' => $ProName]);
             $data = $query->fetch(PDO::FETCH_ASSOC);
             error_log($data['ProName']);
             error_log($data['ProDes']);
-            $Product = new Product($data['ProName'], $data['ProDes']);
+            error_log($data['ProTypeProID']);
+            error_log($data['ProPre']);
+            error_log($data['ProProm']);
+            $Product = new Product($data['ProName'], $data['ProDes'], $data['ProTypeProID'], $data['ProPre'], $data['ProProm']);
             $Product->setId($data['ProID']);
             $Product->setProImg($data['ProImg']);
             return $Product;
@@ -99,26 +89,29 @@ class Product extends Model{
     public static function delete($ProID){
         try{
             $db = new Database();
-            $query = $db->connect()->prepare('DELETE FROM product WHERE ProID = :ProID');
+            $query = $db->connect()->prepare('DELETE FROM Product WHERE ProID = :ProID');
             if ($query->execute([ 'ProID' => $ProID])){
                 return true;
             }
             else
                 return false;
         }catch(PDOException $e){
-            echo "yo falso";
             return false;
         } 
     }
     public static function getById($ProID){
         try{
             $db = new Database();
-            $query = $db->connect()->prepare('SELECT * FROM product WHERE ProID = :ProID');
+            $query = $db->connect()->prepare('SELECT * FROM Product WHERE ProID = :ProID');
             $query->execute([ 'ProID' => $ProID]);
             $data = $query->fetch(PDO::FETCH_ASSOC);
-            $Product = new Product($data['ProName'], $data['ProDes']);
+            $Product = new Product($data['ProName'], $data['ProDes'], $data['ProTypeProID'], $data['ProPre'], $data['ProProm']);
             $Product->setId($data['ProID']);
             $Product->setProImg($data['ProImg']);
+            $Product->setProDes($data['ProDes']);
+            $Product->setProPre($data['ProPre']);
+            $Product->setProTypeProID($data['ProTypeProID']);
+            $Product->setProProm($data['ProProm']);
             $Product->setProEstReg($data['ProEstReg']);
             $Product->setProFecAct($data['ProFecAct']);
             return $Product->toArray();
@@ -129,12 +122,16 @@ class Product extends Model{
     public static function getByIds($ProID){
         try{
             $db = new Database();
-            $query = $db->connect()->prepare('SELECT * FROM product WHERE ProID = :ProID');
+            $query = $db->connect()->prepare('SELECT * FROM Product WHERE ProID = :ProID');
             $query->execute([ 'ProID' => $ProID]);
             $data = $query->fetch(PDO::FETCH_ASSOC);
-            $Product = new Product($data['ProName'], $data['ProDes']);
+            $Product = new Product($data['ProName'], $data['ProDes'], $data['ProTypeProID'], $data['ProPre'], $data['ProProm']);
             $Product->setId($data['ProID']);
             $Product->setProImg($data['ProImg']);
+            $Product->setProDes($data['ProDes']);
+            $Product->setProPre($data['ProPre']);
+            $Product->setProTypeProID($data['ProTypeProID']);
+            $Product->setProProm($data['ProProm']);
             $Product->setProEstReg($data['ProEstReg']);
             $Product->setProFecAct($data['ProFecAct']);
             return $Product;
@@ -147,11 +144,15 @@ class Product extends Model{
         $items = [];
         try{
             $db = new Database();
-            $query = $db->connect()->query('SELECT * FROM product ORDER BY ProFecAct DESC');
+            $query = $db->connect()->query('SELECT * FROM Product ORDER BY ProFecAct DESC');
             while($p = $query->fetch(PDO::FETCH_ASSOC)){
-                $item = new Product($p['ProName'], $p['ProDes']);
+                $item = new Product($p['ProName'], $p['ProDes'], $p['ProTypeProID'], $p['ProImg'], $p['ProPre'], $p['ProProm']);
                 $item->setId($p['ProID']);
                 $item->setProImg($p['ProImg']);
+                $item->setProDes($p['ProDes']);
+                $item->setProTypeProID($p['ProTypeProID']);
+                $item->setProPre($p['ProPre']);
+                $item->setProProm($p['ProProm']);
                 $item->setProEstReg($p['ProEstReg']);
                 $item->setProFecAct($p['ProFecAct']);
                 
@@ -184,7 +185,7 @@ class Product extends Model{
         $this->ProFecAct = $value;
     }
     public function toArray():array{
-        $arr = array("id"=>$this->id,"name"=>$this->ProName,"image"=>$this->ProImg,"description"=>$this->ProDes,"state"=>$this->ProEstReg,"UpdateDate"=>$this->ProFecAct);
+        $arr = array("id"=>$this->id,"name"=>$this->ProName,"image"=>$this->ProImg,"description"=>$this->ProDes,"typeproid"=>$this->ProTypeProID,"price"=>$this->ProPre,"promotion"=>$this->ProProm,"state"=>$this->ProEstReg,"UpdateDate"=>$this->ProFecAct);
         return $arr;
     }
     public function getProName(){
@@ -206,5 +207,26 @@ class Product extends Model{
 
     public function getProImg(){
         return $this->ProImg;
+    }
+    public function setProTypeProID($value){
+        $this->ProTypeProID = $value;
+    }
+
+    public function getProTypeProID(){
+        return $this->ProTypeProID;
+    }
+    public function setProPre($value){
+        $this->ProPre = $value;
+    }
+
+    public function getProPre(){
+        return $this->ProPre;
+    }
+    public function setProProm($value){
+        $this->ProProm = $value;
+    }
+
+    public function getProProm(){
+        return $this->ProProm;
     }
 }
