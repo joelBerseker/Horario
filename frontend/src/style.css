@@ -1,5 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Hurricane&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Roboto+Condensed&display=swap");
+
 :root {
   --first-color: #f1e8e3;
   --second-color: #8d3320;
@@ -8,23 +9,48 @@
   --third-color-v1: #8d6a20a9;
   --fourth-color: #438d20;
 }
-#app{
+/* INICIO UTILITIES PERSONALIZADAS*/
+.gp {
+  padding-left: 85px !important;
+  padding-right: 85px !important;
+}
+.gpl {
+  padding-left: 85px !important;
+}
+.gpr {
+  padding-right: 85px !important;
+}
+.c1{
+  color: var(--first-color) !important;
+}
+.c2{
+  color: var(--second-color) !important;
+}
+.c3{
+  color: var(--third-color) !important;
+}
+.c4{
+  color: var(--fourth-color) !important;
+}
+/* FIN UTILITIES PERSONALIZADAS*/
+
+
+#app {
   font-family: "Roboto Condensed", sans-serif;
 }
+
 /*Google Font*/
 .hurricane-font {
   font-size: 25px !important;
   font-family: "Hurricane", cursive;
 }
+.navbar-light .navbar-nav .nav-link {
+  color: var(--first-color) !important;
+}
+
 .nav-font {
   font-family: "Roboto Condensed", sans-serif;
   color: var(--first-color) !important;
-  font-size: 1.10rem;
-}
-
-.general-padding{
-  padding-left: 85px !important;
-  padding-right: 85px !important;
 }
 .nav-class {
   background-color: var(--second-color);
@@ -41,22 +67,22 @@
   padding: 0.4em;
   padding-left: 0.8em;
   padding-right: 0.8em;
-  border-bottom-left-radius: 8px;
-  border-top-right-radius: 8px;
-  
 }
+
 .food-title {
   font-family: "Roboto Condensed", sans-serif;
   background-color: var(--second-color) !important;
   color: var(--first-color) !important;
-  
+
   padding: 0.4em;
   padding-left: 1em;
   padding-right: 1em;
 }
+
 .food-image {
-  border-radius: 8px;
+  border-radius: 0px;
 }
+
 .food-name {
   font-family: "Roboto Condensed", sans-serif;
   background-color: var(--third-color-v1);
@@ -70,9 +96,8 @@
   padding: 0.4em;
   padding-left: 0.8em;
   padding-right: 0.8em;
-  border-bottom-left-radius: 8px;
-  border-bottom-right-radius: 8px;
 }
+
 .main {
   background-color: var(--first-color) !important;
   padding-bottom: 2em;
@@ -82,9 +107,20 @@
   background-color: var(--fourth-color) !important;
   border-color: var(--fourth-color) !important;
 }
-.btn{
+
+.btn {
   font-family: "Roboto Condensed", sans-serif;
-  border-radius: 20px !important;
+  border-radius: 0px !important;
   padding-left: 1.2em !important;
   padding-right: 1.2em !important;
+}
+
+.background-image {
+  position: relative;
+  z-index: 1;
+  display: block;
+  overflow: hidden;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
 }

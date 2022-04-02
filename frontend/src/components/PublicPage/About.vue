@@ -1,18 +1,15 @@
 <template>
   <div class="pt-5">
-    <img
-      class="d-block img-fluid"
-      width="600"
-      height="180"
-      src="img3.jpg"
-      alt="image slot"
-    />
+    <div
+      class="background-image"
+      :style="'background-image: url(img3.jpg); height: 50vh;'"
+    ></div>
     <b-row>
       <b-col cols="6">
-        <div class="food-title mt-5 general-padding">
+        <div class="food-title mt-5 gp">
           <h5 class="m-0 p-0">Mision</h5>
         </div>
-        <div class="general-padding">
+        <div class="gp">
           <p class="mt-3">
             La Mision es un conjunto de valores y definición de un estado
             deseado que se pretende alcanzar, es una imagen del futuro deseado
@@ -22,10 +19,10 @@
         </div>
       </b-col>
       <b-col cols="6">
-        <div class="food-title mt-5 general-padding">
+        <div class="food-title mt-5 gp">
           <h5 class="m-0 p-0">Vision</h5>
         </div>
-        <div class="general-padding">
+        <div class="gp">
           <p class="mt-3">
             La visión es un conjunto de valores y definición de un estado
             deseado que se pretende alcanzar, es una imagen del futuro deseado
