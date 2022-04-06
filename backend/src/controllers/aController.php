@@ -53,7 +53,7 @@ class aController extends Controller{
         $r = Access::getById($data);
         $this->render('Access/home', ['op'=>2,'response'=>1,'message'=>'success','access' => $r]);
     }
-    public function deleteR($data){
+    public function deleteA($data){
         $r = Access::delete($data);
         $this->render('Access/home', ['op'=>4,'response'=>1,'message'=>'delete success']);
     }

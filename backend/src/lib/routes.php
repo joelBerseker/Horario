@@ -1,6 +1,13 @@
 <?php
 use User\Backend\controllers\Home;
 use User\Backend\controllers\tpController;
+use User\Backend\controllers\aController;
+use User\Backend\controllers\rController;
+use User\Backend\controllers\resController;
+use User\Backend\controllers\uController;
+use User\Backend\controllers\pController;
+use User\Backend\controllers\thController;
+use User\Backend\controllers\tdController;
 $router = new \Bramus\Router\Router();
 session_start();
 //TypeProduct
@@ -235,14 +242,11 @@ $router ->get('/',function(){
 $router ->post('/login',function(){
     echo "Hello World";
 });
-$router ->post('/register',function(){
+/*$router ->post('/register',function(){
     echo "Inicio como estamos";
-});
+});*/
 $router ->get('/logout',function(){
     echo "Inicio como estamos";
-});
-$router->get('/user/{username}',function($username){
-    echo "Inicio amigo como estamos ".$username;
 });
 
 $router->run();
