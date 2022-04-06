@@ -30,7 +30,7 @@ class tpController extends Controller{
             $typep->save();
             $this->render('TypeProduct/home', ['op'=>1,'response'=>1,'message'=>'add successfuly']);
         }else{
-            echo "error por puto";
+            echo "error";
             //$this->render('errors/index');
         }
     }
@@ -52,7 +52,7 @@ class tpController extends Controller{
             $typep->update();
             $this->render('TypeProduct/home', ['op'=>3,'response'=>1,'message'=>'update successfuly','typeProduct' => $typep]);
         }else{
-            echo "Alex es Gay";
+            echo "Error";
         }
     }
 

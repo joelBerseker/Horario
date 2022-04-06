@@ -106,7 +106,6 @@ class TypeProduct extends Model{
             else
                 return false;
         }catch(PDOException $e){
-            echo "yo falso";
             return false;
         } 
     }
