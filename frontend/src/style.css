@@ -32,11 +32,24 @@
 .c4{
   color: var(--fourth-color) !important;
 }
+.bg1{
+  background-color: var(--first-color) !important;
+}
+.bg2{
+  background-color: var(--second-color) !important;
+}
+.bg3{
+  background-color: var(--third-color) !important;
+}
+.bg4{
+  background-color: var(--fourth-color) !important;
+}
 /* FIN UTILITIES PERSONALIZADAS*/
 
 
 #app {
   font-family: "Roboto Condensed", sans-serif;
+  background-color: var(--first-color);
 }
 
 /*Google Font*/
@@ -98,7 +111,7 @@
   padding-right: 0.8em;
 }
 
-.main {
+.main-nav {
   background-color: var(--first-color) !important;
   padding-bottom: 2em;
 }
@@ -123,4 +136,29 @@
   background-repeat: no-repeat;
   background-position: center center;
   background-size: cover;
+}
+
+.fade-enter-active {
+  transition: all 0.2s ease;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
+}
+
+@media only screen and (max-width: 1199px) {
+  #main-side {
+    margin-left: 0px;
+    padding: 0.3rem !important;
+  }
+  #mySidenav {
+    width: 0px;
+  }
+  #perfilImage {
+    visibility: hidden;
+  }
+}
+@media only screen and (max-width: 767px) {
+  .bottom-card {
+    margin-bottom: 2rem;
+  }
 }

@@ -8,6 +8,22 @@ import About from "@/components/PublicPage/About";
 import FoodMenu from "@/components/PublicPage/FoodMenu/FoodMenu";
 import Promotion from "@/components/PublicPage/Promotion";
 
+import Table from "@/components/InternSystem/Table/Table";
+import Logout from "@/components/InternSystem/Autentication/Logout";
+import User from "@/components/InternSystem/User/User";
+import Order from "@/components/InternSystem/Order/Order";
+import MyOrder from "@/components/InternSystem/Order/MyOrder";
+import Sidebar from "@/components/InternSystem/Sidebar";
+
+
+import Access from "@/components/InternSystem/Setting/Access";
+import Dish from "@/components/InternSystem/Setting/Dish";
+import Rol from "@/components/InternSystem/Setting/Rol";
+import Settingbar from "@/components/InternSystem/Setting/Settingbar";
+import SettingTable from "@/components/InternSystem/Setting/Table";
+import TypeOfDish from "@/components/InternSystem/Setting/TypeOfDish/TypeOfDish";
+import SettingUser from "@/components/InternSystem/Setting/User";
+
 Vue.use(VueRouter)
 
 const routes = [
@@ -48,6 +64,87 @@ const routes = [
       },
     ]
   },
+  {
+    path: "/system",
+    name: "Sidebar",
+    component: Sidebar,
+    children: [
+      {
+        path: "/system/user",
+        name: "User",
+        component: User,
+        props: true
+      },
+      {
+        path: "/system/logout",
+        name: "Logout",
+        component: Logout,
+        props: true
+      },
+      {
+        path: "/system/table",
+        name: "Table",
+        component: Table,
+        props: true
+      },
+      {
+        path: "/system/order",
+        name: "Order",
+        component: Order,
+        props: true
+      },
+      {
+        path: "/system/myorder",
+        name: "MyOrder",
+        component: MyOrder,
+        props: true
+      },
+      {
+        path: "/system/setting/",
+        name: "Settingbar",
+        component: Settingbar,
+        children: [
+          {
+            path: "/system/setting/table",
+            name: "SettingTable",
+            component: SettingTable,
+            props: true
+          },
+          {
+            path: "/system/setting/access",
+            name: "Access",
+            component: Access,
+            props: true
+          },
+          {
+            path: "/system/setting/dish",
+            name: "Dish",
+            component: Dish,
+            props: true
+          },
+          {
+            path: "/system/setting/rol",
+            name: "Rol",
+            component: Rol,
+            props: true
+          },
+          {
+            path: "/system/setting/typeofdish",
+            name: "TypeOfDish",
+            component: TypeOfDish,
+            props: true
+          },
+          {
+            path: "/system/setting/user",
+            name: "SettingUser",
+            component: SettingUser,
+            props: true
+          },
+        ]
+      },
+    ]
+  },
+  
 ]
 
 const router = new VueRouter({

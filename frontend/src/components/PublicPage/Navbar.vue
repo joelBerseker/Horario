@@ -10,9 +10,9 @@
           <b-nav-item
             v-for="item in nav_items"
             :key="item.value"
-            v-on:click="changeActive(item.value)"
+            exact-active-class="active-item-home"
             :to="{ name: item.to }"
-            :class="'item-navbar cf ' + item.active"
+            class="item-navbar cf"
             >{{ item.name }}
           </b-nav-item>
         </b-navbar-nav>
@@ -23,7 +23,7 @@
         </b-navbar-nav>
       </b-collapse>
     </b-navbar>
-    <div class="main">
+    <div class="main-nav">
       <router-view />
     </div>
   </div>
@@ -38,55 +38,30 @@ export default {
           value: 1,
           name: "Inicio",
           to: "Home",
-          active: "",
         },
         {
           value: 2,
           name: "Promociones",
           to: "Promotion",
-          active: "",
         },
         {
           value: 3,
           name: "Carta",
           to: "FoodMenu",
-          active: "",
         },
 
         {
           value: 4,
           name: "Nosotros",
           to: "About",
-          active: "",
         },
         {
           value: 5,
           name: "Contactanos",
           to: "Contact",
-          active: "",
         },
       ],
     };
-  },
-  methods: {
-    changeActive(value) {
-      for(let item of this.nav_items){
-        item.active="";
-        if (value == item.value) {
-          item.active = "active-item-home";
-        }
-      }
-      
-    },
-  },
-  created() {
-    this.nav_items.forEach((element) => {
-      console.log(element.to +" "+this.$route.name );
-      if (element.to == this.$route.name) {
-        this.changeActive(element.value);
-      }
-    });
- 
   },
 };
 </script>
@@ -95,7 +70,7 @@ export default {
 .active-item-home {
   border-bottom: 3px solid var(--first-color) !important;
 }
-.item-navbar {
+.item-navbar a{
   transition: all ease-in-out 0.2s;
   border-bottom: 3px solid ;
   border-top: 3px solid ;
@@ -103,8 +78,9 @@ export default {
   margin-left: 0.1rem;
   margin-right: 0.1rem;
 }
-.item-navbar:hover {
+.item-navbar a:hover {
   border-bottom: 3px solid var(--first-color);
 }
+
 
 </style>
