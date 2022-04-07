@@ -10,7 +10,7 @@ export default {
   data() {
     return {
       items: [
-        { Nombre: "Jhon", Rol: "Cocinero", Usuario: "JHON465" },
+        { Nombre: "Jhon", Rol: "", Usuario: "JHON465" },
         { Nombre: "Carlos", Rol: "Mesero", Usuario: "Carl465" },
       ],
       nav_items: [

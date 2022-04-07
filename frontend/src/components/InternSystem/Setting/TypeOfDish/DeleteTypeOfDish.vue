@@ -14,6 +14,8 @@
 </template>
 
 <script>
+import axios from "axios";
+const url = process.env.VUE_APP_RUTA_API;
 export default {
   props: ["item"],
 
@@ -26,6 +28,17 @@ export default {
       });
     },
     deleteItem() {
+      var path =
+        url + "api/typeproduct/"+this.item.id;
+        axios.delete(path).then((response) => {
+          //this.userAliments = response.data.results;
+          //this.functionLoading();
+          console.log(response.data);
+        })
+        .catch((error) => {
+          console.log(error);
+          this.functionLoading();
+        });
       console.log("documento eliminado");
       this.$bvModal.hide("detail-typeofdish-modal");
       

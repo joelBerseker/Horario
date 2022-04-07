@@ -24,6 +24,9 @@
 </template>
 
 <script>
+import axios from "axios";
+const url = process.env.VUE_APP_RUTA_API;
+
 import DetailTypeOfDish from "@/components/InternSystem/Setting/TypeOfDish/DetailTypeOfDish";
 import DeleteTypeOfDish from "@/components/InternSystem/Setting/TypeOfDish/DeleteTypeOfDish";
 export default {
@@ -57,6 +60,13 @@ export default {
           label: "Descripción",
         },
         {
+          key: "state",
+          label: "Estado",
+          /**formatter: (value) => {
+            return this.formalizarSexo(value);
+          }, */
+        },
+        {
           key: "option",
           label: "Opciones",
         },
@@ -73,7 +83,28 @@ export default {
       this.$bvModal.show('detail-typeofdish-modal')
 
     },
+    getTypeProduct(){
+      var path =
+        url + "api/typeproduct";
+      axios.get(path).then((response) => {
+          //this.userAliments = response.data.results;
+          //this.functionLoading();
+          this.items=response.data.data.typeProducts;
+        })
+        .catch((error) => {
+          console.log(error);
+          this.functionLoading();
+        });
+
+    },
   },
+  async created() {
+  //await Service.access(1,typeofDush)
+
+    await this.getTypeProduct();
+  }
+
+
 };
 </script>
 

@@ -21,12 +21,16 @@ class tpController extends Controller{
     }
     public function addTP($data,$file){
         $TypeProName = $data['name'];
-        $TypeProDes = $data['descripcion'];
+        $TypeProDes = $data['description'];
         $TypeProImg = $file['image'];
-        if(!is_null($TypeProName) && !is_null($TypeProDes) && !is_null($TypeProImg)){
-            $url = UtilImages::storeImage("typeproduct/",$TypeProImg);
+        if(!is_null($TypeProName) && !is_null($TypeProDes)){
             $typep = new TypeProduct($TypeProName,$TypeProDes);
-            $typep->setTypeProImg($url);
+            
+            if(file_exists($TypeProImg['tmp_name'][0])){
+                echo "hola";
+                $url = UtilImages::storeImage("typeproduct/",$TypeProImg);
+                $typep->setTypeProImg($url);
+            }
             $typep->save();
             $this->render('TypeProduct/home', ['op'=>1,'response'=>1,'message'=>'add successfuly']);
         }else{
@@ -41,7 +45,7 @@ class tpController extends Controller{
         $TypeProImg = $file['image'];
         if(! is_null($id) && !is_null($TypeProName) && !is_null($TypeProDes)&& !is_null($TypeProEstReg)){
             $typep = TypeProduct::getByIds($id);
-            if(!isset($TypeProImg['tmp_name'])){
+            if(file_exists($TypeProImg['tmp_name'][0])){
                 echo "hola";
                 $url = UtilImages::storeImage("typeproduct/",$TypeProImg);
                 $typep->setTypeProImg($url);
@@ -50,9 +54,9 @@ class tpController extends Controller{
             $typep->setTypeProEstReg($TypeProEstReg);
             $typep->setTypeProDes($TypeProDes);
             $typep->update();
-            $this->render('TypeProduct/home', ['op'=>3,'response'=>1,'message'=>'update successfuly','typeProduct' => $typep]);
+            $this->render('TypeProduct/home', ['op'=>3,'response'=>1,'message'=>'update successfuly','typeProduct' => $typep->toArray()]);
         }else{
-            echo "Error";
+            echo "Error por puto ".$id." -> ".$TypeProName." -> ".$TypeProDes;
         }
     }
 

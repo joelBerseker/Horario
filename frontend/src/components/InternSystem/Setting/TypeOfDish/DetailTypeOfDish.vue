@@ -43,6 +43,13 @@
           required
         ></b-form-input>
       </b-form-group>
+      <b-form-group label="Estado:" label-for="name-graduate">
+        <b-form-select
+          v-model="item.state"
+          :options="options"
+          ></b-form-select>
+      </b-form-group>
+
       <b-form-group
         v-if="mode === 0 || mode === 2"
         class="mb-2"
@@ -94,12 +101,20 @@
 </template>
 
 <script>
+import axios from "axios";
+const url = process.env.VUE_APP_RUTA_API;
 export default {
   props: ["item", "mode", "changeMode"],
   data() {
     return {
       title: ["Agregar regitro", "Ver registro", "Editar registro"],
       image: null,
+      options: [
+        { value: "1", text: "Activo" },
+        { value: "2", text: "Inactivo" },
+        //{ value: "3", text: "Otro" },
+      ],
+
     };
   },
   methods: {
@@ -121,13 +136,43 @@ export default {
       }
     },
     editItem() {
-      console.log("se edito el elemento");
+      console.log(this.item.id);
+      var formData = new FormData();
+      formData.append('name',this.item.name);
+      formData.append('description',this.item.description);
+      formData.append('state',this.item.state);
+      var path =  url + "api/typeproduct/"+this.item.id;
+      console.log(path);
+       axios
+        .post(path, formData)
+        .then((response) => {
+          console.log("se edito el elemento");
+          console.log(response);
+        })
+        .catch(() => {
+         console.log("no se edito correctamente");
+        });
+
       this.$nextTick(() => {
         this.$bvModal.hide("detail-typeofdish-modal");
       });
     },
     addItem() {
-      console.log("se agrego el elemento");
+      var formData = new FormData();
+      formData.append('name',this.item.name);
+      formData.append('description',this.item.description);
+      formData.append('image',this.image);
+      var path =  url + "api/typeproduct/";
+      console.log(path);
+       axios
+        .post(path, formData)
+        .then((response) => {
+          console.log("se agrego el elemento");
+          console.log(response);
+        })
+        .catch(() => {
+         console.log("no se agrego correctamente");
+        });
       this.$nextTick(() => {
         this.$bvModal.hide("detail-typeofdish-modal");
       });

@@ -33,7 +33,7 @@ $router->mount('/api/typeproduct', function() use ($router) {
         $controller->editTP($_POST,$_FILES,$id);
     });
     //eliminar objeto por id
-    $router->delete('/{id}', function($id) {
+    $router->delete('/{id}', function($id) {// '/delete/{id}'
         $controller = new tpController();
         $controller->deleteTP($id);
     });
