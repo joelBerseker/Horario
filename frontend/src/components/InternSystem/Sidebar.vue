@@ -1,52 +1,54 @@
 <template>
   <div>
-    <div id="nav">
-      <b-button
-        v-if="!butonNav"
-        @click="openNav"
-        variant="link "
-        class="c2 bg1 px-3 btn-none icon_menu"
-        size="lg"
-      >
-        <b-icon icon="box-arrow-in-right"></b-icon>
-      </b-button>
-      <div id="mySidenav" class="sidenav">
-        <b-row>
-          <b-col>
-            <div class="float-right">
-              <b-button
-                @click="closeNav"
-                variant="link "
-                size="lg"
-                class="text-white pr-2 btn-none"
-              >
-                <b-icon icon="box-arrow-in-left"></b-icon>
-              </b-button>
-            </div>
-          </b-col>
-        </b-row>
-        <b-list-group flush class="mt-5">
-          <b-list-group-item
-            v-for="item in nav_items"
-            :key="item.value"
-            class="bg2 c1 border-0"
-            active-class="active-item"
-            :to="{ name: item.to }"
-          >
-            <b-icon :icon="item.icon" class="im" :scale="item.scale"></b-icon>
-            <transition name="fade">
-              <span v-if="menuItem" class="menuItem">
-                &nbsp; {{ item.name }}
-              </span>
-            </transition>
-          </b-list-group-item>
-        </b-list-group>
+    <b-overlay :show="showOverlay" rounded="sm" z-index="10000">
+      <div id="nav">
+        <b-button
+          v-if="!butonNav"
+          @click="openNav"
+          variant="link "
+          class="c2 bg1 px-3 btn-none icon_menu"
+          size="lg"
+        >
+          <b-icon icon="box-arrow-in-right"></b-icon>
+        </b-button>
+        <div id="mySidenav" class="sidenav">
+          <b-row>
+            <b-col>
+              <div class="float-right">
+                <b-button
+                  @click="closeNav"
+                  variant="link "
+                  size="lg"
+                  class="text-white pr-2 btn-none"
+                >
+                  <b-icon icon="box-arrow-in-left"></b-icon>
+                </b-button>
+              </div>
+            </b-col>
+          </b-row>
+          <b-list-group flush class="mt-5">
+            <b-list-group-item
+              v-for="item in nav_items"
+              :key="item.value"
+              class="bg2 c1 border-0"
+              active-class="active-item"
+              :to="{ name: item.to }"
+            >
+              <b-icon :icon="item.icon" class="im" :scale="item.scale"></b-icon>
+              <transition name="fade">
+                <span v-if="menuItem" class="menuItem">
+                  &nbsp; {{ item.name }}
+                </span>
+              </transition>
+            </b-list-group-item>
+          </b-list-group>
+        </div>
       </div>
-    </div>
 
-    <div id="main-side" style="overflow-y: hidden">
-      <router-view />
-    </div>
+      <div id="main-side" style="overflow-y: hidden">
+        <router-view />
+      </div>
+    </b-overlay>
   </div>
 </template>
 
@@ -59,8 +61,6 @@ export default {
         recipe_name: null,
       },
       widht_side: "200px",
-      loading: true,
-      loading_side_bar: false,
       user: {
         name: "",
         last_name: "",
@@ -114,7 +114,11 @@ export default {
       ],
     };
   },
-
+  computed: {
+    showOverlay(){
+      return this.$store.getters.getLoading;
+    }
+  },
   mounted() {
     window.onresize = () => {
       this.windowWidth = window.innerWidth;
@@ -136,9 +140,6 @@ export default {
     }
   },
   methods: {
-    show_loading_side_bar(value) {
-      this.loading_side_bar = value;
-    },
     logout() {
       this.$store.dispatch("logout");
       this.$router.push("/home");
@@ -159,13 +160,8 @@ export default {
       this.menuItem = false;
     },
   },
-  updated() {
-    if ("SideBarHome" == this.$route.name) {
-      this.$router.push("/username");
-    }
-  },
   async created() {
-    this.$router.push({ name: 'Settingbar'})
+    console.log("load"+ this.$store.getters.getLoading);
   },
 };
 </script>

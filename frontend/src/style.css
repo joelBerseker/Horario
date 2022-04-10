@@ -9,41 +9,53 @@
   --third-color-v1: #8d6a20a9;
   --fourth-color: #438d20;
 }
+
 /* INICIO UTILITIES PERSONALIZADAS*/
 .gp {
   padding-left: 85px !important;
   padding-right: 85px !important;
 }
+
 .gpl {
   padding-left: 85px !important;
 }
+
 .gpr {
   padding-right: 85px !important;
 }
-.c1{
+
+.c1 {
   color: var(--first-color) !important;
 }
-.c2{
+
+.c2 {
   color: var(--second-color) !important;
 }
-.c3{
+
+.c3 {
   color: var(--third-color) !important;
 }
-.c4{
+
+.c4 {
   color: var(--fourth-color) !important;
 }
-.bg1{
+
+.bg1 {
   background-color: var(--first-color) !important;
 }
-.bg2{
+
+.bg2 {
   background-color: var(--second-color) !important;
 }
-.bg3{
+
+.bg3 {
   background-color: var(--third-color) !important;
 }
-.bg4{
+
+.bg4 {
   background-color: var(--fourth-color) !important;
 }
+
 /* FIN UTILITIES PERSONALIZADAS*/
 
 
@@ -57,6 +69,7 @@
   font-size: 25px !important;
   font-family: "Hurricane", cursive;
 }
+
 .navbar-light .navbar-nav .nav-link {
   color: var(--first-color) !important;
 }
@@ -65,6 +78,7 @@
   font-family: "Roboto Condensed", sans-serif;
   color: var(--first-color) !important;
 }
+
 .nav-class {
   background-color: var(--second-color);
 }
@@ -121,6 +135,18 @@
   border-color: var(--fourth-color) !important;
 }
 
+.btn-secondary {
+  background-color: var(--third-color) !important;
+  border-color: var(--third-color) !important;
+}
+
+.btn-warning {
+  color: #ffffff !important;
+  background-color: #dda602 !important;
+  border-color: #dda602 !important;
+}
+
+
 .btn {
   font-family: "Roboto Condensed", sans-serif;
   border-radius: 0px !important;
@@ -141,22 +167,96 @@
 .fade-enter-active {
   transition: all 0.2s ease;
 }
-.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+
+.fade-enter,
+.fade-leave-to
+
+/* .fade-leave-active below version 2.1.8 */
+  {
   opacity: 0;
+}
+
+.table thead th {
+  border-color: var(--second-color) !important;
+  background-color: var(--second-color) !important;
+  color: var(--first-color) !important;
+  font-weight: 400;
+  padding-top: 0.3rem;
+  padding-bottom: 0.3rem;
+}
+
+.table th,
+.table td {
+  border-color: var(--second-color) !important;
+  padding-top: 0.5rem !important;
+  padding-bottom: 0.5rem !important;
+}
+
+.page-item.active .page-link {
+  background-color: var(--second-color) !important;
+  border-color: var(--second-color) !important;
+  color: var(--first-color) !important;
+}
+
+.page-link {
+  color: var(--second-color) !important;
+  border-radius: 0px !important;
+}
+
+.page-item.disabled .page-link {
+  color: #212529 !important;
+}
+
+.option-class {
+  min-width: 100px !important;
+}
+
+.form-control,
+.custom-file-label,
+.modal-content,
+.custom-select {
+  border-radius: 0px !important;
+}
+
+.b-toast-success .toast {
+  background-color: rgba(230, 245, 233) !important;
+  border-radius: 0px !important;
+}
+
+.b-toast-success .toast .toast-header {
+  background-color: rgba(212, 237, 218) !important;
+  border-radius: 0px !important;
+}
+
+.b-toast-danger .toast {
+  background-color: rgba(252, 237, 238)!important;
+  border-radius: 0px !important;
+}
+
+.b-toast-danger .toast .toast-header {
+  background-color: rgba(248, 215, 218) !important;
+  border-radius: 0px !important;
+}
+
+.toast {
+  border-radius: 0px !important;
 }
 
 @media only screen and (max-width: 1199px) {
   #main-side {
     margin-left: 0px;
-    padding: 0.3rem !important;
+    padding: 0rem !important;
   }
+
   #mySidenav {
     width: 0px;
   }
+
   #perfilImage {
     visibility: hidden;
   }
 }
+
 @media only screen and (max-width: 767px) {
   .bottom-card {
     margin-bottom: 2rem;
