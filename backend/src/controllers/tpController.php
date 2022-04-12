@@ -25,9 +25,7 @@ class tpController extends Controller{
         $TypeProImg = $file['image'];
         if(!is_null($TypeProName) && !is_null($TypeProDes)){
             $typep = new TypeProduct($TypeProName,$TypeProDes);
-            echo "hola";
-            if(file_exists($TypeProImg['tmp_name'][0])){
-                echo "hola";
+            if(file_exists($TypeProImg['tmp_name'])){
                 $url = UtilImages::storeImage("typeproduct/",$TypeProImg);
                 $typep->setTypeProImg($url);
             }
