@@ -2,38 +2,36 @@
   <div>
     <div class="mb-4">
       <b-nav tabs fill>
-        
-          <b-nav-item
-            class="nav-setting"
-            active
-            v-for="item in getNavItems"
-            :key="item.value"
-            :to="{ name: item.to }"
-            v-on:click="getTitle(item)"
-            exact
-            exact-active-class="active-item"
+        <b-nav-item
+          class="nav-setting"
+          active
+          v-for="item in getNavItems"
+          :key="item.value"
+          :to="{ name: item.to }"
+          v-on:click="getTitle(item)"
+          exact
+          exact-active-class="active-item"
+        >
+          <span>
+            <b-icon :icon="item.icon" class="im" :scale="item.scale"></b-icon>
+            &nbsp;{{ item.name }}</span
           >
-          <transition name="fade">
-            <span v-if="!item.active">
-              <b-icon :icon="item.icon" class="im" :scale="item.scale"></b-icon>
-              &nbsp;{{ item.name }}</span
-            >
-            </transition>
-          </b-nav-item>
-        
+        </b-nav-item>
       </b-nav>
-    </div>
-    <div class="bg2 c1 p-2 mb-1">
-      <b-icon
-        :icon="item_selected.icon"
-        class="im"
-        :scale="item_selected.scale"
-      ></b-icon>
-      &nbsp;{{ item_selected.name }}
     </div>
 
     <div>
-      <router-view />
+      <transition name="t-setting-bar-title" mode="out-in">
+        <div class="bg2 c1 p-2 mb-1" v-if="prueba">
+          <b-icon
+            :icon="item_selected.icon"
+            class="im"
+            :scale="item_selected.scale"
+          ></b-icon>
+          &nbsp;{{ item_selected.name }}
+        </div>
+      </transition>
+      <transition name="t-setting-bar-body" mode="out-in"> <router-view /> </transition>
     </div>
   </div>
 </template>
@@ -43,6 +41,7 @@ export default {
   components: {},
   data() {
     return {
+      prueba: true,
       items: [
         { age: 40, first_name: "Dickerson", last_name: "Macdonald" },
         { age: 21, first_name: "Larsen", last_name: "Shaw" },
@@ -114,10 +113,14 @@ export default {
   },
   methods: {
     getTitle(currentTitle) {
+      this.prueba = false;
       this.nav_items.forEach((element) => {
         element.active = false;
       });
       currentTitle.active = true;
+      setTimeout(() => {
+        this.prueba = true;
+      }, 200);
     },
     getPath() {
       this.nav_items.forEach((element) => {

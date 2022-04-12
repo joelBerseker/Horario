@@ -17,7 +17,7 @@ export default {
       }
       this.$bvToast.toast(message, {
         title: title_,
-        autoHideDelay: 700000,
+        autoHideDelay: 3000,
         appendToast: true,
         variant: variant,
       });

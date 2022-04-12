@@ -47,7 +47,7 @@ export default {
             this.$store.dispatch("loadingSwitch");
             this.makeToast(error, "danger");
           });
-      }, 2000);
+      }, 500);
       console.log("documento eliminado");
       
     },

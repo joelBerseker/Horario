@@ -20,9 +20,9 @@
         <div class="text_add"><small>Agregar</small></div>
       </div>
     </b-button>
-
+    <div>
     <b-table
-      :busy.sync="isBusy"
+      :busy="isBusy"
       hover
       :show-empty="!isBusy"
       :items="items"
@@ -43,9 +43,9 @@
         </b-button>
       </template>
       <template #table-busy>
-        <div class="text-center c2 my-2">
+        <div class="text-center c2 my-2" v-if="isBusy">
           <b-spinner class="align-middle"></b-spinner>&nbsp;
-          <strong>Cargando ...</strong>
+          <span>Cargando ...</span>
         </div>
       </template>
     </b-table>
@@ -57,6 +57,7 @@
         aria-controls="my-table"
         align="center"
       ></b-pagination>
+    </div>
     </div>
   </div>
 </template>
@@ -137,7 +138,7 @@ export default {
           .catch((error) => {
             this.makeToast(error, "danger");
           });
-      }, 2000);
+      }, 500);
     },
   },
   async created() {
@@ -156,20 +157,21 @@ export default {
   margin: 0.3rem;
   z-index: 100;
   padding: 1rem;
-  height: 4rem;
-  width: 4rem;
+  height: 3.5rem;
+  width: 3.5rem;
 }
 
 .icon_add {
   position: absolute;
   right: 0;
   left: 0;
-  top: 17%;
+  top: 14%;
 }
 .text_add {
   position: absolute;
   right: 0;
   left: 0;
   bottom: 20%;
+  font-size: 0.8rem !important;
 }
 </style>

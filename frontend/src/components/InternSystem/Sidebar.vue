@@ -1,7 +1,13 @@
 <template>
   <div>
-    <b-overlay :show="showOverlay" rounded="sm" z-index="10000">
-      <div id="nav">
+    <b-overlay :show="showOverlay" z-index="2000">
+      <template #overlay>
+        <div class="text-center c2 my-2">
+          <b-spinner class="align-middle"></b-spinner>&nbsp;
+          <span>Espere por favor ...</span>
+        </div>
+      </template>
+      <div>
         <b-button
           v-if="!butonNav"
           @click="openNav"
@@ -12,39 +18,48 @@
           <b-icon icon="box-arrow-in-right"></b-icon>
         </b-button>
         <div id="mySidenav" class="sidenav">
-          <b-row>
-            <b-col>
-              <div class="float-right">
-                <b-button
-                  @click="closeNav"
-                  variant="link "
-                  size="lg"
-                  class="text-white pr-2 btn-none"
-                >
-                  <b-icon icon="box-arrow-in-left"></b-icon>
-                </b-button>
+          <div>
+            <b-row>
+              <b-col>
+                <div class="float-right">
+                  <b-button
+                    @click="closeNav"
+                    variant="link "
+                    size="lg"
+                    class="text-white pr-2 btn-none"
+                  >
+                    <b-icon icon="box-arrow-in-left"></b-icon>
+                  </b-button>
+                </div>
+              </b-col>
+            </b-row>
+            <transition name="t-side-bar-item">
+              <div v-if="menuItem">
+                <b-list-group flush class="mt-5">
+                  <b-list-group-item
+                    v-for="item in nav_items"
+                    :key="item.value"
+                    class="bg2 c1 border-0"
+                    active-class="active-item"
+                    v-on:click="selectItem()"
+                    :to="{ name: item.to }"
+                  >
+                    <b-icon
+                      :icon="item.icon"
+                      class="im"
+                      :scale="item.scale"
+                    ></b-icon>
+
+                    <span class="menuItem"> &nbsp; {{ item.name }} </span>
+                  </b-list-group-item>
+                </b-list-group>
               </div>
-            </b-col>
-          </b-row>
-          <b-list-group flush class="mt-5">
-            <b-list-group-item
-              v-for="item in nav_items"
-              :key="item.value"
-              class="bg2 c1 border-0"
-              active-class="active-item"
-              :to="{ name: item.to }"
-            >
-              <b-icon :icon="item.icon" class="im" :scale="item.scale"></b-icon>
-              <transition name="fade">
-                <span v-if="menuItem" class="menuItem">
-                  &nbsp; {{ item.name }}
-                </span>
-              </transition>
-            </b-list-group-item>
-          </b-list-group>
+            </transition>
+          </div>
         </div>
       </div>
-
+      <transition name="t-side-bar-item">
+      <div v-if="menuItem&&positionAbsolute" class="side-bar-cover" @click="closeNav"></div></transition>
       <div id="main-side" style="overflow-y: hidden">
         <router-view />
       </div>
@@ -57,16 +72,14 @@ export default {
   components: {},
   data() {
     return {
-      item_selected: {
-        recipe_name: null,
-      },
-      widht_side: "200px",
+      margin_width: "200px",
       user: {
         name: "",
         last_name: "",
       },
       menuItem: true,
       butonNav: true,
+      positionAbsolute: false,
       windowWidth: window.innerWidth,
       nav_items: [
         {
@@ -115,43 +128,50 @@ export default {
     };
   },
   computed: {
-    showOverlay(){
+    showOverlay() {
       return this.$store.getters.getLoading;
-    }
+    },
   },
   mounted() {
     window.onresize = () => {
       this.windowWidth = window.innerWidth;
       if (this.windowWidth >= 1200) {
-        this.widht_side = "200px";
-        //this.openNav();
+        this.margin_width = "200px";
+        this.positionAbsolute = false;
+        this.openNav();
       } else {
-        //this.closeNav();
-        this.widht_side = "0px";
+        document.getElementById("main-side").style.marginLeft = "0px";
+        this.margin_width = "0px";
+        this.positionAbsolute = true;
       }
     };
     this.windowWidth = window.innerWidth;
     if (this.windowWidth >= 1200) {
-      this.widht_side = "200px";
+      this.margin_width = "200px";
+      this.positionAbsolute = false;
     } else {
-      this.widht_side = "0px";
+      this.margin_width = "0px";
+      this.positionAbsolute = true;
       this.butonNav = false;
       this.menuItem = false;
     }
   },
   methods: {
-    logout() {
-      this.$store.dispatch("logout");
-      this.$router.push("/home");
+    selectItem() {
+      this.menuItem = false;
+      if (this.positionAbsolute) {
+        setTimeout(() => {
+          this.closeNav();
+        }, 0);
+      }
     },
     openNav() {
       document.getElementById("mySidenav").style.width = "200px";
-      document.getElementById("main-side").style.marginLeft = this.widht_side;
-
+      document.getElementById("main-side").style.marginLeft = this.margin_width;
       this.butonNav = true;
       setTimeout(() => {
         this.menuItem = true;
-      }, 250);
+      }, 210);
     },
     closeNav() {
       document.getElementById("mySidenav").style.width = "0px";
@@ -160,12 +180,16 @@ export default {
       this.menuItem = false;
     },
   },
-  async created() {
-    console.log("load"+ this.$store.getters.getLoading);
-  },
 };
 </script>
 <style>
+.side-bar-cover {
+  height: 100%;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.356) !important;
+  position: fixed;
+  z-index: 90;
+}
 .sidenav {
   overflow: hidden;
   height: 100%;
@@ -175,8 +199,7 @@ export default {
   top: 0;
   left: 0;
   background-color: var(--second-color) !important;
-  transition: 0.2s;
-  border-right: 1px solid var(--first-color);
+  transition: width 0.2s;
 }
 .sidenav a:hover,
 .sidenav a:focus {

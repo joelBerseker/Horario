@@ -294,7 +294,7 @@ export default {
             this.$store.dispatch("loadingSwitch");
             this.makeToast("No se edito correctamente", "danger");
           });
-      }, 2000);
+      }, 500);
     },
     addItem() {
       var formData = new FormData();
@@ -318,7 +318,7 @@ export default {
             this.$store.dispatch("loadingSwitch");
             this.makeToast("No se agrego correctamente", "danger");
           });
-      }, 2000);
+      }, 500);
     },
 
     detailItemButtom() {
