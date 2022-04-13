@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="mb-4">
+    <div class="mb-0">
       <b-nav tabs fill>
         <b-nav-item
           class="nav-setting"
@@ -22,7 +22,7 @@
 
     <div>
       <transition name="t-setting-bar-title" mode="out-in">
-        <div class="bg2 c1 p-2 mb-1" v-if="prueba">
+        <div class="bg2 c1 p-2 mb-3" v-if="prueba">
           <b-icon
             :icon="item_selected.icon"
             class="im"
@@ -31,7 +31,9 @@
           &nbsp;{{ item_selected.name }}
         </div>
       </transition>
-      <transition name="t-setting-bar-body" mode="out-in"> <router-view /> </transition>
+      <transition name="t-setting-bar-body" mode="out-in">
+        <router-view />
+      </transition>
     </div>
   </div>
 </template>

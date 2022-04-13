@@ -1,24 +1,56 @@
 <template>
   <div>
-    <b-form-select v-model="selected" :options="rol"></b-form-select>
-    <b-table responsive striped hover :items="items">
+    <b-form-select
+      v-model="selected"
+      :options="rol"
+      class="mb-2"
+    ></b-form-select>
+
+    <b-table
+      responsive
+      striped
+      hover
+      :items="items"
+      :fields="fields"
+      class="mb-2"
+    >
       <template #cell(create)="data">
-        <b-form-checkbox v-model="data.value" name="check-button" switch>
+        <b-form-checkbox v-model="data.value" :disabled="!edit" switch>
         </b-form-checkbox>
       </template>
       <template #cell(read)="data">
-        <b-form-checkbox v-model="data.value" name="check-button" switch>
+        <b-form-checkbox v-model="data.value" :disabled="!edit" switch>
         </b-form-checkbox>
       </template>
       <template #cell(update)="data">
-        <b-form-checkbox v-model="data.value" name="check-button" switch>
+        <b-form-checkbox v-model="data.value" :disabled="!edit" switch>
         </b-form-checkbox>
       </template>
       <template #cell(delete)="data">
-        <b-form-checkbox v-model="data.value" name="check-button" switch>
+        <b-form-checkbox v-model="data.value" :disabled="!edit" switch>
         </b-form-checkbox>
       </template>
     </b-table>
+    <div>
+      <b-button
+        v-if="!edit"
+        variant="warning"
+        @click="editTable()"
+        class="float-right mr-1"
+      >
+        <b-icon icon="pen" scale="1"></b-icon>
+        &nbsp;Editar
+      </b-button>
+      <b-button
+        v-if="edit"
+        variant="primary"
+        @click="saveTable()"
+        class="float-right mr-1"
+      >
+        <b-icon icon="check2" scale="1.1"></b-icon>
+        &nbsp;Aceptar
+      </b-button>
+    </div>
   </div>
 </template>
 
@@ -27,70 +59,70 @@ export default {
   components: {},
   data() {
     return {
+      edit: false,
       selected: null,
       rol: [
-        {value: null, text: "Seleccione una opción" },
-        {value: 1, text: "Administrador" },
-        {value: 2, text: "Cocinero" },
-        {value: 3, text: "Mesero" },
+        { value: null, text: "Seleccione un rol" },
+        { value: 1, text: "Administrador" },
+        { value: 2, text: "Cocinero" },
+        { value: 3, text: "Mesero" },
+      ],
+      fields: [
+        {
+          key: "name",
+          label: "Recursos",
+        },
+        {
+          key: "create",
+          label: "Crear",
+          formatter: (value) => {
+            return value ? true : false;
+          },
+        },
+        {
+          key: "read",
+          label: "Ver",
+          formatter: (value) => {
+            return value ? true : false;
+          },
+        },
+        {
+          key: "update",
+          label: "Editar",
+          formatter: (value) => {
+            return value ? true : false;
+          },
+        },
+        {
+          key: "delete",
+          label: "Eliminar",
+          formatter: (value) => {
+            return value ? true : false;
+          },
+        },
       ],
       items: [
-        { nombre: "mesas", create: true, read: 1, update: 1, delete: 1 },
-        { nombre: "pedidos", create: 1, read: 1, update: 1, delete: 1 },
-        { nombre: "mis pedidos", create: 1, read: 1, update: 1, delete: 1 },
-        { nombre: "configuracion", create: true, read: 1, update: 1, delete: 1 },
-      ],
-      nav_items: [
+        { name: "Mesas", create: 0, read: 0, update: 0, delete: 0 },
+        { name: "Pedidos", create: 0, read: 0, update: 0, delete: 0 },
+        { name: "Mis pedidos", create: 0, read: 0, update: 0, delete: 0 },
         {
-          value: 1,
-          icon: "person-fill",
-          scale: 1,
-          name: "Mesas",
-          to: "userProfile",
-          active: "",
-        },
-        {
-          value: 2,
-          icon: "journal-medical",
-          scale: 1,
-          name: "Roles",
-          to: "SearchHealthyFood",
-          active: "",
-        },
-        {
-          value: 3,
-          icon: "people-fill",
-          scale: 1,
-          name: "Usuarios",
-          to: "SearchHealthyFood",
-          active: "",
-        },
-        {
-          value: 4,
-          icon: "power",
-          scale: 1,
-          name: "Platos",
-          to: "SearchHealthyFood",
-          active: "",
-        },
-        {
-          value: 4,
-          icon: "journal",
-          scale: 0.93,
-          name: "Tipos de platos",
-          to: "SearchHealthyFood",
-          active: "",
-        },
-        {
-          value: 5,
-          icon: "journal",
-          scale: 1,
-          name: "Accesos",
-          to: "SearchHealthyFood",
-          active: "",
+          name: "Configuracion",
+          create: 0,
+          read: 0,
+          update: 0,
+          delete: 1,
         },
       ],
     };
+  },
+  methods: {
+    editTable() {
+      this.edit = true;
+    },
+    saveTable() {
+      this.edit = false;
+      console.log("operaciones en back uwu");
+    },
   },
 };
 </script>

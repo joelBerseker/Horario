@@ -281,6 +281,17 @@ table.b-table[aria-busy='false'] {
   border-radius: 0px !important;
 }
 
+.custom-switch .custom-control-label::before{
+  border-radius: 0px !important;
+}
+.custom-switch .custom-control-label::after {
+  border-radius: 0px !important;
+
+}
+.custom-control-input:checked ~ .custom-control-label::before{
+  background-color: var(--fourth-color) !important;
+  border-color: var(--fourth-color) !important;
+}
 @media only screen and (max-width: 1199px) {
   #main-side {
     margin-left: 0px;

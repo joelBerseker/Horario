@@ -145,6 +145,7 @@ import DeleteItem from "@/components/InternSystem/ReusableComponents/DeleteItem"
 import UtilityFunctions from "@/mixin/UtilityFunctions.js";
 import UtilityValidations from "@/mixin/UtilityValidations.js";
 const url = process.env.VUE_APP_RUTA_API;
+const url_public = process.env.VUE_APP_RUTA_PUBLIC;
 
 export default {
   components: {
@@ -188,8 +189,7 @@ export default {
       var resp = this.textEmpty(text);
       if (!resp.status) return resp;
 
-      resp = this.onlyText(text);
-      if (!resp.status) return resp;
+   
 
       return resp;
     },
@@ -219,10 +219,10 @@ export default {
           else return "/no_image.jpg";
         case 1:
           if (this.item.image == "") return "/no_image.jpg";
-          else return this.item.image;
+          else return url_public+this.item.image;
         case 2:
           if (this.image) return this.previewImage;
-          else if (this.item.image != "") return this.item.image;
+          else if (this.item.image != "") return url_public+this.item.image;
           else return "/no_image.jpg";
         default:
           return "/no_image.jpg";
