@@ -30,6 +30,18 @@ class User extends Model{
         return password_hash($password, PASSWORD_DEFAULT, ['cost' => 10]);
     }
 
+    public function exists($UserName){
+        if(!is_null($this->get($UserName))){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public function comparePassword(string $UserPass):bool{
+        return password_verify($UserPass, $this->getUserPass());
+    }
+
     public function save(){
         try{
             $hash = $this->getHashedPassword($this->UserPass);

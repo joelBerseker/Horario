@@ -8,6 +8,9 @@ use User\Backend\controllers\uController;
 use User\Backend\controllers\pController;
 use User\Backend\controllers\thController;
 use User\Backend\controllers\tdController;
+use User\Backend\controllers\logController;
+use User\Backend\controllers\tController;
+use User\Backend\controllers\homeController;
 $router = new \Bramus\Router\Router();
 session_start();
 //TypeProduct
@@ -33,7 +36,7 @@ $router->mount('/api/typeproduct', function() use ($router) {
         $controller->editTP($_POST,$_FILES,$id);
     });
     //eliminar objeto por id
-    $router->delete('/{id}', function($id) {// '/delete/{id}'
+    $router->post('/delete/{id}', function($id) {// '/delete/{id}'
         $controller = new tpController();
         $controller->deleteTP($id);
     });
@@ -61,7 +64,7 @@ $router->mount('/api/role', function() use ($router) {
         $controller->editR($_POST,$id);
     });
     //eliminar objeto por id
-    $router->delete('/{id}', function($id) {
+    $router->post('/delete/{id}', function($id) {
         $controller = new rController();
         $controller->deleteR($id);
     });
@@ -89,7 +92,7 @@ $router->mount('/api/resource', function() use ($router) {
         $controller->editRes($_POST,$id);
     });
     //eliminar objeto por id
-    $router->delete('/{id}', function($id) {
+    $router->post('/delete/{id}', function($id) {
         $controller = new resController();
         $controller->deleteRes($id);
     });
@@ -117,7 +120,7 @@ $router->mount('/api/user', function() use ($router) {
         $controller->editU($_POST,$id);
     });
     //eliminar objeto por id
-    $router->delete('/{id}', function($id) {
+    $router->post('/delete/{id}', function($id) {
         $controller = new uController();
         $controller->deleteU($id);
     });
@@ -145,7 +148,7 @@ $router->mount('/api/access', function() use ($router) {
         $controller->editA($_POST,$id);
     });
     //eliminar objeto por id
-    $router->delete('/{id}', function($id) {
+    $router->post('/delete/{id}', function($id) {
         $controller = new aController();
         $controller->deleteA($id);
     });
@@ -173,7 +176,7 @@ $router->mount('/api/product', function() use ($router) {
         $controller->editP($_POST,$_FILES,$id);
     });
     //eliminar objeto por id
-    $router->delete('/{id}', function($id) {
+    $router->post('/delete/{id}', function($id) {
         $controller = new pController();
         $controller->deleteP($id);
     });
@@ -201,9 +204,36 @@ $router->mount('/api/ticketheader', function() use ($router) {
         $controller->editTH($_POST,$id);
     });
     //eliminar objeto por id
-    $router->delete('/{id}', function($id) {
+    $router->post('/delete/{id}', function($id) {
         $controller = new thController();
         $controller->deleteTH($id);
+    });
+});//Tabl
+$router->mount('/api/tabl', function() use ($router) {
+    //Obtener todos
+    $router->get('/', function() {
+        $controller = new tController();
+        $controller->tindex();
+    });
+    //insertar objeto
+    $router->post('/', function() {
+        $controller = new tController();
+        $controller->addT($_POST);
+    });
+    //obtener objeto por id
+    $router->get('/{id}', function($id) {
+        $controller = new tController();
+        $controller->viewT($id);
+    });
+    //editar un objeto por id
+    $router->post('/{id}', function($id) {
+        $controller = new tController();
+        $controller->editT($_POST,$id);
+    });
+    //eliminar objeto por id
+    $router->post('/delete/{id}', function($id) {
+        $controller = new tController();
+        $controller->deleteT($id);
     });
 });
 //TickerDetail
@@ -229,24 +259,25 @@ $router->mount('/api/ticketdetail', function() use ($router) {
         $controller->editTD($_POST,$id);
     });
     //eliminar objeto por id
-    $router->delete('/{id}', function($id) {
+    $router->post('/delete/{id}', function($id) {
         $controller = new tdController();
         $controller->deleteTD($id);
     });
 });
 
-$router ->get('/',function(){
-    $controller = new Home();
-    $controller->index();
+$router ->get('/user/active',function(){
+    $user = unserialize($_SESSION['user']);
+    $controller = new homeController ();
+    $controller->homeindex();
 });
 $router ->post('/login',function(){
-    echo "Hello World";
+    $controller = new logController();
+    $controller->login();
 });
-/*$router ->post('/register',function(){
-    echo "Inicio como estamos";
-});*/
+
 $router ->get('/logout',function(){
-    echo "Inicio como estamos";
+    $controller = new logController();
+    $controller->logout();
 });
 
 $router->run();

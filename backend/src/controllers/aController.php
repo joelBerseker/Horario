@@ -19,11 +19,11 @@ class aController extends Controller{
         $this->render('Access/home', ['op'=>0,'response'=>1,'message'=>'success','access' => $r]);
     }
     public function addA($data){
-        $AccName = $data['name'];
+        $AccPer = $data['permission'];
         $AccRoleID = $data['roleid'];
         $AccResID = $data['resid'];
-        if(!is_null($AccName) &&!is_null($AccRoleID) &&!is_null($AccResID)){
-            $r = new Access($AccName,$AccRoleID,$AccResID);
+        if(!is_null($AccPer) &&!is_null($AccRoleID) &&!is_null($AccResID)){
+            $r = new Access($AccPer,$AccRoleID,$AccResID);
             $r->save();
             $this->render('Access/home', ['op'=>1,'response'=>1,'message'=>'add successfuly']);
         }else{
@@ -32,13 +32,13 @@ class aController extends Controller{
         }
     }
     public function editA($data,$id){
-        $AccName = $data['name'];
+        $AccPer = $data['permission'];
         $AccRoleID = $data['roleid'];
         $AccResID = $data['resid'];
         $AccEstReg  = $data['state'];
-        if(! is_null($id) && !is_null($AccName) &&!is_null($AccRoleID) &&!is_null($AccResID) && !is_null($AccEstReg)){
+        if(! is_null($id) && !is_null($AccPer) &&!is_null($AccRoleID) &&!is_null($AccResID) && !is_null($AccEstReg)){
             $r = Access::getByIds($id);
-            $r->setAccName($AccName);
+            $r->setAccPer($AccPer);
             $r->setAccRoleID($AccRoleID);
             $r->setAccResID($AccResID);
             $r->setAccEstReg($AccEstReg);

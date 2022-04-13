@@ -31,7 +31,7 @@ CREATE TABLE `access` (
   `AccID` int(11) NOT NULL,
   `AccRoleID` int(11) NOT NULL,
   `AccResID` int(11) NOT NULL,
-  `AccName` varchar(140) NOT NULL,
+  `AccPer` int(11) NOT NULL,
   `AccEstReg` int(11) NOT NULL,
   `AccFecAct` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -79,6 +79,19 @@ CREATE TABLE `role` (
   `RoleEstReg` int(11) NOT NULL,
   `RoleFecAct` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `tabl`
+--
+
+CREATE TABLE `tabl` (
+  `TabID` int(11) NOT NULL,
+  `TabFec` time NOT NULL,
+  `TabEst` int(11) NOT NULL,
+  `TabEstReg` int(11) NOT NULL,
+  `TabFecAct` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -110,7 +123,8 @@ CREATE TABLE `ticketheader` (
   `TicHeadLocName` varchar(100) NOT NULL,
   `TicHeadPorDesc` decimal(3,0) NOT NULL,
   `TicHeadEstReg` int(11) NOT NULL,
-  `TicHeadFecAct` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `TicHeadFecAct` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `TicHeadTabID` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -127,6 +141,7 @@ CREATE TABLE `typeproduct` (
   `TypeProEstReg` int(11) NOT NULL,
   `TypeProFecAct` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 
 -- --------------------------------------------------------
 
@@ -176,6 +191,12 @@ ALTER TABLE `role`
   ADD PRIMARY KEY (`RoleID`);
 
 --
+-- Indices de la tabla `tabl`
+--
+ALTER TABLE `tabl`
+  ADD PRIMARY KEY (`TabID`);
+
+--
 -- Indices de la tabla `ticketdetail`
 --
 ALTER TABLE `ticketdetail`
@@ -188,7 +209,8 @@ ALTER TABLE `ticketdetail`
 --
 ALTER TABLE `ticketheader`
   ADD PRIMARY KEY (`TicHeadID`),
-  ADD KEY `FK_User_TicketHeader` (`TicHeadUserID`);
+  ADD KEY `FK_User_TicketHeader` (`TicHeadUserID`),
+  ADD KEY `FK_Tabl_TicketHeader` (`TicHeadTabID`);
 
 --
 -- Indices de la tabla `typeproduct`
@@ -230,6 +252,12 @@ ALTER TABLE `resource`
 --
 ALTER TABLE `role`
   MODIFY `RoleID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `tabl`
+--
+ALTER TABLE `tabl`
+  MODIFY `TabID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `ticketdetail`
@@ -283,6 +311,7 @@ ALTER TABLE `ticketdetail`
 -- Filtros para la tabla `ticketheader`
 --
 ALTER TABLE `ticketheader`
+  ADD CONSTRAINT `FK_Tabl_TicketHeader` FOREIGN KEY (`TicHeadTabID`) REFERENCES `tabl` (`TabID`),
   ADD CONSTRAINT `FK_User_TicketHeader` FOREIGN KEY (`TicHeadUserID`) REFERENCES `user` (`UserID`);
 
 --

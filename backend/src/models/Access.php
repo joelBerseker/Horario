@@ -15,7 +15,7 @@ class Access extends Model{
     private $AccFecAct;
     
     public function __construct(
-        private string $AccName,
+        private int $AccPer,
         private int $AccRoleID, 
         private int $AccResID
 
@@ -51,9 +51,9 @@ class Access extends Model{
     public function save(){
         try{
             
-            $query = $this->prepare('INSERT INTO Access (AccName,AccRoleID,AccResID) VALUES(:AccName,:AccRoleID,:AccResID)');
+            $query = $this->prepare('INSERT INTO Access (AccPer,AccRoleID,AccResID) VALUES(:AccPer,:AccRoleID,:AccResID)');
             $query->execute([
-                'AccName'  => $this->AccName, 
+                'AccPer'  => $this->AccPer, 
                 'AccRoleID'  => $this->AccRoleID, 
                 'AccResID'  => $this->AccResID, 
             ]);
@@ -65,9 +65,9 @@ class Access extends Model{
     }
     public function update(){
         try{
-            $query = $this->prepare('UPDATE Access SET AccName =:AccName, AccRoleID =:AccRoleID, AccResID =:AccResID, AccEstReg=:AccEstReg WHERE AccID=:AccID');
+            $query = $this->prepare('UPDATE Access SET AccPer =:AccPer, AccRoleID =:AccRoleID, AccResID =:AccResID, AccEstReg=:AccEstReg WHERE AccID=:AccID');
             return $query->execute([
-                'AccName'  => $this->AccName,
+                'AccPer'  => $this->AccPer,
                 'AccRoleID'  => $this->AccRoleID,
                 'AccResID'  => $this->AccResID,
                 'AccEstReg' =>$this->AccEstReg,
@@ -80,16 +80,16 @@ class Access extends Model{
     } 
 
     
-    public static function get($AccName){
+    public static function get($AccPer){
         try{
             $db = new Database();
-            $query = $db->connect()->prepare('SELECT * FROM Access WHERE AccName = :AccName');
-            $query->execute([ 'AccName' => $AccName]);
+            $query = $db->connect()->prepare('SELECT * FROM Access WHERE AccPer = :AccPer');
+            $query->execute([ 'AccPer' => $AccPer]);
             $data = $query->fetch(PDO::FETCH_ASSOC);
-            error_log($data['AccName']);
+            error_log($data['AccPer']);
             error_log($data['AccRoleID']);
             error_log($data['AccResID']);
-            $Access = new Access($data['AccName'],$data['AccRoleID'],$data['AccResID']);
+            $Access = new Access($data['AccPer'],$data['AccRoleID'],$data['AccResID']);
             $Access->setId($data['AccID']);
             return $Access;
         }catch(PDOException $e){
@@ -115,7 +115,7 @@ class Access extends Model{
             $query = $db->connect()->prepare('SELECT * FROM Access WHERE AccID = :AccID');
             $query->execute([ 'AccID' => $AccID]);
             $data = $query->fetch(PDO::FETCH_ASSOC);
-            $Access = new Access($data['AccName'],$data['AccRoleID'],$data['AccResID']);
+            $Access = new Access($data['AccPer'],$data['AccRoleID'],$data['AccResID']);
             $Access->setId($data['AccID']);
             $Access->setAccRoleID($data['AccRoleID']);
             $Access->setAccResID($data['AccResID']);
@@ -132,7 +132,7 @@ class Access extends Model{
             $query = $db->connect()->prepare('SELECT * FROM Access WHERE AccID = :AccID');
             $query->execute([ 'AccID' => $AccID]);
             $data = $query->fetch(PDO::FETCH_ASSOC);
-            $Access = new Access($data['AccName'],$data['AccRoleID'],$data['AccResID']);
+            $Access = new Access($data['AccPer'],$data['AccRoleID'],$data['AccResID']);
             $Access->setId($data['AccID']);
             $Access->setAccRoleID($data['AccRoleID']);
             $Access->setAccResID($data['AccResID']);
@@ -150,7 +150,7 @@ class Access extends Model{
             $db = new Database();
             $query = $db->connect()->query('SELECT * FROM Access ORDER BY AccFecAct DESC');
             while($p = $query->fetch(PDO::FETCH_ASSOC)){
-                $item = new Access($p['AccName'],$p['AccRoleID'],$p['AccResID']);
+                $item = new Access($p['AccPer'],$p['AccRoleID'],$p['AccResID']);
                 $item->setId($p['AccID']);
                 $item->setAccRoleID($p['AccRoleID']);
                 $item->setAccResID($p['AccResID']);
@@ -185,14 +185,14 @@ class Access extends Model{
         $this->AccFecAct = $value;
     }
     public function toArray():array{
-        $arr = array("id"=>$this->id,"name"=>$this->AccName,"roleid"=>$this->AccRoleID,"resid"=>$this->AccResID,"state"=>$this->AccEstReg,"UpdateDate"=>$this->AccFecAct);
+        $arr = array("id"=>$this->id,"name"=>$this->AccPer,"roleid"=>$this->AccRoleID,"resid"=>$this->AccResID,"state"=>$this->AccEstReg,"UpdateDate"=>$this->AccFecAct);
         return $arr;
     }
-    public function getAccName(){
-        return $this->AccName;
+    public function getAccPer(){
+        return $this->AccPer;
     }
-    public function setAccName($value){
-        $this->AccName = $value;
+    public function setAccPer($value){
+        $this->AccPer = $value;
     }
     public function getAccRoleID(){
         return $this->AccRoleID;
