@@ -24,12 +24,14 @@ class pController extends Controller{
         $ProPre = $data['price'];
         $ProTypeProID = $data['typeproid'];
         $ProImg = $file['image'];
-        if(!is_null($ProName) && !is_null($ProDes) && !is_null($ProPre) && !is_null($ProTypeProID) && !is_null($ProImg)){
-            $url = UtilImages::storeImage("product/",$ProImg);
-            $p = new Product($ProName,$ProDes,$ProTypeProID,$ProPre);
-            $p->setProImg($url);
-            $p->save();
-            $this->render('Product/home', ['op'=>1,'response'=>1,'message'=>'add successfuly']);
+        if(!is_null($ProName) && !is_null($ProDes) && !is_null($ProPre) && !is_null($ProTypeProID)){
+            $typep = new Product($ProName,$ProDes,$ProTypeProID,$ProPre);
+            if(file_exists($ProImg['tmp_name'])){
+                $url = UtilImages::storeImage("product/",$ProImg);
+                $typep->setProImg($url);
+            }
+            $typep->save();
+           $this->render('Product/home', ['op'=>1,'response'=>1,'message'=>'add successfuly']);
         }else{
             echo "error";
             //$this->render('errors/index');
