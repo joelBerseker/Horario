@@ -144,14 +144,11 @@ class Product extends Model{
         $items = [];
         try{
             $db = new Database();
-            $query = $db->connect()->query('SELECT * FROM Product ORDER BY ProFecAct DESC');
+            $query = $db->connect()->query('SELECT * FROM product ORDER BY ProFecAct DESC');
             while($p = $query->fetch(PDO::FETCH_ASSOC)){
-                $item = new Product($p['ProName'], $p['ProDes'], $p['ProTypeProID'], $p['ProImg'], $p['ProPre'], $p['ProProm']);
+                $item = new Product($p['ProName'], $p['ProDes'], $p['ProTypeProID'], $p['ProPre']);
                 $item->setId($p['ProID']);
                 $item->setProImg($p['ProImg']);
-                $item->setProDes($p['ProDes']);
-                $item->setProTypeProID($p['ProTypeProID']);
-                $item->setProPre($p['ProPre']);
                 $item->setProProm($p['ProProm']);
                 $item->setProEstReg($p['ProEstReg']);
                 $item->setProFecAct($p['ProFecAct']);
@@ -164,7 +161,6 @@ class Product extends Model{
             echo $e;
         }
     }
-
     public function getId():string{
         return $this->id;
     }
