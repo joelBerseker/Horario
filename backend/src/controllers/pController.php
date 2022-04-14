@@ -3,6 +3,7 @@
 namespace User\Backend\controllers;
 
 use User\Backend\lib\Controller;
+use User\Backend\lib\UtilImages;
 use User\Backend\models\Product;
 
 

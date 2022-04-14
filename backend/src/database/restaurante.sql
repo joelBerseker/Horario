@@ -320,5 +320,5 @@ ALTER TABLE `ticketheader`
 ALTER TABLE `user`
   ADD CONSTRAINT `FK_Role_User` FOREIGN KEY (`UserRoleID`) REFERENCES `role` (`RoleID`);
 COMMIT;
-*/
+
 
