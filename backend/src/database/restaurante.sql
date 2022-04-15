@@ -32,7 +32,7 @@ CREATE TABLE `access` (
   `AccRoleID` int(11) NOT NULL,
   `AccResID` int(11) NOT NULL,
   `AccPer` int(11) NOT NULL,
-  `AccEstReg` int(11) NOT NULL,
+  `AccEstReg` int(11) NOT NULL DEFAULT 1,
   `AccFecAct` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -48,9 +48,9 @@ CREATE TABLE `product` (
   `ProDes` varchar(255) NOT NULL,
   `ProTypeProID` int(11) NOT NULL,
   `ProImg` varchar(100) NOT NULL,
-  `ProPre` decimal(7,0) NOT NULL,
+  `ProPre` decimal(7,2) NOT NULL,
   `ProProm` int(11) NOT NULL,
-  `ProEstReg` int(11) NOT NULL,
+  `ProEstReg` int(11) NOT NULL DEFAULT 1,
   `ProFecAct` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -63,7 +63,7 @@ CREATE TABLE `product` (
 CREATE TABLE `resource` (
   `ResID` int(11) NOT NULL,
   `ResName` varchar(100) NOT NULL,
-  `ResEstReg` int(11) NOT NULL,
+  `ResEstReg` int(11) NOT NULL DEFAULT 1,
   `ResFecAct` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -76,9 +76,10 @@ CREATE TABLE `resource` (
 CREATE TABLE `role` (
   `RoleID` int(11) NOT NULL,
   `RoleName` varchar(70) NOT NULL,
-  `RoleEstReg` int(11) NOT NULL,
+  `RoleEstReg` int(11) NOT NULL DEFAULT 1,
   `RoleFecAct` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 -- --------------------------------------------------------
 
 --
@@ -89,7 +90,7 @@ CREATE TABLE `tabl` (
   `TabID` int(11) NOT NULL,
   `TabFec` time NOT NULL,
   `TabEst` int(11) NOT NULL,
-  `TabEstReg` int(11) NOT NULL,
+  `TabEstReg` int(11) NOT NULL DEFAULT 1,
   `TabFecAct` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -105,7 +106,7 @@ CREATE TABLE `ticketdetail` (
   `TicDetProID` int(11) NOT NULL,
   `TicDetDes` varchar(255) NOT NULL,
   `TicDetCant` int(11) NOT NULL,
-  `TicDetEstReg` int(11) NOT NULL,
+  `TicDetEstReg` int(11) NOT NULL DEFAULT 1,
   `TicDetFecAct` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -122,7 +123,7 @@ CREATE TABLE `ticketheader` (
   `TicHeadRUC` varchar(70) NOT NULL,
   `TicHeadLocName` varchar(100) NOT NULL,
   `TicHeadPorDesc` decimal(3,0) NOT NULL,
-  `TicHeadEstReg` int(11) NOT NULL,
+  `TicHeadEstReg` int(11) NOT NULL DEFAULT 1,
   `TicHeadFecAct` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `TicHeadTabID` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -138,10 +139,9 @@ CREATE TABLE `typeproduct` (
   `TypeProName` varchar(70) NOT NULL,
   `TypeProDes` varchar(255) NOT NULL,
   `TypeProImg` varchar(100) NOT NULL,
-  `TypeProEstReg` int(11) NOT NULL,
+  `TypeProEstReg` int(11) NOT NULL DEFAULT 1,
   `TypeProFecAct` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
 
 -- --------------------------------------------------------
 
@@ -155,7 +155,7 @@ CREATE TABLE `user` (
   `UserName` varchar(70) NOT NULL,
   `UserNickName` varchar(70) NOT NULL,
   `UserPass` varchar(70) NOT NULL,
-  `UserEstReg` int(11) NOT NULL,
+  `UserEstReg` int(11) NOT NULL DEFAULT 1,
   `UserFecAct` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -239,13 +239,13 @@ ALTER TABLE `access`
 -- AUTO_INCREMENT de la tabla `product`
 --
 ALTER TABLE `product`
-  MODIFY `ProID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `ProID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `resource`
 --
 ALTER TABLE `resource`
-  MODIFY `ResID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `ResID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `role`
@@ -275,7 +275,7 @@ ALTER TABLE `ticketheader`
 -- AUTO_INCREMENT de la tabla `typeproduct`
 --
 ALTER TABLE `typeproduct`
-  MODIFY `TypeProID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `TypeProID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de la tabla `user`
@@ -320,5 +320,4 @@ ALTER TABLE `ticketheader`
 ALTER TABLE `user`
   ADD CONSTRAINT `FK_Role_User` FOREIGN KEY (`UserRoleID`) REFERENCES `role` (`RoleID`);
 COMMIT;
-
 
