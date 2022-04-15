@@ -53,7 +53,7 @@ class tpController extends Controller{
             $typep->update();
             $this->render('TypeProduct/home', ['op'=>3,'response'=>1,'message'=>'update successfuly','typeProduct' => $typep->toArray()]);
         }else{
-            echo "Error por puto ".$id." -> ".$TypeProName." -> ".$TypeProDes;
+            echo "Error";
         }
     }
 

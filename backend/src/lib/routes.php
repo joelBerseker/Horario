@@ -31,12 +31,13 @@ $router->mount('/api/typeproduct', function() use ($router) {
         $controller->viewTP($id);
     });
     //editar un objeto por id
-    $router->post('/{id}', function($id) {
+    $router->post('/edit/{id}', function($id) { //colocar todos 
         $controller = new tpController();
         $controller->editTP($_POST,$_FILES,$id);
     });
     //eliminar objeto por id
     $router->post('/delete/{id}', function($id) {// '/delete/{id}'
+        echo "asd";
         $controller = new tpController();
         $controller->deleteTP($id);
     });
@@ -59,7 +60,7 @@ $router->mount('/api/role', function() use ($router) {
         $controller->viewR($id);
     });
     //editar un objeto por id
-    $router->post('/{id}', function($id) {
+    $router->post('/edit/{id}', function($id) {
         $controller = new rController();
         $controller->editR($_POST,$id);
     });
@@ -87,7 +88,7 @@ $router->mount('/api/resource', function() use ($router) {
         $controller->viewRes($id);
     });
     //editar un objeto por id
-    $router->post('/{id}', function($id) {
+    $router->post('/edit/{id}', function($id) {
         $controller = new resController();
         $controller->editRes($_POST,$id);
     });
@@ -115,7 +116,7 @@ $router->mount('/api/user', function() use ($router) {
         $controller->viewU($id);
     });
     //editar un objeto por id
-    $router->post('/{id}', function($id) {
+    $router->post('/edit/{id}', function($id) {
         $controller = new uController();
         $controller->editU($_POST,$id);
     });
@@ -143,7 +144,7 @@ $router->mount('/api/access', function() use ($router) {
         $controller->viewA($id);
     });
     //editar un objeto por id
-    $router->post('/{id}', function($id) {
+    $router->post('/edit/{id}', function($id) {
         $controller = new aController();
         $controller->editA($_POST,$id);
     });
@@ -171,7 +172,7 @@ $router->mount('/api/product', function() use ($router) {
         $controller->viewP($id);
     });
     //editar un objeto por id
-    $router->post('/{id}', function($id) {
+    $router->post('/edit/{id}', function($id) {
         $controller = new pController();
         $controller->editP($_POST,$_FILES,$id);
     });
@@ -199,7 +200,7 @@ $router->mount('/api/ticketheader', function() use ($router) {
         $controller->viewTH($id);
     });
     //editar un objeto por id
-    $router->post('/{id}', function($id) {
+    $router->post('/edit/{id}', function($id) {
         $controller = new thController();
         $controller->editTH($_POST,$id);
     });
@@ -226,7 +227,7 @@ $router->mount('/api/tabl', function() use ($router) {
         $controller->viewT($id);
     });
     //editar un objeto por id
-    $router->post('/{id}', function($id) {
+    $router->post('/edit/{id}', function($id) {
         $controller = new tController();
         $controller->editT($_POST,$id);
     });
@@ -254,7 +255,7 @@ $router->mount('/api/ticketdetail', function() use ($router) {
         $controller->viewTD($id);
     });
     //editar un objeto por id
-    $router->post('/{id}', function($id) {
+    $router->post('/edit/{id}', function($id) {
         $controller = new tdController();
         $controller->editTD($_POST,$id);
     });

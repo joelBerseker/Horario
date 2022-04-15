@@ -48,7 +48,7 @@ class pController extends Controller{
         $ProEstReg  = $data['state'];
         if(! is_null($id) && !is_null($ProName) && !is_null($ProDes) && !is_null($ProProm) && !is_null($ProPre) && !is_null($ProTypeProID) && !is_null($ProEstReg)){
             $p = Product::getByIds($id);
-            if(!isset($ProImg['tmp_name'])){
+            if(file_exists($ProImg['tmp_name'])){
                 $url = UtilImages::storeImage("product/",$ProImg);
                 $p->setProImg($url);
             }
@@ -59,7 +59,7 @@ class pController extends Controller{
             $p->setProProm($ProProm);
             $p->setProPre($ProPre);
             $p->update();
-            $this->render('Product/home', ['op'=>3,'response'=>1,'message'=>'update successfuly','Product' => $p]);
+            $this->render('Product/home', ['op'=>3,'response'=>1,'message'=>'update successfuly','product' => $p->toArray()]);
         }else{
             echo "Error";
         }

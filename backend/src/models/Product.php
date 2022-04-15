@@ -49,7 +49,8 @@ class Product extends Model{
     }
     public function update(){
         try{
-            $query = $this->prepare('UPDATE Product SET ProName =:ProName, ProDes=:ProDes, ProTypeProID=: ProTypeProID, ProImg= :ProImg, ProPre= :ProPre, ProProm= :ProProm, ProEstReg=:ProEstReg WHERE ProID=:ProID');
+            
+            $query = $this->prepare('UPDATE product SET ProName =:ProName, ProDes=:ProDes, ProTypeProID=: ProTypeProID, ProImg= :ProImg, ProPre= :ProPre, ProProm= :ProProm, ProEstReg=:ProEstReg WHERE ProID=:ProID');
             return $query->execute([
                 'ProName'  => $this->ProName, 
                 'ProDes'  => $this->ProDes,
@@ -78,7 +79,7 @@ class Product extends Model{
             error_log($data['ProTypeProID']);
             error_log($data['ProPre']);
             error_log($data['ProProm']);
-            $Product = new Product($data['ProName'], $data['ProDes'], $data['ProTypeProID'], $data['ProPre'], $data['ProProm']);
+            $Product = new Product($data['ProName'], $data['ProDes'], $data['ProTypeProID'], $data['ProPre']);
             $Product->setId($data['ProID']);
             $Product->setProImg($data['ProImg']);
             return $Product;
@@ -102,19 +103,16 @@ class Product extends Model{
     public static function getById($ProID){
         try{
             $db = new Database();
-            $query = $db->connect()->prepare('SELECT * FROM Product WHERE ProID = :ProID');
+            $query = $db->connect()->prepare('SELECT * FROM product WHERE ProID = :ProID');
             $query->execute([ 'ProID' => $ProID]);
             $data = $query->fetch(PDO::FETCH_ASSOC);
-            $Product = new Product($data['ProName'], $data['ProDes'], $data['ProTypeProID'], $data['ProPre'], $data['ProProm']);
-            $Product->setId($data['ProID']);
-            $Product->setProImg($data['ProImg']);
-            $Product->setProDes($data['ProDes']);
-            $Product->setProPre($data['ProPre']);
-            $Product->setProTypeProID($data['ProTypeProID']);
-            $Product->setProProm($data['ProProm']);
-            $Product->setProEstReg($data['ProEstReg']);
-            $Product->setProFecAct($data['ProFecAct']);
-            return $Product->toArray();
+            $prod = new Product($data['ProName'], $data['ProDes'], $data['ProTypeProID'], $data['ProPre']);
+            $prod->setId($data['ProID']);
+            $prod->setProImg($data['ProImg']);
+            $prod->setProImg($data['ProProm']);
+            $prod->setProEstReg($data['ProEstReg']);
+            $prod->setProFecAct($data['ProFecAct']);
+            return $prod->toArray();
         }catch(PDOException $e){
             return false;
         }
@@ -122,19 +120,16 @@ class Product extends Model{
     public static function getByIds($ProID){
         try{
             $db = new Database();
-            $query = $db->connect()->prepare('SELECT * FROM Product WHERE ProID = :ProID');
+            $query = $db->connect()->prepare('SELECT * FROM product WHERE ProID = :ProID');
             $query->execute([ 'ProID' => $ProID]);
             $data = $query->fetch(PDO::FETCH_ASSOC);
-            $Product = new Product($data['ProName'], $data['ProDes'], $data['ProTypeProID'], $data['ProPre'], $data['ProProm']);
-            $Product->setId($data['ProID']);
-            $Product->setProImg($data['ProImg']);
-            $Product->setProDes($data['ProDes']);
-            $Product->setProPre($data['ProPre']);
-            $Product->setProTypeProID($data['ProTypeProID']);
-            $Product->setProProm($data['ProProm']);
-            $Product->setProEstReg($data['ProEstReg']);
-            $Product->setProFecAct($data['ProFecAct']);
-            return $Product;
+            $prod = new Product($data['ProName'], $data['ProDes'], $data['ProTypeProID'], $data['ProPre']);
+            $prod->setId($data['ProID']);
+            $prod->setProImg($data['ProImg']);
+            $prod->setProImg($data['ProProm']);
+            $prod->setProEstReg($data['ProEstReg']);
+            $prod->setProFecAct($data['ProFecAct']);
+            return $prod;
         }catch(PDOException $e){
             return false;
         }
