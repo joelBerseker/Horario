@@ -37,7 +37,6 @@ $router->mount('/api/typeproduct', function() use ($router) {
     });
     //eliminar objeto por id
     $router->post('/delete/{id}', function($id) {// '/delete/{id}' falta eliminar archivos generados tanto al actualizar como al borrar
-        echo "asd";
         $controller = new tpController();
         $controller->deleteTP($id);
     });
