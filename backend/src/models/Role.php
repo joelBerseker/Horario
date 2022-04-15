@@ -30,6 +30,7 @@ class Role extends Model{
             $query->execute([
                 'RoleName'  => $this->RoleName, 
             ]);
+            /*
             $resources = Resource::getAll();
             for ($i = 1, $size = count($resources); $i < $size; ++$i) {
                 $auxq = $this->prepare('INSERT INTO Access (AccPer,AccRoleID,AccResID) VALUES(:AccPer,:AccRoleID,:AccResID)');
@@ -39,6 +40,7 @@ class Role extends Model{
                     'AccResID'  => $resources[$i]['ResID'], 
                 ]);
             }
+            */
             return true;
         }catch(PDOException $e){
             error_log($e);
