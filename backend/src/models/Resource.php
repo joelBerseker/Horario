@@ -22,29 +22,7 @@ class Resource extends Model{
         $this->ResEstReg=0;
         $this->ResFecAct='';
     }
-
-    /*public static function exists($RoleName){
-        try{
-            $db = new Database();
-            $query = $db->connect()->prepare('SELECT RoleName FROM Roleduct WHERE RoleName = :RoleName');
-            $query->execute( ['RoleName' => $RoleName]);
-            
-            if($query->rowCount() > 0){
-                return true;
-            }else{
-                return false;
-            }
-        }catch(PDOException $e){
-            echo $e;
-            return false;
-        }
-    }*/
-
-   
-    /**
-     * @description Guardar Datos
-     * 
-     */
+    
     public function save(){
         try{
             

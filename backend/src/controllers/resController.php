@@ -37,7 +37,7 @@ class resController extends Controller{
             $r->setResName($ResName);
             $r->setResEstReg($ResEstReg);
             $r->update();
-            $this->render('Resource/home', ['op'=>3,'response'=>1,'message'=>'update successfuly','resource' => $r]);
+            $this->render('Resource/home', ['op'=>3,'response'=>1,'message'=>'update successfuly','resource' => $r->toArray()]);
         }else{
             echo "Error";
         }
@@ -45,7 +45,7 @@ class resController extends Controller{
 
     public function viewRes($data){
         $r = Resource::getById($data);
-        $this->render('Role/home', ['op'=>2,'response'=>1,'message'=>'success','resource' => $r]);
+        $this->render('Resource/home', ['op'=>2,'response'=>1,'message'=>'success','resource' => $r]);
     }
     public function deleteRes($data){
         $r = Resource::delete($data);
