@@ -49,8 +49,7 @@ class Product extends Model{
     }
     public function update(){
         try{
-            
-            $query = $this->prepare('UPDATE product SET ProName =:ProName, ProDes=:ProDes, ProTypeProID=: ProTypeProID, ProImg= :ProImg, ProPre= :ProPre, ProProm= :ProProm, ProEstReg=:ProEstReg WHERE ProID=:ProID');
+            $query = $this->prepare('UPDATE product SET ProName =:ProName, ProDes=:ProDes, ProTypeProID= :ProTypeProID, ProImg=:ProImg, ProPre=:ProPre, ProProm=:ProProm, ProEstReg=:ProEstReg WHERE ProID=:ProID');
             return $query->execute([
                 'ProName'  => $this->ProName, 
                 'ProDes'  => $this->ProDes,
@@ -131,6 +130,7 @@ class Product extends Model{
             $prod->setProFecAct($data['ProFecAct']);
             return $prod;
         }catch(PDOException $e){
+            
             return false;
         }
     }
