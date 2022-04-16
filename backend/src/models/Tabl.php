@@ -16,7 +16,7 @@ class Tabl extends Model{
     private $TabFec;
     
     public function __construct(
-        private string $TabEst
+        private int $TabEst
     )
     {
         parent::__construct();
@@ -41,7 +41,7 @@ class Tabl extends Model{
     }
     public function update(){
         try{
-            $query = $this->prepare('UPDATE Tabl SET TabEst =:TabEst, TabFec =:TabFec, TabEstReg=:TabEstReg WHERE TabID=:TabID');
+            $query = $this->prepare('UPDATE Tabl SET TabFec =:TabFec, TabEst =:TabEst, TabEstReg=:TabEstReg WHERE TabID=:TabID');
             return $query->execute([
                 'TabEst'  => $this->TabEst, 
                 'TabEstReg' =>$this->TabEstReg,
@@ -71,14 +71,13 @@ class Tabl extends Model{
     public static function getById($TabID){
         try{
             $db = new Database();
-            $query = $db->connect()->prepare('SELECT * FROM Tabl WHERE TabID = :TabID');
+            $query = $db->connect()->prepare('SELECT * FROM tabl WHERE TabID = :TabID');
             $query->execute([ 'TabID' => $TabID]);
             $data = $query->fetch(PDO::FETCH_ASSOC);
-            $Tab = new Tab($data['TabEst']);
+            $Tab = new Tabl($data['TabEst']);
             $Tab->setId($data['TabID']);
             $Tab->setTabEstReg($data['TabEstReg']);
             $Tab->setTabFecAct($data['TabFecAct']);
-            $Tab->setTabFec($data['TabFec']);
             return $Tab->toArray();
         }catch(PDOException $e){
             return false;
@@ -87,14 +86,13 @@ class Tabl extends Model{
     public static function getByIds($TabID){
         try{
             $db = new Database();
-            $query = $db->connect()->prepare('SELECT * FROM Tabl WHERE TabID = :TabID');
+            $query = $db->connect()->prepare('SELECT * FROM tabl WHERE TabID = :TabID');
             $query->execute([ 'TabID' => $TabID]);
             $data = $query->fetch(PDO::FETCH_ASSOC);
-            $Tab = new Tab($data['TabEst']);
+            $Tab = new Tabl($data['TabEst']);
             $Tab->setId($data['TabID']);
             $Tab->setTabEstReg($data['TabEstReg']);
             $Tab->setTabFecAct($data['TabFecAct']);
-            $Tab->setTabFec($data['TabFec']);
             return $Tab;
         }catch(PDOException $e){
             return false;
@@ -107,11 +105,10 @@ class Tabl extends Model{
             $db = new Database();
             $query = $db->connect()->query('SELECT * FROM Tabl ORDER BY TabFecAct DESC');
             while($p = $query->fetch(PDO::FETCH_ASSOC)){
-                $item = new Tab($p['TabEst']);
+                $item = new Tabl($p['TabEst']);
                 $item->setId($p['TabID']);
                 $item->setTabEstReg($p['TabEstReg']);
                 $item->setTabFecAct($p['TabFecAct']);
-                $item->setTabFec($p['TabFec']);
                 array_push($items, $item->toArray());
             }
             return $items;
@@ -146,7 +143,7 @@ class Tabl extends Model{
         $this->TabFec = $value;
     }
     public function toArray():array{
-        $arr = array("id"=>$this->id,"name"=>$this->TabEst,"state"=>$this->TabEstReg,"reserved"=>$this->TabFec,"UpdateDate"=>$this->TabFecAct);
+        $arr = array("id"=>$this->id,"date"=>$this->TabFec,"reserved"=>$this->TabEst,"state"=>$this->TabEstReg,"UpdateDate"=>$this->TabFecAct);
         return $arr;
     }
     public function getTabEst(){
