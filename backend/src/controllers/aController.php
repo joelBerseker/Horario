@@ -23,7 +23,7 @@ class aController extends Controller{
         $AccRoleID = $data['roleid'];
         $AccResID = $data['resid'];
         if(!is_null($AccPer) &&!is_null($AccRoleID) &&!is_null($AccResID)){
-            $r = new Access($AccPer,$AccRoleID,$AccResID);
+            $r = new Access($AccRoleID,$AccResID,$AccPer);
             $r->save();
             $this->render('Access/home', ['op'=>1,'response'=>1,'message'=>'add successfuly']);
         }else{
@@ -32,18 +32,21 @@ class aController extends Controller{
         }
     }
     public function editA($data,$id){
-        $AccPer = $data['permission'];
+        $AccPer = $data['permise'];
         $AccRoleID = $data['roleid'];
         $AccResID = $data['resid'];
         $AccEstReg  = $data['state'];
         if(! is_null($id) && !is_null($AccPer) &&!is_null($AccRoleID) &&!is_null($AccResID) && !is_null($AccEstReg)){
             $r = Access::getByIds($id);
+            var_dump($r);
             $r->setAccPer($AccPer);
+            
             $r->setAccRoleID($AccRoleID);
             $r->setAccResID($AccResID);
+            var_dump($r);
             $r->setAccEstReg($AccEstReg);
             $r->update();
-            $this->render('Access/home', ['op'=>3,'response'=>1,'message'=>'update successfuly','access' => $r]);
+            $this->render('Access/home', ['op'=>3,'response'=>1,'message'=>'update successfuly','access' => $r->toArray()]);
         }else{
             echo "Error";
         }

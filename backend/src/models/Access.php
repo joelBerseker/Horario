@@ -92,16 +92,14 @@ class Access extends Model{
     public static function getById($AccID){
         try{
             $db = new Database();
-            $query = $db->connect()->prepare('SELECT * FROM Access WHERE AccID = :AccID');
+            $query = $db->connect()->prepare('SELECT * FROM access WHERE AccID = :AccID');
             $query->execute([ 'AccID' => $AccID]);
             $data = $query->fetch(PDO::FETCH_ASSOC);
-            $Access = new Access($data['AccPer'],$data['AccRoleID'],$data['AccResID']);
+            $Access = new Access($data['AccRoleID'],$data['AccResID'],$data['AccPer']);
             $Access->setId($data['AccID']);
-            $Access->setAccRoleID($data['AccRoleID']);
-            $Access->setAccResID($data['AccResID']);
             $Access->setAccEstReg($data['AccEstReg']);
             $Access->setAccFecAct($data['AccFecAct']);
-            return $Access->toArray();
+            return $Access;
         }catch(PDOException $e){
             return false;
         }
@@ -109,16 +107,14 @@ class Access extends Model{
     public static function getByIds($AccID){
         try{
             $db = new Database();
-            $query = $db->connect()->prepare('SELECT * FROM Access WHERE AccID = :AccID');
+            $query = $db->connect()->prepare('SELECT * FROM access WHERE AccID = :AccID');
             $query->execute([ 'AccID' => $AccID]);
             $data = $query->fetch(PDO::FETCH_ASSOC);
-            $Access = new Access($data['AccPer'],$data['AccRoleID'],$data['AccResID']);
+            $Access = new Access($data['AccRoleID'],$data['AccResID'],$data['AccPer']);
             $Access->setId($data['AccID']);
-            $Access->setAccRoleID($data['AccRoleID']);
-            $Access->setAccResID($data['AccResID']);
             $Access->setAccEstReg($data['AccEstReg']);
             $Access->setAccFecAct($data['AccFecAct']);
-            return $Access;
+            return $Access->toArray();
         }catch(PDOException $e){
             return false;
         }
@@ -168,10 +164,11 @@ class Access extends Model{
         $arr = array("id"=>$this->id,"permise"=>$this->AccPer,"roleid"=>$this->AccRoleID,"resid"=>$this->AccResID,"state"=>$this->AccEstReg);
         return $arr;
     }
-    public function getAccPer(){
+    public function getAccPer():int{
         return $this->AccPer;
     }
-    public function setAccPer($value){
+    public function setAccPer($value)
+    {
         $this->AccPer = $value;
     }
     public function getAccRoleID(){
