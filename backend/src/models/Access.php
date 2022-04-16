@@ -15,35 +15,15 @@ class Access extends Model{
     private $AccFecAct;
     
     public function __construct(
-        private int $AccPer,
         private int $AccRoleID, 
-        private int $AccResID
-
+        private int $AccResID,
+        private int $AccPer
     )
     {
         parent::__construct();
         $this->AccEstReg=0;
         $this->AccFecAct='';
     }
-
-    /*public static function exists($RoleName){
-        try{
-            $db = new Database();
-            $query = $db->connect()->prepare('SELECT RoleName FROM Roleduct WHERE RoleName = :RoleName');
-            $query->execute( ['RoleName' => $RoleName]);
-            
-            if($query->rowCount() > 0){
-                return true;
-            }else{
-                return false;
-            }
-        }catch(PDOException $e){
-            echo $e;
-            return false;
-        }
-    }*/
-
-   
     /**
      * @description Guardar Datos
      * 
@@ -185,7 +165,7 @@ class Access extends Model{
         $this->AccFecAct = $value;
     }
     public function toArray():array{
-        $arr = array("id"=>$this->id,"name"=>$this->AccPer,"roleid"=>$this->AccRoleID,"resid"=>$this->AccResID,"state"=>$this->AccEstReg,"UpdateDate"=>$this->AccFecAct);
+        $arr = array("id"=>$this->id,"permise"=>$this->AccPer,"roleid"=>$this->AccRoleID,"resid"=>$this->AccResID,"state"=>$this->AccEstReg);
         return $arr;
     }
     public function getAccPer(){

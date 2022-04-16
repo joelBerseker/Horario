@@ -1,6 +1,6 @@
 <?php
 header ("Access-Control-Allow-Origin: *");
-echo  $this->d['user'];
-$arr = array("respuesta"=>1,"envio"=>"tablero","c"=>3,"d"=>4,"e"=>5);
+
+$arr = array("response"=>$this->d['response'],"message"=>$this->d['message'],"data"=>array("user"=>$this->d['user'],"permises"=>$this->d['permises']));
 echo json_encode($arr);
 ?>

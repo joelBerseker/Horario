@@ -37,7 +37,7 @@ class rController extends Controller{
             $r->setRoleName($RoleName);
             $r->setRoleEstReg($RoleEstReg);
             $r->update();
-            $this->render('Role/home', ['op'=>3,'response'=>1,'message'=>'update successfuly','role' => $r]);
+            $this->render('Role/home', ['op'=>3,'response'=>1,'message'=>'update successfuly','role' => $r->toArray()]);
         }else{
             echo "Error";
         }

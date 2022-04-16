@@ -39,7 +39,7 @@ class tController extends Controller{
             $r->setTabEst($TabEst);
             $r->setTabEstReg($TabEstReg);
             $r->update();
-            $this->render('Tabl/home', ['op'=>3,'response'=>1,'message'=>'update successfuly','Tabl' => $r]);
+            $this->render('Tabl/home', ['op'=>3,'response'=>1,'message'=>'update successfuly','tabl' => $r->toArray()]);
         }else{
             echo "Error";
         }
@@ -47,7 +47,7 @@ class tController extends Controller{
 
     public function viewT($data){
         $r = Tabl::getById($data);
-        $this->render('Tabl/home', ['op'=>2,'response'=>1,'message'=>'success','Tabl' => $r]);
+        $this->render('Tabl/home', ['op'=>2,'response'=>1,'message'=>'success','tabl' => $r]);
     }
     public function deleteT($data){
         $r = Tabl::delete($data);
