@@ -23,28 +23,6 @@ class Role extends Model{
         $this->RoleFecAct='';
     }
 
-    /*public static function exists($RoleName){
-        try{
-            $db = new Database();
-            $query = $db->connect()->prepare('SELECT RoleName FROM Roleduct WHERE RoleName = :RoleName');
-            $query->execute( ['RoleName' => $RoleName]);
-            
-            if($query->rowCount() > 0){
-                return true;
-            }else{
-                return false;
-            }
-        }catch(PDOException $e){
-            echo $e;
-            return false;
-        }
-    }*/
-
-   
-    /**
-     * @description Guardar Datos
-     * 
-     */
     public function save(){
         try{
             
@@ -52,6 +30,7 @@ class Role extends Model{
             $query->execute([
                 'RoleName'  => $this->RoleName, 
             ]);
+            /*
             $resources = Resource::getAll();
             for ($i = 1, $size = count($resources); $i < $size; ++$i) {
                 $auxq = $this->prepare('INSERT INTO Access (AccPer,AccRoleID,AccResID) VALUES(:AccPer,:AccRoleID,:AccResID)');
@@ -61,6 +40,7 @@ class Role extends Model{
                     'AccResID'  => $resources[$i]['ResID'], 
                 ]);
             }
+            */
             return true;
         }catch(PDOException $e){
             error_log($e);

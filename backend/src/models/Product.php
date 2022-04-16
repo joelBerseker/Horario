@@ -48,18 +48,9 @@ class Product extends Model
             return false;
         }
     }
-    public function update()
-    {
-        try {
-            $query = $this->prepare('UPDATE product SET 
-                            ProName         =:ProName,
-                            ProDes          =:ProDes,
-                            ProTypeProID    =:ProTypeProID,
-                            ProImg          =:ProImg,
-                            ProPre          =:ProPre,
-                            ProProm         =:ProProm,
-                            ProEstReg       =:ProEstReg
-                            WHERE ProID     =:ProID');
+    public function update(){
+        try{
+            $query = $this->prepare('UPDATE product SET ProName =:ProName, ProDes=:ProDes, ProTypeProID= :ProTypeProID, ProImg=:ProImg, ProPre=:ProPre, ProProm=:ProProm, ProEstReg=:ProEstReg WHERE ProID=:ProID');
             return $query->execute([
                 'ProName'  => $this->ProName,
                 'ProDes'  => $this->ProDes,
@@ -142,7 +133,8 @@ class Product extends Model
             $prod->setProEstReg($data['ProEstReg']);
             $prod->setProFecAct($data['ProFecAct']);
             return $prod;
-        } catch (PDOException $e) {
+        }catch(PDOException $e){
+            
             return false;
         }
     }
