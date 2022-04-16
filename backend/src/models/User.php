@@ -154,7 +154,7 @@ class User extends Model{
         $items = [];
         try{
             $db = new Database();
-            $query = $db->connect()->query('SELECT * FROM User ORDER BY UserFecAct DESC');
+            $query = $db->connect()->query('SELECT * FROM user_table ORDER BY UserFecAct DESC');
             while($p = $query->fetch(PDO::FETCH_ASSOC)){
                 $item = new User($p['UserRoleID'],$p['UserName'],$p['UserNickName'],$p['UserPass']);
                 $item->setId($p['AccID']);

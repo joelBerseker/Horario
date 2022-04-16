@@ -15,6 +15,7 @@ class Product extends Model
     private int $ProEstReg;
     private $ProFecAct;
     private string $ProImg;
+    private $ProTypeProName;
 
     public function __construct(
         private string $ProName,
@@ -27,6 +28,7 @@ class Product extends Model
         $this->ProEstReg = 0;
         $this->ProFecAct = '';
         $this->ProProm = 0;
+        $this->ProTypeProName='';
     }
 
     public function save()
@@ -144,7 +146,7 @@ class Product extends Model
         $items = [];
         try {
             $db = new Database();
-            $query = $db->connect()->query('SELECT * FROM product ORDER BY ProFecAct DESC');
+            $query = $db->connect()->query('SELECT * FROM product_table ORDER BY ProFecAct DESC');
             while ($p = $query->fetch(PDO::FETCH_ASSOC)) {
                 $item = new Product($p['ProName'], $p['ProDes'], $p['ProTypeProID'], $p['ProPre']);
                 $item->setId($p['ProID']);
@@ -188,7 +190,7 @@ class Product extends Model
     }
     public function toArray(): array
     {
-        $arr = array("id" => $this->id, "name" => $this->ProName, "image" => $this->ProImg, "description" => $this->ProDes, "typeproid" => $this->ProTypeProID, "price" => $this->ProPre, "promotion" => $this->ProProm, "state" => $this->ProEstReg, "UpdateDate" => $this->ProFecAct);
+        $arr = array("id" => $this->id, "name" => $this->ProName, "image" => $this->ProImg, "description" => $this->ProDes,"typeproname"=>$this->ProTypeProName, "typeproid" => $this->ProTypeProID, "price" => $this->ProPre, "promotion" => $this->ProProm, "state" => $this->ProEstReg, "UpdateDate" => $this->ProFecAct);
         return $arr;
     }
     public function getProName()
@@ -225,6 +227,15 @@ class Product extends Model
     public function getProTypeProID()
     {
         return $this->ProTypeProID;
+    }
+    public function setProTypeProName($value)
+    {
+        $this->ProTypeProName = $value;
+    }
+
+    public function getProTypeProName()
+    {
+        return $this->ProTypeProName;
     }
     public function setProPre($value)
     {
