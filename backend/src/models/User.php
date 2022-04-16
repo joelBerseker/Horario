@@ -13,6 +13,7 @@ class User extends Model{
     private string $id;
     private int $UserEstReg;
     private $UserFecAct;
+    private $userRoleName;
 
     public function __construct(
         private int $UserRoleID,
@@ -24,6 +25,7 @@ class User extends Model{
         parent::__construct();
         $this->UserEstReg=0;
         $this->UserFecAct='';
+        $this->userRoleName='';
     }
 
     private function getHashedPassword($password){
@@ -157,6 +159,7 @@ class User extends Model{
                 $item = new User($p['UserRoleID'],$p['UserName'],$p['UserNickName'],$p['UserPass']);
                 $item->setId($p['AccID']);
                 $item->setUserRoleID($p['UserRoleID']);
+                $item->setUserRoleName($p['RoleName']);
                 $item->setUserName($p['UserName']);
                 $item->setUserNickName($p['UserNickName']);
                 $item->setUserPass($p['UserPass']);
@@ -191,7 +194,7 @@ class User extends Model{
         $this->UserFecAct = $value;
     }
     public function toArray():array{
-        $arr = array("id"=>$this->id,"name"=>$this->UserName,"roleid"=>$this->UserRoleID,"nickname"=>$this->UserNickName,"password"=>$this->UserPass,"state"=>$this->UserEstReg,"UpdateDate"=>$this->UserFecAct);
+        $arr = array("id"=>$this->id,"name"=>$this->UserName,"rolename"=>$this->userRoleName,"roleid"=>$this->UserRoleID,"nickname"=>$this->UserNickName,"password"=>$this->UserPass,"state"=>$this->UserEstReg,"UpdateDate"=>$this->UserFecAct);
         return $arr;
     }
     public function getUserName(){
@@ -211,6 +214,12 @@ class User extends Model{
     }
     public function setUserNickName($value){
         $this->UserNickName = $value;
+    }
+    public function getUserRoleName(){
+        return $this->userRoleName;
+    }
+    public function setUserRoleName($value){
+        $this->userRoleName = $value;
     }
     public function getUserPass(){
         return $this->UserPass;
