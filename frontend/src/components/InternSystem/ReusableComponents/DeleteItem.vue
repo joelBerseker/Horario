@@ -22,7 +22,7 @@ const url = process.env.VUE_APP_RUTA_API;
 
 export default {
   mixins: [UtilityFunctions],
-  props: ["item", "pathName", "modalName"],
+  props: ["item", "pathName", "modalName", "getList"],
 
   methods: {
     handleOk(evt) {
@@ -30,11 +30,11 @@ export default {
       this.deleteItem();
     },
     deleteItem() {
-      var path = url + this.pathName + "/" + this.item.id;
+      var path = url + this.pathName + "/delete/" + this.item.id;
       this.$store.dispatch("loadingSwitch");
       setTimeout(() => {
         axios
-          .delete(path)
+          .post(path)
           .then((response) => {
             this.$store.dispatch("loadingSwitch");
             this.makeToast(response, "success");
@@ -42,6 +42,7 @@ export default {
               this.$bvModal.hide("delete-" + this.modalName + "-modal");
             });
             this.$bvModal.hide("detail-" + this.modalName + "-modal");
+            this.getList();
           })
           .catch((error) => {
             this.$store.dispatch("loadingSwitch");

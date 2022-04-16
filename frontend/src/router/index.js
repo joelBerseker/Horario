@@ -16,12 +16,12 @@ import MyOrder from "@/components/InternSystem/Order/MyOrder";
 import Sidebar from "@/components/InternSystem/Sidebar";
 
 import Access from "@/components/InternSystem/Setting/Access";
-import Dish from "@/components/InternSystem/Setting/Dish";
-import Rol from "@/components/InternSystem/Setting/Rol";
+import ListProduct from "@/components/InternSystem/Setting/Product/ListProduct";
+import ListRol from "@/components/InternSystem/Setting/Rol/ListRol";
 import Settingbar from "@/components/InternSystem/Setting/Settingbar";
-import SettingTable from "@/components/InternSystem/Setting/Table";
+import ListSettingTable from "@/components/InternSystem/Setting/Table/ListTable";
 import ListTypeOfProduct from "@/components/InternSystem/Setting/TypeOfProduct/ListTypeOfProduct";
-import SettingUser from "@/components/InternSystem/Setting/User";
+import ListSettingUser from "@/components/InternSystem/Setting/User/ListUser";
 
 Vue.use(VueRouter);
 
@@ -109,8 +109,8 @@ const routes = [
         children: [
           {
             path: "/system/setting/table",
-            name: "SettingTable",
-            component: SettingTable,
+            name: "ListSettingTable",
+            component: ListSettingTable,
             props: true,
           },
           {
@@ -120,15 +120,15 @@ const routes = [
             props: true,
           },
           {
-            path: "/system/setting/dish",
-            name: "Dish",
-            component: Dish,
+            path: "/system/setting/product",
+            name: "ListProduct",
+            component: ListProduct,
             props: true,
           },
           {
             path: "/system/setting/rol",
-            name: "Rol",
-            component: Rol,
+            name: "ListRol",
+            component: ListRol,
             props: true,
           },
           {
@@ -139,8 +139,8 @@ const routes = [
           },
           {
             path: "/system/setting/user",
-            name: "SettingUser",
-            component: SettingUser,
+            name: "ListSettingUser",
+            component: ListSettingUser,
             props: true,
           },
         ],

@@ -2,7 +2,8 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto+Condensed&display=swap");
 
 :root {
-  --first-color: #f1e8e3;
+  --first-color: white;
+  /*f1e8e3*/
   --second-color: #8d3320;
   --second-color-v1: #8d3220e3;
   --third-color: #8d6a20;
@@ -58,6 +59,32 @@
 
 /* FIN UTILITIES PERSONALIZADAS*/
 
+.icon_menu {
+  position: fixed; /* Stay in place */
+  bottom: 0;
+  margin: 0.3rem;
+  z-index: 100;
+  padding: 0.2rem !important;
+
+}
+.icon_menu_simulation {
+  z-index: 100;
+  padding-top: 0.2rem !important;
+  padding-bottom: 0.2rem !important;
+  visibility: hidden;
+}
+.buttom_add {
+  z-index: 100;
+  padding-top: 0.2rem !important;
+  padding-bottom: 0.2rem !important;
+}
+.nav_buttoms {
+  position: fixed;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  margin: 0.3rem;
+}
 
 #app {
   font-family: "Roboto Condensed", sans-serif;
@@ -135,10 +162,16 @@
   border-color: var(--fourth-color) !important;
 }
 
+
 .btn-secondary {
   background-color: var(--third-color) !important;
   border-color: var(--third-color) !important;
 }
+.btn-dark {
+  background-color: var(--second-color) !important;
+  border-color: var(--second-color) !important;
+}
+
 
 .btn-warning {
   color: #ffffff !important;
@@ -164,48 +197,6 @@
   background-size: cover;
 }
 
-/*TRANSITIONS*/
-/*t-setting-bar-body*/
-.t-setting-bar-body-enter-active,
-.t-setting-bar-body-leave-active {
-  transition: opacity 0.2s ease
-}
-
-.t-setting-bar-body-enter {
-  opacity: 0;
-}
-
-.t-setting-bar-body-leave-to {
-  opacity: 0;
-}
-
-
-/*t-setting-bar-title*/
-.t-setting-bar-title-enter-active,
-.t-setting-bar-title-leave-active {
-  transition: all 0.2s ease
-}
-
-.t-setting-bar-title-enter {
-  opacity: 0;
-  transform: translateX(-3rem);
-}
-
-.t-setting-bar-title-leave-to {
-  opacity: 0;
-  transform: translateX(3rem);
-}
-
-/*t-side-bar-item*/
-.t-side-bar-item-enter-active {
-  transition: all 0.2s ease
-}
-
-.t-side-bar-item-enter {
-  opacity: 0;
-}
-
-
 /*TABLE MODIFICATIONS*/
 table.b-table[aria-busy='true'] {
   opacity: 0;
@@ -216,7 +207,7 @@ table.b-table[aria-busy='false'] {
 }
 
 .table thead th {
-  border-color: var(--second-color) !important;
+  border-color: var(--second-color-v1) !important;
   background-color: var(--second-color) !important;
   color: var(--first-color) !important;
   font-weight: 400;
@@ -226,7 +217,7 @@ table.b-table[aria-busy='false'] {
 
 .table th,
 .table td {
-  border-color: var(--second-color) !important;
+  border-color: var(--second-color-v1) !important;
   padding-top: 0.5rem !important;
   padding-bottom: 0.5rem !important;
 }
@@ -281,17 +272,20 @@ table.b-table[aria-busy='false'] {
   border-radius: 0px !important;
 }
 
-.custom-switch .custom-control-label::before{
+.custom-switch .custom-control-label::before {
   border-radius: 0px !important;
 }
+
 .custom-switch .custom-control-label::after {
   border-radius: 0px !important;
 
 }
-.custom-control-input:checked ~ .custom-control-label::before{
+
+.custom-control-input:checked~.custom-control-label::before {
   background-color: var(--fourth-color) !important;
   border-color: var(--fourth-color) !important;
 }
+
 @media only screen and (max-width: 1199px) {
   #main-side {
     margin-left: 0px;
@@ -311,4 +305,15 @@ table.b-table[aria-busy='false'] {
   .bottom-card {
     margin-bottom: 2rem;
   }
+}
+
+
+/*t-extra-buttoms*/
+.t-extra-buttoms-enter-active{
+  transition: all 0.2s ease
+}
+
+.t-extra-buttoms-enter {
+  opacity: 0;
+  transform: translateX(3rem);
 }
