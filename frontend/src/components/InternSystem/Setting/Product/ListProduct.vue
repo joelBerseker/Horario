@@ -1,17 +1,18 @@
 <template>
   <div>
-    <DetailTypeOfProduct
+    <DetailProduct
       :item="itemSelected"
       :changeMode="changeMode"
       :mode="mode"
       :pathName="pathName"
       :modalName="modalName"
-      :getTypeOfProductList="getTypeOfProductList"
+      :getProductList="getProductList"
     />
+
     <transition name="t-extra-buttoms">
       <div v-if="!isBusy" class="nav_buttoms">
         <b-row>
-          <b-col cols="auto" class="pr-2">
+          <b-col cols="auto" class="pr-0">
             <b-button
               variant="link "
               class="c1 bg4 px-2 icon_menu_simulation"
@@ -21,13 +22,13 @@
             </b-button>
           </b-col>
 
-          <b-col class="pl-0">
+          <b-col class="pl-2">
             <b-button
               class="buttom_add"
               variant="primary"
               size="lg"
               block
-              @click="detailTypeOfProduct(item_new, 0)"
+              @click="detailProduct(item_new, 0)"
             >
               <b-icon icon="plus"></b-icon>
               <small>Agregar</small>
@@ -36,7 +37,6 @@
         </b-row>
       </div>
     </transition>
-
     <div>
       <b-table
         :busy="isBusy"
@@ -54,7 +54,7 @@
           <b-button
             variant="secondary"
             size="sm"
-            @click="detailTypeOfProduct(data.item, 1)"
+            @click="detailProduct(data.item, 1)"
           >
             <b-icon icon="box-arrow-in-up-right"></b-icon>&nbsp;Ver
           </b-button>
@@ -81,23 +81,24 @@
 
 <script>
 import axios from "axios";
-import DetailTypeOfProduct from "@/components/InternSystem/Setting/TypeOfProduct/DetailTypeOfProduct";
+import DetailProduct from "@/components/InternSystem/Setting/Product/DetailProduct";
 import UtilityFunctions from "@/mixin/UtilityFunctions.js";
 const url = process.env.VUE_APP_RUTA_API;
 
 export default {
   mixins: [UtilityFunctions],
   components: {
-    DetailTypeOfProduct,
+    DetailProduct,
   },
   data() {
     return {
       item_new: {
         state: 0,
+        typeproid: 0,
       },
       isBusy: true,
-      modalName: "TypeOfProduct",
-      pathName: "typeproduct",
+      modalName: "Product",
+      pathName: "product",
       mode: 0, //0: agregar , 1: ver, 2: update
       itemSelected: {},
       perPage: 5,
@@ -111,6 +112,21 @@ export default {
         {
           key: "description",
           label: "Descripción",
+        },
+        {
+          key: "price",
+          label: "Precio",
+        },
+        {
+          key: "typeproid",
+          label: "Tipo de producto",
+        },
+        {
+          key: "promotion",
+          label: "Promoción",
+          formatter: (value) => {
+            return this.selections[value].text;
+          },
         },
         {
           key: "state",
@@ -137,12 +153,12 @@ export default {
     changeMode(mode) {
       this.mode = mode;
     },
-    detailTypeOfProduct(item, mode) {
+    detailProduct(item, mode) {
       this.itemSelected = Object.assign({}, item);
       this.mode = mode;
       this.$bvModal.show("detail-" + this.modalName + "-modal");
     },
-    getTypeOfProductList() {
+    getProductList() {
       this.isBusy = true;
       var path = url + this.pathName;
       console.log(path);
@@ -150,7 +166,7 @@ export default {
         axios
           .get(path)
           .then((response) => {
-            this.items = response.data.data.typeProducts;
+            this.items = response.data.data.products;
             this.isBusy = false;
           })
           .catch((error) => {
@@ -161,21 +177,10 @@ export default {
   },
   async created() {
     //await Service.access(1,typeofDush)
-    await this.getTypeOfProductList();
+    await this.getProductList();
   },
 };
 </script>
 
 <style scoped>
-/*.buttom_add {
-  border-radius: 100px !important;
-  position: fixed;
-  bottom: 0;
-  right: 0;
-  margin: 0.3rem;
-  z-index: 100;
-  padding: 1rem;
-  height: 3.5rem;
-  width: 3.5rem;
-}*/
 </style>

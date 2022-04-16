@@ -11,11 +11,11 @@
         <b-button
           v-if="!butonNav"
           @click="openNav"
-          variant="link "
-          class="c2 bg1 px-3 btn-none icon_menu"
+          variant="dark "
+          class="c1 bg2 px-2 icon_menu"
           size="lg"
         >
-          <b-icon icon="box-arrow-in-right"></b-icon>
+          <b-icon icon="list"></b-icon>
         </b-button>
         <div id="mySidenav" class="sidenav">
           <div>
@@ -59,7 +59,12 @@
         </div>
       </div>
       <transition name="t-side-bar-item">
-      <div v-if="menuItem&&positionAbsolute" class="side-bar-cover" @click="closeNav"></div></transition>
+        <div
+          v-if="menuItem && positionAbsolute"
+          class="side-bar-cover"
+          @click="closeNav"
+        ></div
+      ></transition>
       <div id="main-side" style="overflow-y: hidden">
         <router-view />
       </div>
@@ -158,8 +163,8 @@ export default {
   },
   methods: {
     selectItem() {
-      this.menuItem = false;
       if (this.positionAbsolute) {
+        this.menuItem = false;
         setTimeout(() => {
           this.closeNav();
         }, 0);
@@ -211,12 +216,7 @@ export default {
   background-color: var(--first-color) !important;
   color: var(--second-color) !important;
 }
-.icon_menu {
-  position: fixed; /* Stay in place */
-  bottom: 0;
-  margin: 0.3rem;
-  z-index: 100;
-}
+
 #main-side {
   transition: margin-left 0.5s;
   margin-left: 200px;
@@ -230,7 +230,14 @@ export default {
 .bottom-card {
   margin-bottom: 0;
 }
+/*t-side-bar-item*/
+.t-side-bar-item-enter-active {
+  transition: all 0.2s ease;
+}
 
+.t-side-bar-item-enter {
+  opacity: 0;
+}
 @media only screen and (max-width: 1199px) {
   #main-side {
     margin-left: 0px;

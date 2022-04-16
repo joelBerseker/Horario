@@ -22,7 +22,7 @@
 
     <div>
       <transition name="t-setting-bar-title" mode="out-in">
-        <div class="bg2 c1 p-2 mb-3" v-if="prueba">
+        <div class="bg2 c1 py-2 title-selected mb-2" v-if="prueba">
           <b-icon
             :icon="item_selected.icon"
             class="im"
@@ -44,12 +44,6 @@ export default {
   data() {
     return {
       prueba: true,
-      items: [
-        { age: 40, first_name: "Dickerson", last_name: "Macdonald" },
-        { age: 21, first_name: "Larsen", last_name: "Shaw" },
-        { age: 89, first_name: "Geneva", last_name: "Wilson" },
-        { age: 38, first_name: "Jami", last_name: "Carney" },
-      ],
       item_selected: {},
       nav_items: [
         {
@@ -57,7 +51,7 @@ export default {
           icon: "table",
           scale: 0.95,
           name: "Mesas",
-          to: "SettingTable",
+          to: "ListSettingTable",
           active_: false,
         },
         {
@@ -65,7 +59,7 @@ export default {
           icon: "journal-medical",
           scale: 1,
           name: "Roles",
-          to: "Rol",
+          to: "ListRol",
           active: false,
         },
         {
@@ -73,15 +67,15 @@ export default {
           icon: "people-fill",
           scale: 1,
           name: "Usuarios",
-          to: "SettingUser",
+          to: "ListSettingUser",
           active: false,
         },
         {
           value: 4,
           icon: "box-seam",
           scale: 1,
-          name: "Platos",
-          to: "Dish",
+          name: "Productos",
+          to: "ListProduct",
           active: false,
         },
         {
@@ -141,6 +135,10 @@ export default {
 </script>
 
 <style scoped>
+.title-selected{
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+}
 .nav-setting a {
   border-radius: 0px !important;
   border: none;
@@ -149,5 +147,36 @@ export default {
   transition: 0.2s;
   background-color: var(--second-color) !important;
   color: var(--first-color) !important;
+}
+
+/*t-setting-bar-body*/
+.t-setting-bar-body-enter-active,
+.t-setting-bar-body-leave-active {
+  transition: opacity 0.2s ease
+}
+
+.t-setting-bar-body-enter {
+  opacity: 0;
+}
+
+.t-setting-bar-body-leave-to {
+  opacity: 0;
+}
+
+
+/*t-setting-bar-title*/
+.t-setting-bar-title-enter-active,
+.t-setting-bar-title-leave-active {
+  transition: all 0.2s ease
+}
+
+.t-setting-bar-title-enter {
+  opacity: 0;
+  transform: translateX(-3rem);
+}
+
+.t-setting-bar-title-leave-to {
+  opacity: 0;
+  transform: translateX(3rem);
 }
 </style>

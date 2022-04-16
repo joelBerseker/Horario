@@ -4,7 +4,7 @@
       :item="item"
       :pathName="pathName"
       :modalName="modalName"
-      :getList="getTypeOfProductList"
+      :getList="getProductList"
     />
     <b-modal
       :id="'detail-' + this.modalName + '-modal'"
@@ -29,7 +29,7 @@
           ></div>
         </div>
         <InputTextPersonalized
-          name="Nombre:"
+          :name="'Nombre'"
           :validation="validation_name"
           :mode="mode"
           v-model="item.name"
@@ -44,6 +44,37 @@
           type="text"
           :required="true"
         />
+        <InputTextPersonalized
+          name="Precio:"
+          :validation="validation_price"
+          :mode="mode"
+          v-model="item.price"
+          type="number"
+          :required="true"
+        />
+        <InputSelectPersonalized
+          name="Tipo de producto:"
+          :validation="validation_typeproid"
+          :mode="mode"
+          v-model="item.typeproid"
+          :list="list_type_of_product"
+          :editFirst="true"
+          :required="true"
+          valueField="id"
+          textField="name"
+        />
+        <InputSelectPersonalized
+          v-if="mode !== 0"
+          name="Promoción:"
+          :validation="validation_promotion"
+          :mode="mode"
+          v-model="item.promotion"
+          :list="selections"
+          :editFirst="false"
+          :required="true"
+          valueField="value"
+          textField="text"
+        />
         <InputSelectPersonalized
           v-if="mode !== 0"
           name="Estado:"
@@ -57,7 +88,7 @@
           textField="text"
         />
         <InputImagePersonalized
-        v-if="mode === 0 || mode === 2"
+          v-if="mode === 0 || mode === 2"
           name="Imagen:"
           :validation="validation_image"
           :mode="mode"
@@ -121,7 +152,7 @@ export default {
     DeleteItem,
     InputTextPersonalized,
     InputSelectPersonalized,
-    InputImagePersonalized
+    InputImagePersonalized,
   },
   mixins: [UtilityFunctions, UtilityValidations],
   props: [
@@ -130,11 +161,12 @@ export default {
     "changeMode",
     "pathName",
     "modalName",
-    "getTypeOfProductList",
+    "getProductList",
   ],
 
   data() {
     return {
+      list_type_of_product: [],
       validated: false,
       title: ["Agregar registro", "Ver registro", "Editar registro"],
       image: null,
@@ -166,6 +198,36 @@ export default {
 
     validation_state() {
       var text = this.item.state;
+      var required = true;
+      var validation_ = { status: null, value: "" };
+      if (this.showValidation(text, required, this.validated, this.mode)) {
+        validation_.status = true;
+        if (validation_.status) validation_ = this.optionSelect(text);
+      }
+      return validation_;
+    },
+    validation_typeproid() {
+      var text = this.item.typeproid;
+      var required = true;
+      var validation_ = { status: null, value: "" };
+      if (this.showValidation(text, required, this.validated, this.mode)) {
+        validation_.status = true;
+        if (validation_.status) validation_ = this.optionSelect(text);
+      }
+      return validation_;
+    },
+    validation_price() {
+      var text = this.item.price;
+      var required = true;
+      var validation_ = { status: null, value: "" };
+      if (this.showValidation(text, required, this.validated, this.mode)) {
+        validation_.status = true;
+        if (validation_.status) validation_ = this.textEmpty(text);
+      }
+      return validation_;
+    },
+    validation_promotion() {
+      var text = this.item.promotion;
       var required = true;
       var validation_ = { status: null, value: "" };
       if (this.showValidation(text, required, this.validated, this.mode)) {
@@ -253,6 +315,9 @@ export default {
       formData.append("name", this.item.name);
       formData.append("description", this.item.description);
       formData.append("state", this.item.state);
+      formData.append("typeproid", this.item.typeproid);
+      formData.append("price", this.item.price);
+      formData.append("promotion", 1);
       var path = url + this.pathName + "/edit/" + this.item.id;
       this.$store.dispatch("loadingSwitch");
       setTimeout(() => {
@@ -264,7 +329,7 @@ export default {
             this.$nextTick(() => {
               this.$bvModal.hide("detail-" + this.modalName + "-modal");
             });
-            this.getTypeOfProductList();
+            this.getProductList();
           })
           .catch(() => {
             this.$store.dispatch("loadingSwitch");
@@ -276,8 +341,11 @@ export default {
       var formData = new FormData();
       formData.append("name", this.item.name);
       formData.append("description", this.item.description);
+      formData.append("typeproid", this.item.typeproid);
+      formData.append("price", this.item.price);
       formData.append("image", this.image);
       var path = url + this.pathName + "/";
+      console.log(path);
       this.$store.dispatch("loadingSwitch");
       setTimeout(() => {
         axios
@@ -288,7 +356,7 @@ export default {
             this.$nextTick(() => {
               this.$bvModal.hide("detail-" + this.modalName + "-modal");
             });
-            this.getTypeOfProductList();
+            this.getProductList();
           })
           .catch(() => {
             this.$store.dispatch("loadingSwitch");
@@ -309,6 +377,21 @@ export default {
     deleteItemButtom() {
       this.$bvModal.show("delete-" + this.modalName + "-modal");
     },
+    getTypeOfProductList() {
+      var path = url + "typeproduct";
+
+      axios
+        .get(path)
+        .then((response) => {
+          this.list_type_of_product = response.data.data.typeProducts;
+        })
+        .catch((error) => {
+          this.makeToast(error, "danger");
+        });
+    },
+  },
+  created() {
+    this.getTypeOfProductList();
   },
 };
 </script>

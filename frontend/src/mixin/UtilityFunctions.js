@@ -26,9 +26,14 @@ export default {
   data() {
     return {
       status: [
-        { value: 0, text: "Seleccione una opción", disabled: true },
+        { value: 0, text: "Seleccione una opción" },
         { value: 1, text: "Activo" },
         { value: 2, text: "Inactivo" },
+      ],
+      selections: [
+        { value: 0, text: "Seleccione una opción" },
+        { value: 1, text: "Si" },
+        { value: 2, text: "No" },
       ],
     };
   },

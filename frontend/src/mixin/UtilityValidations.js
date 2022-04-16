@@ -2,6 +2,11 @@
 
 export default {
   methods: {
+    showValidation(text, required, activated, mode) {
+      if (mode==2) activated = true;
+      if (!required) activated = false;
+      return !(((text == null || text === 0) && !activated) || mode == 1);
+    },
     onlyText(text) {
       var status_ = this.regular_expressions.onlyText.test(text);
       var value_ = "Solo se permite texto";
