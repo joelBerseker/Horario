@@ -154,7 +154,7 @@ class Product extends Model
                 $item->setProProm($p['ProProm']);
                 $item->setProEstReg($p['ProEstReg']);
                 $item->setProFecAct($p['ProFecAct']);
-
+                $item->setProTypeProName($p['TypeProName']);
                 array_push($items, $item->toArray());
             }
             return $items;
