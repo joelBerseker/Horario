@@ -36,14 +36,12 @@ class aController extends Controller{
         $AccRoleID = $data['roleid'];
         $AccResID = $data['resid'];
         $AccEstReg  = $data['state'];
-        if(! is_null($id) && !is_null($AccPer) &&!is_null($AccRoleID) &&!is_null($AccResID) && !is_null($AccEstReg)){
+        
+        if(!is_null($id) && !is_null($AccPer) &&!is_null($AccRoleID) &&!is_null($AccResID) && !is_null($AccEstReg)){
             $r = Access::getByIds($id);
-            var_dump($r);
             $r->setAccPer($AccPer);
-            
             $r->setAccRoleID($AccRoleID);
             $r->setAccResID($AccResID);
-            var_dump($r);
             $r->setAccEstReg($AccEstReg);
             $r->update();
             $this->render('Access/home', ['op'=>3,'response'=>1,'message'=>'update successfuly','access' => $r->toArray()]);
@@ -54,6 +52,7 @@ class aController extends Controller{
 
     public function viewA($data){
         $r = Access::getById($data);
+
         $this->render('Access/home', ['op'=>2,'response'=>1,'message'=>'success','access' => $r]);
     }
     public function deleteA($data){
