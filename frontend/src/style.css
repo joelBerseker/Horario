@@ -8,7 +8,7 @@
   --second-color-v1: #8d3220e3;
   --third-color: #8d6a20;
   --third-color-v1: #8d6a20a9;
-  --fourth-color: #438d20;
+  --fourth-color: #7A8D20;
 }
 
 /* INICIO UTILITIES PERSONALIZADAS*/
@@ -63,7 +63,7 @@
   position: fixed; /* Stay in place */
   bottom: 0;
   margin: 0.3rem;
-  z-index: 100;
+  z-index: 110;
   padding: 0.2rem !important;
 
 }
@@ -79,11 +79,13 @@
   padding-bottom: 0.2rem !important;
 }
 .nav_buttoms {
+  z-index: 90;
   position: fixed;
   right: 0;
-  left: 0;
+  left: 75%;
+
   bottom: 0;
-  margin: 0.3rem;
+  margin: 0.3rem 2rem 0.3rem 0.3rem;
 }
 
 #app {
@@ -182,7 +184,6 @@
 
 .btn {
   font-family: "Roboto Condensed", sans-serif;
-  border-radius: 0px !important;
   padding-left: 1.2em !important;
   padding-right: 1.2em !important;
 }
@@ -239,6 +240,8 @@ table.b-table[aria-busy='false'] {
 
 .option-class {
   min-width: 100px !important;
+  width: 100px !important;
+  max-width: 100px !important;
 }
 
 .form-control,
@@ -287,6 +290,12 @@ table.b-table[aria-busy='false'] {
 }
 
 @media only screen and (max-width: 1199px) {
+
+  .nav_buttoms {
+    right: 0;
+    left: 0;
+    margin: 0.3rem;
+  }
   #main-side {
     margin-left: 0px;
     padding: 0rem !important;

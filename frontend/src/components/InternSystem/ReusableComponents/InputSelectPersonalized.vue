@@ -1,7 +1,7 @@
 <template>
   <b-form-group class="mb-2" :label="name" label-size="sm" label-class="mb-0">
     <b-form-select
-      :disabled="mode === 1"
+      :disabled="disabled"
       v-model="computedItem"
       :options="list"
       :value-field="valueField"
@@ -26,7 +26,7 @@ export default {
   props: [
     "name",
     "validation",
-    "mode",
+    "disabled",
     "item",
     "required",
     "list",

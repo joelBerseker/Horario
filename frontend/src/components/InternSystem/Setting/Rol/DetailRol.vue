@@ -1,6 +1,11 @@
 <template>
   <div>
-    <DeleteItem :item="item" :pathName="pathName" :modalName="modalName" />
+    <DeleteItem
+      :item="item"
+      :pathName="pathName"
+      :modalName="modalName"
+      :getList="getRolList"
+    />
     <b-modal
       :id="'detail-' + this.modalName + '-modal'"
       ref="modal"
@@ -13,92 +18,29 @@
       @hidden="closeModal"
     >
       <b-form ref="form" @submit="handleSubmit">
-        <div class="mb-2 row justify-content-center">
-          <div
-            class="image-product"
-            :style="
-              'background-image: url(' +
-              selectImage +
-              '); width: 25vh; height: 25vh;'
-            "
-          ></div>
-        </div>
-        <b-form-group
-          class="mb-2"
-          label="Nombre:"
-          label-size="sm"
-          label-class="mb-0"
-        >
-          <b-form-input
-            :disabled="mode === 1"
-            v-model="item.name"
-            type="text"
-            required
-            :state="validationName.status"
-          ></b-form-input>
-          <small v-if="validationName.status == false" class="text-danger">
-            <b-icon icon="exclamation-circle" variant="danger"></b-icon>&nbsp;
-            {{ validationName.value }}
-          </small>
-        </b-form-group>
-        <b-form-group
-          class="mb-2"
-          label="Descripcion:"
-          label-size="sm"
-          label-class="mb-0"
-        >
-          <b-form-input
-            :disabled="mode === 1"
-            v-model="item.description"
-            type="text"
-            required
-            :state="validationDescription.status"
-          ></b-form-input>
-          <small
-            v-if="validationDescription.status == false"
-            class="text-danger"
-          >
-            <b-icon icon="exclamation-circle" variant="danger"></b-icon>&nbsp;
-            {{ validationDescription.value }}
-          </small>
-        </b-form-group>
+       
+        <InputTextPersonalized
+          :name="'Nombre'"
+          :validation="validation_name"
+          :disabled="mode === 1"
+          v-model="item.name"
+          type="text"
+          :required="true"
+        />
 
-        <b-form-group
+        <InputSelectPersonalized
           v-if="mode !== 0"
-          class="mb-2"
-          label="Estado:"
-          label-size="sm"
-          label-class="mb-0"
-        >
-          <b-form-select
-            :disabled="mode === 1"
-            v-model="item.state"
-            :options="status"
-            :state="validationState.status"
-          ></b-form-select>
-          <small v-if="validationState.status == false" class="text-danger">
-            <b-icon icon="exclamation-circle" variant="danger"></b-icon>&nbsp;
-            {{ validationState.value }}
-          </small>
-        </b-form-group>
-
-        <b-form-group
-          v-if="mode === 0 || mode === 2"
-          class="mb-2"
-          label="Imagen:"
-          label-class="mb-0"
-          label-size="sm"
-          description="No es necesario ingresar una imagen"
-        >
-          <b-form-file
-            @change="obtainImage"
-            accept="image/*"
-            v-model="image"
-            :state="validationImage.status"
-            placeholder="Escoge una imagen..."
-            drop-placeholder="Suelta una imagen aqui..."
-          ></b-form-file>
-        </b-form-group>
+          name="Estado:"
+          :validation="validation_state"
+          :disabled="mode === 1"
+          v-model="item.state"
+          :list="status"
+          :editFirst="false"
+          :required="true"
+          valueField="value"
+          textField="text"
+        />
+    
       </b-form>
       <template #modal-footer="{ ok }">
         <!----
@@ -106,7 +48,7 @@
           Cancelar
         </b-button>--->
         <b-button v-if="mode === 1" variant="warning" @click="editItemButtom()">
-          <b-icon icon="pen" scale="1"></b-icon>
+          <b-icon icon="pencil-square" scale="1"></b-icon>
           &nbsp;Editar
         </b-button>
         <b-button
@@ -122,7 +64,7 @@
           variant="secondary"
           @click="detailItemButtom()"
         >
-          <b-icon icon="list" scale="1"></b-icon>
+          <b-icon icon="eye" scale="1"></b-icon>
           &nbsp;Ver
         </b-button>
 
@@ -142,14 +84,17 @@
 <script>
 import axios from "axios";
 import DeleteItem from "@/components/InternSystem/ReusableComponents/DeleteItem";
+import InputTextPersonalized from "@/components/InternSystem/ReusableComponents/InputTextPersonalized";
+import InputSelectPersonalized from "@/components/InternSystem/ReusableComponents/InputSelectPersonalized";
 import UtilityFunctions from "@/mixin/UtilityFunctions.js";
 import UtilityValidations from "@/mixin/UtilityValidations.js";
 const url = process.env.VUE_APP_RUTA_API;
-const url_public = process.env.VUE_APP_RUTA_PUBLIC;
 
 export default {
   components: {
     DeleteItem,
+    InputTextPersonalized,
+    InputSelectPersonalized,
   },
   mixins: [UtilityFunctions, UtilityValidations],
   props: [
@@ -158,82 +103,47 @@ export default {
     "changeMode",
     "pathName",
     "modalName",
-    "getTypeOfProductList",
+    "getRolList",
   ],
 
   data() {
     return {
-      activate_validation: false,
+      list_type_of_product: [],
+      validated: false,
       title: ["Agregar registro", "Ver registro", "Editar registro"],
       image: null,
       previewImage: null,
     };
   },
   computed: {
-    validationName() {
+    validation_name() {
       var text = this.item.name;
-      if ((text == null && !this.activate_validation) || this.mode == 1)
-        return { status: null, value: "" };
-
-      var resp = this.textEmpty(text);
-      if (!resp.status) return resp;
-      resp = this.onlyText(text);
-      if (!resp.status) return resp;
-      return resp;
-    },
-    validationDescription() {
-      var text = this.item.description;
-      if ((text == null && !this.activate_validation) || this.mode == 1)
-        return { status: null, value: "" };
-
-      var resp = this.textEmpty(text);
-      if (!resp.status) return resp;
-
-   
-
-      return resp;
-    },
-
-    validationState() {
-      var text = this.item.state;
-      if ((text == 0 && !this.activate_validation) || this.mode == 1)
-        return { status: null, value: "" };
-
-      var resp = this.optionSelect(text);
-      if (!resp.status) return resp;
-      return resp;
-    },
-    validationImage() {
-      var text = this.image;
-      if (text === null || this.mode == 1) return { status: null, value: "" };
-
-      var resp = this.fileUploaded(text);
-      if (!resp.status) return resp;
-      return resp;
-    },
-
-    selectImage() {
-      switch (this.mode) {
-        case 0:
-          if (this.image) return this.previewImage;
-          else return "/no_image.jpg";
-        case 1:
-          if (this.item.image == "") return "/no_image.jpg";
-          else return url_public+this.item.image;
-        case 2:
-          if (this.image) return this.previewImage;
-          else if (this.item.image != "") return url_public+this.item.image;
-          else return "/no_image.jpg";
-        default:
-          return "/no_image.jpg";
+      var required = true;
+      var validation_ = { status: null, value: "" };
+      if (this.showValidation(text, required, this.validated, this.mode)) {
+        validation_.status = true;
+        if (validation_.status) validation_ = this.textEmpty(text);
+    
       }
+      return validation_;
+    },
+
+    validation_state() {
+      var text = this.item.state;
+      var required = true;
+      var validation_ = { status: null, value: "" };
+      if (this.showValidation(text, required, this.validated, this.mode)) {
+        validation_.status = true;
+        if (validation_.status) validation_ = this.optionSelect(text);
+      }
+      return validation_;
     },
   },
   methods: {
     closeModal() {
       this.image = null;
       this.previewImage = null;
-      this.activate_validation = false;
+      this.validated = false;
     },
     obtainImage(e) {
       const file = e.target.files[0];
@@ -244,7 +154,7 @@ export default {
       this.handleSubmit();
     },
     handleSubmit() {
-      this.activate_validation = true;
+      this.validated = true;
       if (this.formValidation()) {
         switch (this.mode) {
           case 0:
@@ -265,19 +175,21 @@ export default {
       }
     },
     formValidation() {
+      var state = true;
+      if (this.mode == 2) state = this.validation_state.status;
+      console.log(state);
       return (
         this.$refs.form.checkValidity() &&
-        this.validationName.status &&
-        this.validationDescription.status
+        this.validation_name.status &&
+        state
       );
     },
     editItem() {
       console.log(this.item.id);
       var formData = new FormData();
       formData.append("name", this.item.name);
-      formData.append("description", this.item.description);
       formData.append("state", this.item.state);
-      var path = url + this.pathName + "/" + this.item.id;
+      var path = url + this.pathName + "/edit/" + this.item.id;
       this.$store.dispatch("loadingSwitch");
       setTimeout(() => {
         axios
@@ -288,7 +200,7 @@ export default {
             this.$nextTick(() => {
               this.$bvModal.hide("detail-" + this.modalName + "-modal");
             });
-            this.getTypeOfProductList();
+            this.getRolList();
           })
           .catch(() => {
             this.$store.dispatch("loadingSwitch");
@@ -299,9 +211,8 @@ export default {
     addItem() {
       var formData = new FormData();
       formData.append("name", this.item.name);
-      formData.append("description", this.item.description);
-      formData.append("image", this.image);
       var path = url + this.pathName + "/";
+      console.log(path);
       this.$store.dispatch("loadingSwitch");
       setTimeout(() => {
         axios
@@ -312,7 +223,7 @@ export default {
             this.$nextTick(() => {
               this.$bvModal.hide("detail-" + this.modalName + "-modal");
             });
-            this.getTypeOfProductList();
+            this.getRolList();
           })
           .catch(() => {
             this.$store.dispatch("loadingSwitch");
@@ -324,7 +235,7 @@ export default {
     detailItemButtom() {
       this.image = null;
       this.previewImage = null;
-      this.activate_validation = false;
+      this.validated = false;
       this.changeMode(1);
     },
     editItemButtom() {
@@ -333,6 +244,21 @@ export default {
     deleteItemButtom() {
       this.$bvModal.show("delete-" + this.modalName + "-modal");
     },
+    getTypeOfProductList() {
+      var path = url + "typeproduct";
+
+      axios
+        .get(path)
+        .then((response) => {
+          this.list_type_of_product = response.data.data.typeProducts;
+        })
+        .catch((error) => {
+          this.makeToast(error, "danger");
+        });
+    },
+  },
+  created() {
+    this.getTypeOfProductList();
   },
 };
 </script>

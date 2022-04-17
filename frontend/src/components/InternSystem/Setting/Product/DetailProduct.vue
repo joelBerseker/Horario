@@ -31,7 +31,7 @@
         <InputTextPersonalized
           :name="'Nombre'"
           :validation="validation_name"
-          :mode="mode"
+          :disabled="mode === 1"
           v-model="item.name"
           type="text"
           :required="true"
@@ -39,7 +39,7 @@
         <InputTextPersonalized
           name="Descripcion:"
           :validation="validation_description"
-          :mode="mode"
+          :disabled="mode === 1"
           v-model="item.description"
           type="text"
           :required="true"
@@ -47,7 +47,7 @@
         <InputTextPersonalized
           name="Precio:"
           :validation="validation_price"
-          :mode="mode"
+          :disabled="mode === 1"
           v-model="item.price"
           type="number"
           :required="true"
@@ -55,7 +55,7 @@
         <InputSelectPersonalized
           name="Tipo de producto:"
           :validation="validation_typeproid"
-          :mode="mode"
+          :disabled="mode === 1"
           v-model="item.typeproid"
           :list="list_type_of_product"
           :editFirst="true"
@@ -67,7 +67,7 @@
           v-if="mode !== 0"
           name="Promoción:"
           :validation="validation_promotion"
-          :mode="mode"
+          :disabled="mode === 1"
           v-model="item.promotion"
           :list="selections"
           :editFirst="false"
@@ -79,7 +79,7 @@
           v-if="mode !== 0"
           name="Estado:"
           :validation="validation_state"
-          :mode="mode"
+          :disabled="mode === 1"
           v-model="item.state"
           :list="status"
           :editFirst="false"
@@ -91,7 +91,7 @@
           v-if="mode === 0 || mode === 2"
           name="Imagen:"
           :validation="validation_image"
-          :mode="mode"
+          :disabled="mode === 1"
           v-model="image"
           :required="false"
           :obtainImage="obtainImage"
@@ -103,7 +103,7 @@
           Cancelar
         </b-button>--->
         <b-button v-if="mode === 1" variant="warning" @click="editItemButtom()">
-          <b-icon icon="pen" scale="1"></b-icon>
+          <b-icon icon="pencil-square" scale="1"></b-icon>
           &nbsp;Editar
         </b-button>
         <b-button
@@ -119,7 +119,7 @@
           variant="secondary"
           @click="detailItemButtom()"
         >
-          <b-icon icon="list" scale="1"></b-icon>
+          <b-icon icon="eye" scale="1"></b-icon>
           &nbsp;Ver
         </b-button>
 
@@ -181,7 +181,7 @@ export default {
       if (this.showValidation(text, required, this.validated, this.mode)) {
         validation_.status = true;
         if (validation_.status) validation_ = this.textEmpty(text);
-        if (validation_.status) validation_ = this.onlyText(text);
+    
       }
       return validation_;
     },

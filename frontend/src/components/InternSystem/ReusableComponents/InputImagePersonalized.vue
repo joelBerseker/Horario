@@ -3,7 +3,7 @@
     <b-form-file
       @change="obtainImage"
       accept="image/*"
-      :disabled="mode === 1"
+      :disabled="disabled"
       v-model="computedItem"
       :required="required"
       :state="validation.status"
@@ -18,7 +18,7 @@
 </template>
 <script>
 export default {
-  props: ["name", "validation", "mode", "item", "required", "obtainImage"],
+  props: ["name", "validation", "disabled", "item", "required", "obtainImage"],
   model: {
     prop: "item",
     event: "itemchange",

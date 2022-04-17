@@ -106,7 +106,7 @@
           Cancelar
         </b-button>--->
         <b-button v-if="mode === 1" variant="warning" @click="editItemButtom()">
-          <b-icon icon="pen" scale="1"></b-icon>
+          <b-icon icon="pencil-square" scale="1"></b-icon>
           &nbsp;Editar
         </b-button>
         <b-button
@@ -122,7 +122,7 @@
           variant="secondary"
           @click="detailItemButtom()"
         >
-          <b-icon icon="list" scale="1"></b-icon>
+          <b-icon icon="eye" scale="1"></b-icon>
           &nbsp;Ver
         </b-button>
 

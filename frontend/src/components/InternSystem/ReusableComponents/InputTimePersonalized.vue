@@ -1,13 +1,12 @@
 <template>
   <b-form-group class="mb-2" :label="name" label-size="sm" label-class="mb-0">
-    <b-form-input
+    <b-form-timepicker
       :disabled="disabled"
-      v-model="computedItem"
-      :type="type"
       :required="required"
       :state="validation.status"
-      step=".01"
-    ></b-form-input>
+      v-model="computedItem"
+      locale="en"
+    ></b-form-timepicker>
     <small v-if="validation.status == false" class="text-danger">
       <b-icon icon="exclamation-circle" variant="danger"></b-icon>&nbsp;
       {{ validation.value }}

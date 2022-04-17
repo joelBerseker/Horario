@@ -17,50 +17,44 @@
         >
           <b-icon icon="list"></b-icon>
         </b-button>
+        <b-button
+          v-else
+          @click="closeNav"
+          variant="link "
+          size="lg"
+          class="text-white px-2 btn-none icon_menu"
+        >
+          <b-icon icon="x"></b-icon>
+        </b-button>
         <div id="mySidenav" class="sidenav">
           <div>
-            <b-row>
-              <b-col>
-                <div class="float-right">
-                  <b-button
-                    @click="closeNav"
-                    variant="link "
-                    size="lg"
-                    class="text-white pr-2 btn-none"
-                  >
-                    <b-icon icon="box-arrow-in-left"></b-icon>
-                  </b-button>
-                </div>
-              </b-col>
-            </b-row>
-            <transition name="t-side-bar-item">
-              <div v-if="menuItem">
-                <b-list-group flush class="mt-5">
-                  <b-list-group-item
-                    v-for="item in nav_items"
-                    :key="item.value"
-                    class="bg2 c1 border-0"
-                    active-class="active-item"
-                    v-on:click="selectItem()"
-                    :to="{ name: item.to }"
-                  >
-                    <b-icon
-                      :icon="item.icon"
-                      class="im"
-                      :scale="item.scale"
-                    ></b-icon>
-
-                    <span class="menuItem"> &nbsp; {{ item.name }} </span>
-                  </b-list-group-item>
-                </b-list-group>
-              </div>
-            </transition>
+            <b-list-group flush class="mt-4">
+              <b-list-group-item
+                v-for="item in nav_items"
+                :key="item.value"
+                class="bg2 c1 border-0 menu-item"
+                active-class="active-item"
+                :to="{ name: item.to }"
+                v-on:click.prevent="selectItem()"
+              >
+                <b-icon
+                  :icon="item.icon"
+                  class="im"
+                  :scale="item.scale"
+                ></b-icon>
+              
+                  <span  class="">
+                    &nbsp; {{ item.name }}
+                  </span>
+               
+              </b-list-group-item>
+            </b-list-group>
           </div>
         </div>
       </div>
       <transition name="t-side-bar-item">
         <div
-          v-if="menuItem && positionAbsolute"
+          v-if="butonNav && positionAbsolute"
           class="side-bar-cover"
           @click="closeNav"
         ></div
@@ -164,7 +158,6 @@ export default {
   methods: {
     selectItem() {
       if (this.positionAbsolute) {
-        this.menuItem = false;
         setTimeout(() => {
           this.closeNav();
         }, 0);
@@ -176,7 +169,7 @@ export default {
       this.butonNav = true;
       setTimeout(() => {
         this.menuItem = true;
-      }, 210);
+      }, 250);
     },
     closeNav() {
       document.getElementById("mySidenav").style.width = "0px";
@@ -187,13 +180,17 @@ export default {
   },
 };
 </script>
-<style>
+<style >
+.menu-item{
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 .side-bar-cover {
   height: 100%;
   width: 100%;
   background-color: rgba(0, 0, 0, 0.356) !important;
   position: fixed;
-  z-index: 90;
+  z-index: 99;
 }
 .sidenav {
   overflow: hidden;
@@ -206,12 +203,7 @@ export default {
   background-color: var(--second-color) !important;
   transition: width 0.2s;
 }
-.sidenav a:hover,
-.sidenav a:focus {
-  background-color: var(--first-color) !important;
-  color: var(--second-color) !important;
-  transition: all 0.6s ease;
-}
+
 .active-item {
   background-color: var(--first-color) !important;
   color: var(--second-color) !important;

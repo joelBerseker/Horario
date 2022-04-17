@@ -56,7 +56,7 @@
             size="sm"
             @click="detailProduct(data.item, 1)"
           >
-            <b-icon icon="box-arrow-in-up-right"></b-icon>&nbsp;Ver
+            <b-icon icon="eye"></b-icon>&nbsp;Ver
           </b-button>
         </template>
         <template #table-busy>
@@ -118,7 +118,7 @@ export default {
           label: "Precio",
         },
         {
-          key: "typeproid",
+          key: "typeproname",
           label: "Tipo de producto",
         },
         {
@@ -159,6 +159,7 @@ export default {
       this.$bvModal.show("detail-" + this.modalName + "-modal");
     },
     getProductList() {
+      
       this.isBusy = true;
       var path = url + this.pathName;
       console.log(path);
@@ -167,6 +168,7 @@ export default {
           .get(path)
           .then((response) => {
             this.items = response.data.data.products;
+            console.log(response.data.data.products);
             this.isBusy = false;
           })
           .catch((error) => {

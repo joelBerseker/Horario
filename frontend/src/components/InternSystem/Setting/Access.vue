@@ -38,7 +38,7 @@
         @click="editTable()"
         class="float-right mr-1"
       >
-        <b-icon icon="pen" scale="1"></b-icon>
+        <b-icon icon="pencil-square" scale="1"></b-icon>
         &nbsp;Editar
       </b-button>
       <b-button

@@ -35,6 +35,12 @@ export default {
         { value: 1, text: "Si" },
         { value: 2, text: "No" },
       ],
+      state_validation: [
+        { value: 0, text: "Seleccione una opción" },
+        { value: 1, text: "Libre" },
+        { value: 2, text: "Reservado" },
+        { value: 3, text: "Ocupado" },
+      ],
     };
   },
 };

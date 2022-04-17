@@ -56,7 +56,7 @@
             size="sm"
             @click="detailTypeOfProduct(data.item, 1)"
           >
-            <b-icon icon="box-arrow-in-up-right"></b-icon>&nbsp;Ver
+            <b-icon icon="eye"></b-icon>&nbsp;Ver
           </b-button>
         </template>
         <template #table-busy>
