@@ -7,6 +7,7 @@ Vue.use(Vuex)
 const getDefaultState = () => {
   return {
     loadingAction: false,
+    permises:[],
   };
 };
 export default new Vuex.Store({
@@ -14,6 +15,9 @@ export default new Vuex.Store({
   getters: {
     getLoading: (state) => {
       return state.loadingAction;
+    },
+    getPermisos: (state) => {
+      return state.permises;
     },
   },
   mutations: {
@@ -23,6 +27,9 @@ export default new Vuex.Store({
     LOADING_DEACTIVATE: (state) => {
       state.loadingAction=false;
     },
+    SET_PERMISOS: (state, p) => {
+      state.permises = p;
+    },
   },
   actions: {
     loadingSwitch: ({ commit }) => {
@@ -30,6 +37,9 @@ export default new Vuex.Store({
     },
     loadingDeactivate: ({ commit }) => {
       commit("LOADING_DEACTIVATE", "");
+    },
+    permisos: ({ commit }, { p }) => {
+      commit('SET_PERMISOS', p);
     },
   },
   modules: {
