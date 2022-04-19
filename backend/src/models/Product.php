@@ -141,12 +141,16 @@ class Product extends Model
         }
     }
 
-    public static function getAll()
+    public static function getAll($data)
     {
         $items = [];
+        $consulta = 'SELECT * FROM product_table ORDER BY ProFecAct DESC';
+        if(!is_null($data)){
+            $consulta ='SELECT * FROM product_table WHERE ProEstReg = ' .$data.' ORDER BY ProFecAct DESC';
+        }
         try {
             $db = new Database();
-            $query = $db->connect()->query('SELECT * FROM product_table ORDER BY ProFecAct DESC');
+            $query = $db->connect()->query($consulta);
             while ($p = $query->fetch(PDO::FETCH_ASSOC)) {
                 $item = new Product($p['ProName'], $p['ProDes'], $p['ProTypeProID'], $p['ProPre']);
                 $item->setId($p['ProID']);

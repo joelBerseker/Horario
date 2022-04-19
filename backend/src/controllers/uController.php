@@ -16,7 +16,7 @@ class uController extends Controller{
     public function uindex(){
         //acl true
         $r = User::getAll();
-        $this->render('User/home', ['op'=>0,'response'=>1,'message'=>'success','Users' => $r]);
+        $this->render('User/home', ['op'=>0,'response'=>1,'message'=>'success','users' => $r]);
     }
     public function addU($data){
         $UserName = $data['name'];
@@ -45,7 +45,7 @@ class uController extends Controller{
             $r->setUserPass($UserPass);
             $r->setUserEstReg($UserEstReg);
             $r->update();
-            $this->render('User/home', ['op'=>3,'response'=>1,'message'=>'update successfuly','user' => $r]);
+            $this->render('User/home', ['op'=>3,'response'=>1,'message'=>'update successfuly','user' => $r->toArray_2()]);
         }else{
             echo "Error";
         }

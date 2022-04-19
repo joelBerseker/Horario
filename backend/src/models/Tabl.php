@@ -108,11 +108,16 @@ class Tabl extends Model{
             $db = new Database();
             $query = $db->connect()->query('SELECT * FROM Tabl ORDER BY TabFecAct DESC');
             while($p = $query->fetch(PDO::FETCH_ASSOC)){
+                
                 $item = new Tabl($p['TabID']);
+                
                 $item->setTabEst($p['TabEst']);
+                
                 $item->setTabEstReg($p['TabEstReg']);
                 $item->setTabFecAct($p['TabFecAct']);
+            
                 $item->setTabFecHour($p['TabFecHour']);
+                
                 array_push($items, $item->toArray());
             }
             return $items;
