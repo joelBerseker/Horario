@@ -36,9 +36,7 @@ class tController extends Controller{
             $r = Tabl::getByIds($id);
             $r->setTabEst($TabEst);
             $r->setTabEstReg($TabEstReg);
-            
             if(!is_null($TabFecHour)){
-                echo $TabFecHour;
                 $r->setTabFecHour($TabFecHour);
             }
             //colocar if si existe recien se cambia, fecha no obligatoria if reserved = 3   

@@ -20,12 +20,16 @@ class thController extends Controller{
     }
     public function addTH($data){
         $TicHeadUserID = $data['userid'];
+        $TicHeadTabID = $data['tabid'];
         $TicHeadFec = $data['fecha'];
         $TicHeadRUC = $data['ruc'];
         $TicHeadLocName = $data['localname'];
         $TicHeadPorDesc = $data['perdesc'];
-        if(!is_null($TicHeadUserID) &&!is_null($TicHeadFec) &&!is_null($TicHeadRUC) &&!is_null($TicHeadLocName) &&!is_null($TicHeadPorDesc)){
-            $r = new TicketHeader($TicHeadUserID,$TicHeadFec,$TicHeadRUC,$TicHeadLocName,$TicHeadPorDesc);
+        if(!is_null($TicHeadUserID) && !is_null($TicHeadTabID) &&!is_null($TicHeadFec) &&!is_null($TicHeadRUC) &&!is_null($TicHeadLocName)){
+            $r = new TicketHeader($TicHeadUserID,$TicHeadTabID,$TicHeadFec,$TicHeadRUC,$TicHeadLocName);
+            if(!is_null($TicHeadPorDesc)){
+                $r->setTicHeadPorDesc($TicHeadPorDesc);
+            }
             $r->save();
             $this->render('TicketHeader/home', ['op'=>1,'response'=>1,'message'=>'add successfuly']);
         }else{
@@ -35,21 +39,25 @@ class thController extends Controller{
     }
     public function editTH($data,$id){
         $TicHeadUserID = $data['userid'];
+        $TicHeadTabID = $data['tabid'];
         $TicHeadFec = $data['fecha'];
         $TicHeadRUC = $data['ruc'];
         $TicHeadLocName = $data['localname'];
         $TicHeadPorDesc = $data['perdesc'];
         $TicHeadEstReg  = $data['state'];
-        if(! is_null($id) && !is_null($TicHeadUserID) &&!is_null($TicHeadFec) &&!is_null($TicHeadRUC) &&!is_null($TicHeadLocName) &&!is_null($TicHeadPorDesc) && !is_null($TicHeadEstReg)){
+        if(! is_null($id) && !is_null($TicHeadUserID)&& !is_null($TicHeadTabID) &&!is_null($TicHeadFec) &&!is_null($TicHeadRUC) &&!is_null($TicHeadLocName) && !is_null($TicHeadEstReg)){
             $r = TicketHeader::getByIds($id);
             $r->setTicHeadUserID($TicHeadUserID);
-            $r->setHeadFec($TicHeadFec);
+            $r->setTicHeadTabID($TicHeadTabID);
+            $r->setTicHeadFec($TicHeadFec);
             $r->setTicHeadRUC($TicHeadRUC);
             $r->setTicHeadLocName($TicHeadLocName);
-            $r->setTicHeadPorDesc($TicHeadPorDesc);
             $r->setTicHeadEstReg($TicHeadEstReg);
+            if(!is_null($TicHeadPorDesc)){
+                $r->setTicHeadPorDesc($TicHeadPorDesc);
+            }
             $r->update();
-            $this->render('TicketHeader/home', ['op'=>3,'response'=>1,'message'=>'update successfuly','ticketheader' => $r]);
+            $this->render('TicketHeader/home', ['op'=>3,'response'=>1,'message'=>'update successfuly','ticketheader' => $r->toArray()]);
         }else{
             echo "Error";
         }
