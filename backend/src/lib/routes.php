@@ -158,7 +158,7 @@ $router->mount('/api/product', function() use ($router) {
     //Obtener todos
     $router->get('/', function() {
         $controller = new pController();
-        $controller->pindex();
+        $controller->pindex($_GET);
     });
     //insertar objeto
     $router->post('/', function() {
@@ -272,7 +272,7 @@ $router ->get('/user/active',function(){
 });
 $router ->post('/login',function(){
     $controller = new logController();
-    $controller->login();
+    $controller->login($_POST);
 });
 
 $router ->get('/logout',function(){
