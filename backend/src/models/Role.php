@@ -94,12 +94,16 @@ class Role extends Model{
     public static function delete($RoleID){
         try{
             $db = new Database();
-            $query = $db->connect()->prepare('DELETE FROM role WHERE RoleID = :RoleID');
-            if ($query->execute([ 'RoleID' => $RoleID])){
-                return true;
-            }
-            else
-                return false;
+            $query1 = $db->connect()->prepare('DELETE FROM access WHERE AccRoleID = :AccRoleID');
+            if ($query1->execute([ 'AccRoleID' => $RoleID])){
+                $query2 = $db->connect()->prepare('DELETE FROM role WHERE RoleID = :RoleID');
+                if ($query2->execute([ 'RoleID' => $RoleID])){
+                    return true;
+                }
+                else{
+                    return false;
+                }
+            }             
         }catch(PDOException $e){
             return false;
         } 
