@@ -13,14 +13,14 @@ class logController extends Controller{
         parent::__construct();
     }
 
-    public function login(){
-        $UserName = $this->post('UserName');
-        $UserPass = $this->post('UserPass');  
-        
+    public function login($data){
+        $UserName = $data['name'];
+        $UserPass = $data['password'];
         if(!is_null($UserName) && !is_null($UserPass)){
             if(User::exists($UserName)){
                 $user = User::get($UserName); 
                 if($user->comparePassword($UserPass)){
+                    //guardarlo como toArray() el user de linea 21 guardarlo como un toArray
                     $_SESSION['user'] = serialize($user);
                     //direccionar correctamente generar respuestas generales
                     $this->render('/home', ['op'=>0,'response'=>1,'message'=>'login successfully']);

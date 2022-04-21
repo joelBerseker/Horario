@@ -44,6 +44,7 @@ class Access extends Model{
         }
     }
     public function update(){
+        echo "hola";
         try{
             $query = $this->prepare('UPDATE Access SET AccPer =:AccPer, AccRoleID =:AccRoleID, AccResID =:AccResID, AccEstReg=:AccEstReg WHERE AccID=:AccID');
             return $query->execute([
@@ -95,11 +96,15 @@ class Access extends Model{
             $query = $db->connect()->prepare('SELECT * FROM access WHERE AccID = :AccID');
             $query->execute([ 'AccID' => $AccID]);
             $data = $query->fetch(PDO::FETCH_ASSOC);
+            
             $Access = new Access($data['AccRoleID'],$data['AccResID'],$data['AccPer']);
             $Access->setId($data['AccID']);
+            
             $Access->setAccEstReg($data['AccEstReg']);
+            
             $Access->setAccFecAct($data['AccFecAct']);
-            return $Access;
+            
+            return $Access->toArray();
         }catch(PDOException $e){
             return false;
         }
@@ -114,7 +119,7 @@ class Access extends Model{
             $Access->setId($data['AccID']);
             $Access->setAccEstReg($data['AccEstReg']);
             $Access->setAccFecAct($data['AccFecAct']);
-            return $Access->toArray();
+            return $Access;
         }catch(PDOException $e){
             return false;
         }
@@ -167,20 +172,21 @@ class Access extends Model{
     public function getAccPer():int{
         return $this->AccPer;
     }
-    public function setAccPer($value)
-    {
+    public function setAccPer(int $value){
         $this->AccPer = $value;
     }
-    public function getAccRoleID(){
+    public function getRoleId():int{
         return $this->AccRoleID;
     }
-    public function setAccRoleID($value){
+
+    public function setAccRoleID(int $value){
         $this->AccRoleID = $value;
     }
-    public function getAccResID(){
+    public function getAccResID():int{
         return $this->AccResID;
     }
-    public function setAccResID($value){
+
+    public function setAccResID(int $value){
         $this->AccResID = $value;
     }
 }

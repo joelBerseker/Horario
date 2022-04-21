@@ -10,28 +10,29 @@ use PDOException;
 
 class Tabl extends Model{
 
-    private string $id;
+    private int $TabEst;
     private int $TabEstReg;
     private $TabFecAct;
-    private $TabFec;
+    private $TabFecHour;
     
     public function __construct(
-        private int $TabEst
+        private string $id
     )
     {
         parent::__construct();
+        //TabEst : 1=libre 2=ocupado 3=reservado
+        $this->TabEst=0;
         $this->TabEstReg=0;
         $this->TabFecAct='';
-        $this->TabFec='';
+        $this->TabFecHour='';
     }
 
     
     public function save(){
         try{
-            
-            $query = $this->prepare('INSERT INTO Tabl (TabEst) VALUES(:TabEst)');
+            $query = $this->prepare('INSERT INTO Tabl (TabID) VALUES(:TabID)');
             $query->execute([
-                'TabEst'  => $this->TabEst, 
+                'TabID'  => $this->id, 
             ]);
             return true;
         }catch(PDOException $e){
@@ -41,11 +42,11 @@ class Tabl extends Model{
     }
     public function update(){
         try{
-            $query = $this->prepare('UPDATE Tabl SET TabFec =:TabFec, TabEst =:TabEst, TabEstReg=:TabEstReg WHERE TabID=:TabID');
+            $query = $this->prepare('UPDATE Tabl SET TabFecHour =:TabFecHour, TabEst =:TabEst, TabEstReg=:TabEstReg WHERE TabID=:TabID');
             return $query->execute([
                 'TabEst'  => $this->TabEst, 
                 'TabEstReg' =>$this->TabEstReg,
-                'TabFec' =>$this->TabFec,
+                'TabFecHour' =>$this->TabFec,
                 'TabID'=> $this->id,
                 ]);
         }catch(PDOException $e){
@@ -74,9 +75,10 @@ class Tabl extends Model{
             $query = $db->connect()->prepare('SELECT * FROM tabl WHERE TabID = :TabID');
             $query->execute([ 'TabID' => $TabID]);
             $data = $query->fetch(PDO::FETCH_ASSOC);
-            $Tab = new Tabl($data['TabEst']);
-            $Tab->setId($data['TabID']);
+            $Tab = new Tabl($data['TabID']);
             $Tab->setTabEstReg($data['TabEstReg']);
+            $Tab->setTabEst($data['TabEst']);
+            $Tab->setTabFecHour($data['TabFecHour']);
             $Tab->setTabFecAct($data['TabFecAct']);
             return $Tab->toArray();
         }catch(PDOException $e){
@@ -89,9 +91,10 @@ class Tabl extends Model{
             $query = $db->connect()->prepare('SELECT * FROM tabl WHERE TabID = :TabID');
             $query->execute([ 'TabID' => $TabID]);
             $data = $query->fetch(PDO::FETCH_ASSOC);
-            $Tab = new Tabl($data['TabEst']);
-            $Tab->setId($data['TabID']);
+            $Tab = new Tabl($data['TabID']);
             $Tab->setTabEstReg($data['TabEstReg']);
+            $Tab->setTabEst($data['TabEst']);
+            $Tab->setTabFecHour($data['TabFecHour']);
             $Tab->setTabFecAct($data['TabFecAct']);
             return $Tab;
         }catch(PDOException $e){
@@ -105,10 +108,16 @@ class Tabl extends Model{
             $db = new Database();
             $query = $db->connect()->query('SELECT * FROM Tabl ORDER BY TabFecAct DESC');
             while($p = $query->fetch(PDO::FETCH_ASSOC)){
-                $item = new Tabl($p['TabEst']);
-                $item->setId($p['TabID']);
+                
+                $item = new Tabl($p['TabID']);
+                
+                $item->setTabEst($p['TabEst']);
+                
                 $item->setTabEstReg($p['TabEstReg']);
                 $item->setTabFecAct($p['TabFecAct']);
+            
+                $item->setTabFecHour($p['TabFecHour']);
+                
                 array_push($items, $item->toArray());
             }
             return $items;
@@ -136,14 +145,15 @@ class Tabl extends Model{
     }
     public function setTabFecAct(string $value){
         $this->TabFecAct = $value;
-    }public function getTabFec():string{
-        return $this->TabFec;
     }
-    public function setTabFec(string $value){
-        $this->TabFec = $value;
+    public function getTabFecHour():string{
+        return $this->TabFecHour;
+    }
+    public function setTabFecHour(string $value){
+        $this->TabFecHour = $value;
     }
     public function toArray():array{
-        $arr = array("id"=>$this->id,"date"=>$this->TabFec,"reserved"=>$this->TabEst,"state"=>$this->TabEstReg,"UpdateDate"=>$this->TabFecAct);
+        $arr = array("id"=>$this->id,"hour"=>$this->TabFecHour,"reserved"=>$this->TabEst,"state"=>$this->TabEstReg,"UpdateDate"=>$this->TabFecAct);
         return $arr;
     }
     public function getTabEst(){

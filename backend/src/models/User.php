@@ -32,10 +32,18 @@ class User extends Model{
         return password_hash($password, PASSWORD_DEFAULT, ['cost' => 10]);
     }
 
-    public function exists($UserName){
-        if(!is_null($this->get($UserName))){
-            return true;
-        }else{
+    public static function exists($UserName){
+        try{
+            $db = new Database();
+            $query = $db->connect()->prepare('SELECT UserName FROM user WHERE UserName = :UserName');
+            $query->execute( ['UserName' => $UserName]);
+            if($query->rowCount() > 0){
+                return true;
+            }else{
+                return false;
+            }
+        }catch(PDOException $e){
+            echo $e;
             return false;
         }
     }
@@ -89,11 +97,10 @@ class User extends Model{
             error_log($data['UserName']);
             error_log($data['UserNickName']);
             error_log($data['UserPass']);
-            $user = new User($data['UserRoleID'], $data['UserName'],$data['UserRoleID'], $data['UserPass']);
+            $user = new User($data['UserRoleID'], $data['UserName'],$data['UserNickName'], $data['UserPass']);
             $user->setId($data['UserID']);
-            $user->setUserRoleID($data['UserRoleID']);
-            $user->setUserNickName($data['UserNickName']);
-            $user->setUserPass($data['UserPass']);
+            $user->setUserEstReg($data['UserEstReg']);
+            $user->setUserFecAct($data['UserFecAct']);
             return $user;
         }catch(PDOException $e){
             return false;
@@ -121,12 +128,9 @@ class User extends Model{
             $data = $query->fetch(PDO::FETCH_ASSOC);
             $user = new User($data['UserRoleID'], $data['UserName'],$data['UserNickName'],$data['UserPass']);
             $user->setId($data['UserID']);
-            $user->setUserRoleID($data['UserRoleID']);
-            $user->setUserNickName($data['UserNickName']);
-            $user->setUserPass($data['UserPass']);
             $user->setUserEstReg($data['UserEstReg']);
             $user->setUserFecAct($data['UserFecAct']);
-            return $user->toArray();
+            return $user->toArray_2();
         }catch(PDOException $e){
             return false;
         }
@@ -139,9 +143,6 @@ class User extends Model{
             $data = $query->fetch(PDO::FETCH_ASSOC);
             $user = new User($data['UserRoleID'], $data['UserName'],$data['UserNickName'],$data['UserPass']);
             $user->setId($data['UserID']);
-            $user->setUserRoleID($data['UserRoleID']);
-            $user->setUserNickName($data['UserNickName']);
-            $user->setUserPass($data['UserPass']);
             $user->setUserEstReg($data['UserEstReg']);
             $user->setUserFecAct($data['UserFecAct']);
             return $user;
@@ -157,15 +158,11 @@ class User extends Model{
             $query = $db->connect()->query('SELECT * FROM user_table ORDER BY UserFecAct DESC');
             while($p = $query->fetch(PDO::FETCH_ASSOC)){
                 $item = new User($p['UserRoleID'],$p['UserName'],$p['UserNickName'],$p['UserPass']);
-                $item->setId($p['AccID']);
-                $item->setUserRoleID($p['UserRoleID']);
+                $item->setId($p['UserID']);
                 $item->setUserRoleName($p['RoleName']);
-                $item->setUserName($p['UserName']);
-                $item->setUserNickName($p['UserNickName']);
-                $item->setUserPass($p['UserPass']);
                 $item->setUserEstReg($p['UserEstReg']);
                 $item->setUserFecAct($p['UserFecAct']);
-                array_push($items, $item->toArray());
+                array_push($items, $item->toArray_2());
             }
             return $items;
         }catch(PDOException $e){
@@ -195,6 +192,10 @@ class User extends Model{
     }
     public function toArray():array{
         $arr = array("id"=>$this->id,"name"=>$this->UserName,"rolename"=>$this->userRoleName,"roleid"=>$this->UserRoleID,"nickname"=>$this->UserNickName,"password"=>$this->UserPass,"state"=>$this->UserEstReg,"UpdateDate"=>$this->UserFecAct);
+        return $arr;
+    }
+    public function toArray_2():array{
+        $arr = array("id"=>$this->id,"name"=>$this->UserName,"rolename"=>$this->userRoleName,"roleid"=>$this->UserRoleID,"nickname"=>$this->UserNickName,"state"=>$this->UserEstReg,"UpdateDate"=>$this->UserFecAct);
         return $arr;
     }
     public function getUserName(){

@@ -13,30 +13,31 @@ class TicketHeader extends Model{
     private string $id;
     private int $TicHeadEstReg;
     private $TicHeadFecAct;
+    private $TicHeadPorDesc;
     
     public function __construct(
         private int $TicHeadUserID,
+        private int $TicHeadTabID,
         private $TicHeadFec,
         private string $TicHeadRUC,
-        private string $TicHeadLocName,
-        private string $TicHeadPorDesc
+        private string $TicHeadLocName
     )
     {
         parent::__construct();
         $this->TicHeadEstReg=0;
         $this->TicHeadFecAct='';
+
     }
 
     public function save(){
         try{
-            
-            $query = $this->prepare('INSERT INTO TicketHeader (TicHeadUserID, TicHeadFec, TicHeadRUC, TicHeadLocName, TicHeadPorDesc) VALUES(:TicHeadUserID, :TicHeadFec, :TicHeadRUC, :TicHeadLocName, :TicHeadPorDesc)');
+            $query = $this->prepare('INSERT INTO Ticketheader (TicHeadUserID, TicHeadFec, TicHeadRUC, TicHeadLocName, TicHeadTabID) VALUES(:TicHeadUserID, :TicHeadFec, :TicHeadRUC, :TicHeadLocName, :TicHeadTabID)');
             $query->execute([
                 'TicHeadUserID'  => $this->TicHeadUserID, 
                 'TicHeadFec'  => $this->TicHeadFec,
                 'TicHeadRUC'  => $this->TicHeadRUC,
                 'TicHeadLocName'  => $this->TicHeadLocName,
-                'TicHeadPorDesc'  => $this->TicHeadPorDesc,
+                'TicHeadTabID'  => $this->TicHeadTabID, 
                 ]);
             return true;
         }catch(PDOException $e){
@@ -46,7 +47,16 @@ class TicketHeader extends Model{
     }
     public function update(){
         try{
-            $query = $this->prepare('UPDATE TicketHeader SET TicHeadUserID =:TicHeadUserID, TicHeadFec=:TicHeadFec, TicHeadRUC=: TicHeadRUC, TicHeadLocName= :TicHeadLocName, TicHeadPorDesc= :TicHeadPorDesc, TicHeadEstReg=:TicHeadEstReg WHERE TicHeadID=:TicHeadID');
+            
+            $query = $this->prepare('UPDATE ticketheader SET 
+            TicHeadUserID =:TicHeadUserID, 
+            TicHeadFec=:TicHeadFec, 
+            TicHeadRUC=: TicHeadRUC, 
+            TicHeadLocName= :TicHeadLocName, 
+            TicHeadPorDesc= :TicHeadPorDesc, 
+            TicHeadEstReg=:TicHeadEstReg, 
+            TicHeadTabID =:TicHeadTabID WHERE TicHeadID=:TicHeadID');
+            
             return $query->execute([
                 'TicHeadUserID'  => $this->TicHeadUserID, 
                 'TicHeadFec'  => $this->TicHeadFec,
@@ -54,17 +64,19 @@ class TicketHeader extends Model{
                 'TicHeadLocName'  => $this->TicHeadLocName,
                 'TicHeadPorDesc'  => $this->TicHeadPorDesc,
                 'TicHeadEstReg' =>$this->TicHeadEstReg,
+                'TicHeadTabID'  => $this->TicHeadTabID, 
                 'TicHeadID'=> $this->id,
                 ]);
         }catch(PDOException $e){
             error_log($e);
+            echo "error";
             return false;
         }
     } 
     public static function delete($TicHeadID){
         try{
             $db = new Database();
-            $query = $db->connect()->prepare('DELETE FROM TicketHeader WHERE TicHeadID = :TicHeadID');
+            $query = $db->connect()->prepare('DELETE FROM Ticketheader WHERE TicHeadID = :TicHeadID');
             if ($query->execute([ 'TicHeadID' => $TicHeadID])){
                 return true;
             }
@@ -77,15 +89,11 @@ class TicketHeader extends Model{
     public static function getById($TicHeadID){
         try{
             $db = new Database();
-            $query = $db->connect()->prepare('SELECT * FROM TicketHeader WHERE TicHeadID = :TicHeadID');
+            $query = $db->connect()->prepare('SELECT * FROM Ticketheader WHERE TicHeadID = :TicHeadID');
             $query->execute([ 'TicHeadID' => $TicHeadID]);
             $data = $query->fetch(PDO::FETCH_ASSOC);
-            $TicketHeader = new TicketHeader($data['TicHeadUserID'], $data['TicHeadFec'], $data['TicHeadRUC'], $data['TicHeadLocName'], $data['TicHeadPorDesc']);
+            $TicketHeader = new TicketHeader($data['TicHeadUserID'],$data['TicHeadTabID'], $data['TicHeadFec'], $data['TicHeadRUC'], $data['TicHeadLocName']);
             $TicketHeader->setId($data['TicHeadID']);
-            $TicketHeader->setTicHeadUserID($data['TicHeadUserID']);
-            $TicketHeader->setTicHeadFec($data['TicHeadFec']);
-            $TicketHeader->setTicHeadRUC($data['TicHeadRUC']);
-            $TicketHeader->setTicHeadLocName($data['TicHeadLocName']);
             $TicketHeader->setTicHeadPorDesc($data['TicHeadPorDesc']);
             $TicketHeader->setTicHeadEstReg($data['TicHeadEstReg']);
             $TicketHeader->setTicHeadFecAct($data['TicHeadFecAct']);
@@ -97,15 +105,11 @@ class TicketHeader extends Model{
     public static function getByIds($TicHeadID){
         try{
             $db = new Database();
-            $query = $db->connect()->prepare('SELECT * FROM TicketHeader WHERE TicHeadID = :TicHeadID');
+            $query = $db->connect()->prepare('SELECT * FROM Ticketheader WHERE TicHeadID = :TicHeadID');
             $query->execute([ 'TicHeadID' => $TicHeadID]);
             $data = $query->fetch(PDO::FETCH_ASSOC);
-            $TicketHeader = new TicketHeader($data['TicHeadUserID'], $data['TicHeadFec'], $data['TicHeadRUC'], $data['TicHeadLocName'], $data['TicHeadPorDesc']);
+            $TicketHeader = new TicketHeader($data['TicHeadUserID'],$data['TicHeadTabID'], $data['TicHeadFec'], $data['TicHeadRUC'], $data['TicHeadLocName']);
             $TicketHeader->setId($data['TicHeadID']);
-            $TicketHeader->setTicHeadUserID($data['TicHeadUserID']);
-            $TicketHeader->setTicHeadFec($data['TicHeadFec']);
-            $TicketHeader->setTicHeadRUC($data['TicHeadRUC']);
-            $TicketHeader->setTicHeadLocName($data['TicHeadLocName']);
             $TicketHeader->setTicHeadPorDesc($data['TicHeadPorDesc']);
             $TicketHeader->setTicHeadEstReg($data['TicHeadEstReg']);
             $TicketHeader->setTicHeadFecAct($data['TicHeadFecAct']);
@@ -119,18 +123,13 @@ class TicketHeader extends Model{
         $items = [];
         try{
             $db = new Database();
-            $query = $db->connect()->query('SELECT * FROM TicketHeader ORDER BY TicHeadFecAct DESC');
+            $query = $db->connect()->query('SELECT * FROM Ticketheader ORDER BY TicHeadFecAct DESC');
             while($p = $query->fetch(PDO::FETCH_ASSOC)){
-                $item = new TicketHeader($p['TicHeadUserID'], $p['TicHeadFec'], $p['TicHeadRUC'], $p['TicHeadLocName'], $p['TicHeadPorDesc']);
+                $item = new TicketHeader($p['TicHeadUserID'],$p['TicHeadTabID'], $p['TicHeadFec'], $p['TicHeadRUC'], $p['TicHeadLocName']);
                 $item->setId($p['TicHeadID']);
-                $item->setTicHeadUserID($p['TicHeadUserID']);
-                $item->setTicHead>Fec($p['TicHeadFec']);
-                $item->setTicHeadRUC($p['TicHeadRUC']);
-                $item->setTicHeadLocName($p['TicHeadLocName']);
                 $item->setTicHeadPorDesc($p['TicHeadPorDesc']);
                 $item->setTicHeadEstReg($p['TicHeadEstReg']);
                 $item->setTicHeadFecAct($p['TicHeadFecAct']);
-                
                 array_push($items, $item->toArray());
             }
             return $items;
@@ -160,7 +159,7 @@ class TicketHeader extends Model{
         $this->TicHeadFecAct = $value;
     }
     public function toArray():array{
-        $arr = array("id"=>$this->id,"userid"=>$this->TicHeadUserID,"date"=>$this->TicHeadFec,"RUC"=>$this->TicHeadRUC,"localname"=>$this->TicHeadLocName,"percdesc"=>$this->TicHeadPorDesc,"state"=>$this->TicHeadEstReg,"UpdateDate"=>$this->TicHeadFecAct);
+        $arr = array("id"=>$this->id,"userid"=>$this->TicHeadUserID,"tabid"=>$this->TicHeadTabID,"date"=>$this->TicHeadFec,"RUC"=>$this->TicHeadRUC,"localname"=>$this->TicHeadLocName,"percdesc"=>$this->TicHeadPorDesc,"state"=>$this->TicHeadEstReg,"UpdateDate"=>$this->TicHeadFecAct);
         return $arr;
     }
     public function getTicHeadUserID(){
@@ -169,10 +168,16 @@ class TicketHeader extends Model{
     public function setTicHeadUserID($value){
         $this->TicHeadUserID = $value;
     }
-    public function getTicHeadFec(){
+    public function getTicHeadTabID(){
+        return $this->TicHeadUserID;
+    }
+    public function setTicHeadTabID($value){
+        $this->TicHeadUserID = $value;
+    }
+    public function getTicHeadFec():string{
         return $this->TicHeadFec;
     }
-    public function setTicHeadFec($value){
+    public function setTicHeadFec(string $value){
         $this->TicHeadFec = $value;
     }
 

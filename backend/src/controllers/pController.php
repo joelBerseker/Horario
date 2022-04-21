@@ -14,9 +14,9 @@ class pController extends Controller{
         parent::__construct();
     }
 
-    public function pindex(){
+    public function pindex($data){
         //acl true
-        $r = Product::getAll();
+        $r = Product::getAll($data['status']);
         $this->render('Product/home', ['op'=>0,'response'=>1,'message'=>'success','Products' => $r]);
     }
     public function addP($data,$file){

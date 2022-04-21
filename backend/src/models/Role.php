@@ -25,22 +25,23 @@ class Role extends Model{
 
     public function save(){
         try{
-            
+            //verificar que el nombre del rol no se repita
             $query = $this->prepare('INSERT INTO role (RoleName) VALUES(:RoleName)');
             $query->execute([
                 'RoleName'  => $this->RoleName, 
             ]);
-            /*
+            $NewRole =  Role::get_inArray($this->RoleName);
+            $NewRoleID = $NewRole['id'];
             $resources = Resource::getAll();
-            for ($i = 1, $size = count($resources); $i < $size; ++$i) {
-                $auxq = $this->prepare('INSERT INTO Access (AccPer,AccRoleID,AccResID) VALUES(:AccPer,:AccRoleID,:AccResID)');
+            for ($i = 0; $i < count($resources); $i++) {
+                $auxq = $this->prepare('INSERT INTO Access (AccRoleID,AccResID,AccPer) VALUES(:AccRoleID,:AccResID,:AccPer)');
                 $auxq->execute([
-                    'AccPer'  => 0, 
-                    'AccRoleID'  => $this->RoleID, 
-                    'AccResID'  => $resources[$i]['ResID'], 
+                    'AccPer'  => 1, 
+                    'AccRoleID'  => $NewRoleID, 
+                    'AccResID'  => $resources[$i]['id'], 
                 ]);
             }
-            */
+            
             return true;
         }catch(PDOException $e){
             error_log($e);
@@ -72,6 +73,20 @@ class Role extends Model{
             $Role = new Role($data['RoleName']);
             $Role->setId($data['RoleID']);
             return $Role;
+        }catch(PDOException $e){
+            return false;
+        }
+    }
+    public static function get_inArray($RoleName){
+        try{
+            $db = new Database();
+            $query = $db->connect()->prepare('SELECT * FROM role WHERE RoleName = :RoleName');
+            $query->execute([ 'RoleName' => $RoleName]);
+            $data = $query->fetch(PDO::FETCH_ASSOC);
+            error_log($data['RoleName']);
+            $Role = new Role($data['RoleName']);
+            $Role->setId($data['RoleID']);
+            return $Role->toArray();
         }catch(PDOException $e){
             return false;
         }

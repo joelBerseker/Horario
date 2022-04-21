@@ -1,7 +1,7 @@
 <?php
 header ("Access-Control-Allow-Origin: *");
 if($this->d['op']==0){ // ALL
-    $arr = array("response"=>$this->d['response'],"message"=>$this->d['message'],"data"=>array("ticketheaders"=>$this->d['ticketheaders']));
+    $arr = array("response"=>$this->d['response'],"message"=>$this->d['message'],"data"=>array("ticketheaders"=>$this->d['ticketheader']));
     echo json_encode($arr);
 }else if($this->d['op']==1){ // ADDD
     $arr = array("response"=>$this->d['response'],"message"=>$this->d['message']);

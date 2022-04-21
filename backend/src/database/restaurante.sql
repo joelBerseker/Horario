@@ -54,6 +54,14 @@ CREATE TABLE `product` (
   `ProFecAct` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Volcado de datos para la tabla `product`
+--
+
+INSERT INTO `product` (`ProID`, `ProName`, `ProDes`, `ProTypeProID`, `ProImg`, `ProPre`, `ProProm`, `ProEstReg`, `ProFecAct`) VALUES
+(1, 'Torta', 'de Chocolate', 1, '', '123', 12, 1, '2022-04-19 02:17:03'),
+(2, 'Leche asada', 'random', 1, '', '100', 1, 2, '2022-04-19 02:18:11');
+
 -- --------------------------------------------------------
 
 --
@@ -111,6 +119,13 @@ CREATE TABLE `role` (
   `RoleFecAct` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Volcado de datos para la tabla `role`
+--
+
+INSERT INTO `role` (`RoleID`, `RoleName`, `RoleEstReg`, `RoleFecAct`) VALUES
+(1, 'Admin', 1, '2022-04-19 02:19:47');
+
 -- --------------------------------------------------------
 
 --
@@ -119,11 +134,18 @@ CREATE TABLE `role` (
 
 CREATE TABLE `tabl` (
   `TabID` int(11) NOT NULL,
-  `TabFec` time NOT NULL,
+  `TabFecHour` time NOT NULL,
   `TabEst` int(11) NOT NULL,
   `TabEstReg` int(11) NOT NULL,
   `TabFecAct` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `tabl`
+--
+
+INSERT INTO `tabl` (`TabID`, `TabFecHour`, `TabEst`, `TabEstReg`, `TabFecAct`) VALUES
+(1, '00:00:00', 3, 2, '2022-04-19 03:05:50');
 
 -- --------------------------------------------------------
 
@@ -159,6 +181,13 @@ CREATE TABLE `ticketheader` (
   `TicHeadTabID` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Volcado de datos para la tabla `ticketheader`
+--
+
+INSERT INTO `ticketheader` (`TicHeadID`, `TicHeadUserID`, `TicHeadFec`, `TicHeadRUC`, `TicHeadLocName`, `TicHeadPorDesc`, `TicHeadEstReg`, `TicHeadFecAct`, `TicHeadTabID`) VALUES
+(21, 2, '00:00:11', '123123', 'Local1', '0', 0, '2022-04-19 03:08:59', 1);
+
 -- --------------------------------------------------------
 
 --
@@ -173,6 +202,13 @@ CREATE TABLE `typeproduct` (
   `TypeProEstReg` int(11) NOT NULL DEFAULT 1,
   `TypeProFecAct` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `typeproduct`
+--
+
+INSERT INTO `typeproduct` (`TypeProID`, `TypeProName`, `TypeProDes`, `TypeProImg`, `TypeProEstReg`, `TypeProFecAct`) VALUES
+(1, 'Postres', 'Postres ricos', '', 1, '2022-04-19 02:16:24');
 
 -- --------------------------------------------------------
 
@@ -189,6 +225,13 @@ CREATE TABLE `user` (
   `UserEstReg` int(11) NOT NULL,
   `UserFecAct` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `user`
+--
+
+INSERT INTO `user` (`UserID`, `UserRoleID`, `UserName`, `UserNickName`, `UserPass`, `UserEstReg`, `UserFecAct`) VALUES
+(2, 1, 'Dominic', 'Chefsito', '', 1, '2022-04-19 02:33:04');
 
 -- --------------------------------------------------------
 
@@ -214,7 +257,7 @@ CREATE TABLE `user_table` (
 --
 DROP TABLE IF EXISTS `product_table`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `product_table`  AS SELECT `p`.`ProID` AS `ProID`, `p`.`ProName` AS `ProName`, `p`.`ProDes` AS `ProDes`, `p`.`ProTypeProID` AS `ProTypeProID`, `p`.`ProImg` AS `ProImg`, `p`.`ProPre` AS `ProPre`, `p`.`ProProm` AS `ProProm`, `p`.`ProEstReg` AS `ProEstReg`, `p`.`ProFecAct` AS `ProFecAct`, `tp`.`TypeProName` AS `TypeProName` FROM (`product` `p` join `typeproduct` `tp` on(`p`.`ProTypeProID` = `tp`.`TypeProID`)) ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `product_table`  AS SELECT `p`.`ProID` AS `ProID`, `p`.`ProName` AS `ProName`, `p`.`ProDes` AS `ProDes`, `p`.`ProTypeProID` AS `ProTypeProID`, `p`.`ProImg` AS `ProImg`, `p`.`ProPre` AS `ProPre`, `p`.`ProProm` AS `ProProm`, `p`.`ProEstReg` AS `ProEstReg`, `p`.`ProFecAct` AS `ProFecAct`, `tp`.`TypeProName` AS `TypeProName` FROM (`product` `p` join `typeproduct` `tp` on(`p`.`ProTypeProID` = `tp`.`TypeProID`))  ;
 
 -- --------------------------------------------------------
 
@@ -223,7 +266,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `user_table`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `user_table`  AS SELECT `u`.`UserID` AS `UserID`, `u`.`UserRoleID` AS `UserRoleID`, `u`.`UserName` AS `UserName`, `u`.`UserNickName` AS `UserNickName`, `u`.`UserPass` AS `UserPass`, `u`.`UserEstReg` AS `UserEstReg`, `u`.`UserFecAct` AS `UserFecAct`, `r`.`RoleName` AS `RoleName` FROM (`user` `u` join `role` `r` on(`u`.`UserRoleID` = `r`.`RoleID`)) ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `user_table`  AS SELECT `u`.`UserID` AS `UserID`, `u`.`UserRoleID` AS `UserRoleID`, `u`.`UserName` AS `UserName`, `u`.`UserNickName` AS `UserNickName`, `u`.`UserPass` AS `UserPass`, `u`.`UserEstReg` AS `UserEstReg`, `u`.`UserFecAct` AS `UserFecAct`, `r`.`RoleName` AS `RoleName` FROM (`user` `u` join `role` `r` on(`u`.`UserRoleID` = `r`.`RoleID`))  ;
 
 --
 -- Índices para tablas volcadas
@@ -305,7 +348,7 @@ ALTER TABLE `access`
 -- AUTO_INCREMENT de la tabla `product`
 --
 ALTER TABLE `product`
-  MODIFY `ProID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `ProID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `resource`
@@ -317,13 +360,13 @@ ALTER TABLE `resource`
 -- AUTO_INCREMENT de la tabla `role`
 --
 ALTER TABLE `role`
-  MODIFY `RoleID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `RoleID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `tabl`
 --
 ALTER TABLE `tabl`
-  MODIFY `TabID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `TabID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `ticketdetail`
@@ -335,19 +378,19 @@ ALTER TABLE `ticketdetail`
 -- AUTO_INCREMENT de la tabla `ticketheader`
 --
 ALTER TABLE `ticketheader`
-  MODIFY `TicHeadID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `TicHeadID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT de la tabla `typeproduct`
 --
 ALTER TABLE `typeproduct`
-  MODIFY `TypeProID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `TypeProID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `user`
 --
 ALTER TABLE `user`
-  MODIFY `UserID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `UserID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Restricciones para tablas volcadas
