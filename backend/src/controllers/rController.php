@@ -22,8 +22,13 @@ class rController extends Controller{
         $RoleName = $data['name'];
         if(!is_null($RoleName)){
             $r = new Role($RoleName);
-            $r->save();
-            $this->render('Role/home', ['op'=>1,'response'=>1,'message'=>'add successfuly']);
+            if(!($r->exists($RoleName))){
+                $r->save();
+                $this->render('Role/home', ['op'=>1,'response'=>1,'message'=>'add successfuly']);
+            }else{
+                echo "Nombre de rol repetido";
+            }
+            
         }else{
             echo "error";
             //$this->render('errors/index');
