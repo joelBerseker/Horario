@@ -9,6 +9,7 @@ import FoodMenu from "@/components/PublicPage/FoodMenu/FoodMenu";
 import Promotion from "@/components/PublicPage/Promotion";
 
 import Table from "@/components/InternSystem/Table/Table";
+import TableOrder from "@/components/InternSystem/Table/TableOrder";
 import Logout from "@/components/InternSystem/Autentication/Logout";
 import User from "@/components/InternSystem/User/User";
 import Order from "@/components/InternSystem/Order/Order";
@@ -66,7 +67,7 @@ const routes = [
   {
     path: "/system",
     name: "Sidebar",
-    redirect: '/system/setting/',
+    redirect: "/system/setting/",
     component: Sidebar,
     children: [
       {
@@ -88,6 +89,12 @@ const routes = [
         props: true,
       },
       {
+        path: "/system/table/order",
+        name: "TableOrder",
+        component: TableOrder,
+        props: true,
+      },
+      {
         path: "/system/order",
         name: "Order",
         component: Order,
@@ -104,7 +111,7 @@ const routes = [
         name: "Settingbar",
 
         component: Settingbar,
-        redirect: '/system/setting/table',
+        redirect: "/system/setting/table",
         props: true,
         children: [
           {

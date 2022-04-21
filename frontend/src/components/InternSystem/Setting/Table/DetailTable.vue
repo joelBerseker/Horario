@@ -10,7 +10,7 @@
       :id="'detail-' + this.modalName + '-modal'"
       ref="modal"
       :title="title[mode]"
-      scrollable
+      :scrollable="mode!==3"
       no-close-on-backdrop
       @ok="handleOk"
       ok-title="Agregar"
@@ -19,6 +19,7 @@
     >
       <b-form ref="form" @submit="handleSubmit">
         <InputTextPersonalized
+          v-if="mode !== 3"
           name="Numero:"
           :validation="validation_id"
           :disabled="mode === 1"
@@ -27,7 +28,7 @@
           :required="true"
         />
         <InputSelectPersonalized
-        v-if="mode !== 0"
+          v-if="mode !== 0"
           name="Estado de mesa:"
           :validation="validation_state_table"
           :disabled="mode === 1"
@@ -48,7 +49,7 @@
           :required="true"
         />
         <InputSelectPersonalized
-          v-if="mode !== 0"
+          v-if="mode !== 0 && mode !== 3"
           name="Estado:"
           :validation="validation_state"
           :disabled="mode === 1"
@@ -87,7 +88,7 @@
         </b-button>
 
         <b-button
-          v-if="mode === 0 || mode === 2"
+          v-if="mode === 0 || mode === 2 || mode === 3"
           variant="primary"
           @click="ok()"
         >
@@ -114,7 +115,7 @@ export default {
     DeleteItem,
     InputTextPersonalized,
     InputSelectPersonalized,
-    InputTimePersonalized
+    InputTimePersonalized,
   },
   mixins: [UtilityFunctions, UtilityValidations],
   props: [
@@ -129,7 +130,7 @@ export default {
   data() {
     return {
       validated: false,
-      title: ["Agregar registro", "Ver registro", "Editar registro"],
+      title: ["Agregar registro", "Ver registro", "Editar registro", "Cambiar estado"],
       image: null,
       previewImage: null,
     };
@@ -175,8 +176,6 @@ export default {
       }
       return validation_;
     },
-
-  
   },
   methods: {
     closeModal() {
@@ -195,6 +194,7 @@ export default {
     handleSubmit() {
       this.validated = true;
       if (this.formValidation()) {
+        if (this.mode == 3) this.mode = 2;
         switch (this.mode) {
           case 0:
             this.addItem();

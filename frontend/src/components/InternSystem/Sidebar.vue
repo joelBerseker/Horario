@@ -9,7 +9,7 @@
       </template>
       <div>
         <b-button
-          v-if="!butonNav"
+          v-if="!sideBarOpen"
           @click="openNav"
           variant="dark "
           class="c1 bg2 px-2 icon_menu"
@@ -26,27 +26,24 @@
         >
           <b-icon icon="x"></b-icon>
         </b-button>
-        <div id="mySidenav" class="sidenav">
+        <div id="side-bar">
           <div>
             <b-list-group flush class="mt-4">
               <b-list-group-item
-                v-for="item in nav_items"
+                v-for="item in navItems"
                 :key="item.value"
-                class="bg2 c1 border-0 menu-item"
+                class="bg2 c1 border-0 side-bar-item"
                 active-class="active-item"
                 :to="{ name: item.to }"
-                v-on:click.prevent="selectItem()"
+                v-on:click="closeNavAuto()"
               >
                 <b-icon
                   :icon="item.icon"
                   class="im"
                   :scale="item.scale"
                 ></b-icon>
-              
-                  <span  class="">
-                    &nbsp; {{ item.name }}
-                  </span>
-               
+
+                <span class=""> &nbsp; {{ item.name }} </span>
               </b-list-group-item>
             </b-list-group>
           </div>
@@ -54,12 +51,12 @@
       </div>
       <transition name="t-side-bar-item">
         <div
-          v-if="butonNav && positionAbsolute"
+          v-if="sideBarOpen && positionAbsolute"
           class="side-bar-cover"
           @click="closeNav"
-        ></div
-      ></transition>
-      <div id="main-side" style="overflow-y: hidden">
+        ></div>
+      </transition>
+      <div id="main-side">
         <router-view />
       </div>
     </b-overlay>
@@ -71,16 +68,15 @@ export default {
   components: {},
   data() {
     return {
-      margin_width: "200px",
+      marginWidth: "200px",
       user: {
         name: "",
         last_name: "",
       },
-      menuItem: true,
-      butonNav: true,
+      sideBarOpen: true,
       positionAbsolute: false,
       windowWidth: window.innerWidth,
-      nav_items: [
+      navItems: [
         {
           value: 1,
           icon: "person-fill",
@@ -135,53 +131,46 @@ export default {
     window.onresize = () => {
       this.windowWidth = window.innerWidth;
       if (this.windowWidth >= 1200) {
-        this.margin_width = "200px";
+        this.marginWidth = "200px";
         this.positionAbsolute = false;
         this.openNav();
       } else {
         document.getElementById("main-side").style.marginLeft = "0px";
-        this.margin_width = "0px";
+        this.marginWidth = "0px";
         this.positionAbsolute = true;
       }
     };
     this.windowWidth = window.innerWidth;
     if (this.windowWidth >= 1200) {
-      this.margin_width = "200px";
+      this.marginWidth = "200px";
       this.positionAbsolute = false;
     } else {
-      this.margin_width = "0px";
+      this.marginWidth = "0px";
       this.positionAbsolute = true;
-      this.butonNav = false;
-      this.menuItem = false;
+      this.sideBarOpen = false;
     }
   },
   methods: {
-    selectItem() {
+    closeNavAuto() {
       if (this.positionAbsolute) {
-        setTimeout(() => {
-          this.closeNav();
-        }, 0);
+        this.closeNav();
       }
     },
     openNav() {
-      document.getElementById("mySidenav").style.width = "200px";
-      document.getElementById("main-side").style.marginLeft = this.margin_width;
-      this.butonNav = true;
-      setTimeout(() => {
-        this.menuItem = true;
-      }, 250);
+      document.getElementById("side-bar").style.width = "200px";
+      document.getElementById("main-side").style.marginLeft = this.marginWidth;
+      this.sideBarOpen = true;
     },
     closeNav() {
-      document.getElementById("mySidenav").style.width = "0px";
+      document.getElementById("side-bar").style.width = "0px";
       document.getElementById("main-side").style.marginLeft = "0px";
-      this.butonNav = false;
-      this.menuItem = false;
+      this.sideBarOpen = false;
     },
   },
 };
 </script>
 <style >
-.menu-item{
+.side-bar-item {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -192,7 +181,7 @@ export default {
   position: fixed;
   z-index: 99;
 }
-.sidenav {
+#side-bar {
   overflow: hidden;
   height: 100%;
   width: 200px;
@@ -200,29 +189,25 @@ export default {
   z-index: 100;
   top: 0;
   left: 0;
-  background-color: var(--second-color) !important;
+  background-color: var(--color-2) !important;
   transition: width 0.2s;
 }
 
 .active-item {
-  background-color: var(--first-color) !important;
-  color: var(--second-color) !important;
+  background-color: var(--color-1) !important;
+  color: var(--color-2) !important;
 }
 
 #main-side {
   transition: margin-left 0.5s;
   margin-left: 200px;
-  padding: 2rem;
+  /*padding: 2rem;*/
   min-height: 100vh;
   background-size: cover;
+  overflow-y: hidden;
+  padding-bottom: 2.6rem !important;
 }
-.height-padding {
-  min-height: calc(100vh - 4rem);
-}
-.bottom-card {
-  margin-bottom: 0;
-}
-/*t-side-bar-item*/
+
 .t-side-bar-item-enter-active {
   transition: all 0.2s ease;
 }
@@ -233,17 +218,10 @@ export default {
 @media only screen and (max-width: 1199px) {
   #main-side {
     margin-left: 0px;
+    /*padding: 0.3rem !important;*/
   }
-  #mySidenav {
+  #side-bar {
     width: 0px;
-  }
-  #perfilImage {
-    visibility: hidden;
-  }
-}
-@media only screen and (max-width: 767px) {
-  .bottom-card {
-    margin-bottom: 2rem;
   }
 }
 </style>

@@ -1,34 +1,33 @@
 <template>
   <div>
-    <div class="mb-0">
-      <b-nav tabs fill>
+    <div class="mb-2 setting-bar">
+      <b-nav tabs fill class="setting-tabs pt-1">
         <b-nav-item
           class="nav-setting"
-          active
-          v-for="item in getNavItems"
+          v-for="item in navItems"
           :key="item.value"
           :to="{ name: item.to }"
-          v-on:click="getTitle(item)"
           exact
-          exact-active-class="active-item"
+          exact-active-class="active active-item"
+          v-on:click="changeTitle()"
         >
           <span>
-            <b-icon :icon="item.icon" class="im" :scale="item.scale"></b-icon>
-            &nbsp;{{ item.name }}</span
-          >
+            <b-icon :icon="item.icon" :scale="item.scale"></b-icon>
+            <div class="text-nav">{{ item.name }}</div>
+          </span>
         </b-nav-item>
       </b-nav>
     </div>
-
-    <div>
+    <div class="setting-body">
       <transition name="t-setting-bar-title" mode="out-in">
-        <div class="bg2 c1 py-2 title-selected mb-2" v-if="prueba">
-          <b-icon
-            :icon="item_selected.icon"
-            class="im"
-            :scale="item_selected.scale"
-          ></b-icon>
-          &nbsp;{{ item_selected.name }}
+        <div class="bg2 c1 py-2 title-selected mb-2" v-if="showTitle">
+          <span v-show="showTitleText">
+            <b-icon
+              :icon="navItemSelected.icon"
+              :scale="navItemSelected.scale"
+            ></b-icon>
+            &nbsp;{{ navItemSelected.name }} </span
+          >&nbsp;
         </div>
       </transition>
       <transition name="t-setting-bar-body" mode="out-in">
@@ -43,13 +42,14 @@ export default {
   components: {},
   data() {
     return {
-      prueba: true,
-      item_selected: {},
-      nav_items: [
+      showTitle: true,
+      showTitleText: true,
+      itemSelected: {},
+      navItems: [
         {
           value: 1,
           icon: "table",
-          scale: 0.95,
+          scale: 0.94,
           name: "Mesas",
           to: "ListSettingTable",
           active_: false,
@@ -89,7 +89,7 @@ export default {
         {
           value: 6,
           icon: "bezier2",
-          scale: 1.1,
+          scale: 1,
           name: "Accesos",
           to: "Access",
           active: false,
@@ -98,61 +98,104 @@ export default {
     };
   },
   computed: {
-    getNavItems() {
-      var nav_items_selected = [];
-      this.nav_items.forEach((element) => {
-        if (element.active === false) nav_items_selected.push(element);
-        else this.item_selected = element;
-      });
-      return nav_items_selected;
+    navItemSelected: {
+      get: function () {
+        var itemSelected = {};
+        if (this.showTitle == false) {
+          return {};
+        }
+        this.navItems.forEach((element) => {
+          if (element.to === this.$route.name) {
+            element.active = true;
+            itemSelected = element;
+          } else {
+            element.active = false;
+          }
+        });
+
+        return itemSelected;
+      },
+      set: function (value) {
+        this.showTitle = value;
+      },
     },
   },
   methods: {
-    getTitle(currentTitle) {
-      this.prueba = false;
-      this.nav_items.forEach((element) => {
-        element.active = false;
-      });
-      currentTitle.active = true;
+    changeTitle() {
+      this.showTitleText = false;
       setTimeout(() => {
-        this.prueba = true;
+        this.navItemSelected = false;
+      }, 0);
+
+      setTimeout(() => {
+        this.showTitleText = true;
+        this.showTitle = true;
       }, 200);
     },
-    getPath() {
-      this.nav_items.forEach((element) => {
-        if (element.to === this.$route.name) {
-          element.active = true;
-        } else {
-          element.active = false;
-        }
-      });
-    },
   },
-  async created() {
-    this.getPath();
-  },
+  async created() {},
 };
 </script>
 
 <style scoped>
-.title-selected{
+.title-selected {
   padding-left: 0.75rem;
   padding-right: 0.75rem;
 }
-.nav-setting a {
-  border-radius: 0px !important;
-  border: none;
+.text-nav {
+  position: absolute;
+  left: 0;
+  right: 0;
+  text-align: center;
+  margin-left: 0.3rem;
+  margin-right: 0.3rem;
+  font-size: 0.84rem;
+  max-width: 100%;
+  bottom: 0.1rem;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
-.active-item {
-  transition: 0.2s;
+.nav-setting a {
+  position: relative;
+  color: #707070;
+  min-height: 3.2rem;
+  padding-top: 0.3rem;
+}
+.active a {
   background-color: var(--second-color) !important;
   color: var(--first-color) !important;
+  
+}
+.active{
+border: none !important;
+}
+.setting-bar {
+  background-color: #7c7c7c2f;
+}
+.setting-body {
+  padding: 2rem;
+}
+.setting-tabs {
+  padding-left: 2rem;
+  padding-right: 2rem;
+  border: none;
+}
+
+@media only screen and (max-width: 1199px) {
+  .setting-body {
+    padding: 0.3rem;
+  }
+  .setting-tabs {
+    padding-left: 0.3rem;
+    padding-right: 0.3rem;
+  }
 }
 
 /*t-setting-bar-body*/
 .t-setting-bar-body-enter-active,
 .t-setting-bar-body-leave-active {
-  transition: opacity 0.2s ease
+  transition: opacity 0.2s ease;
 }
 
 .t-setting-bar-body-enter {
@@ -163,20 +206,21 @@ export default {
   opacity: 0;
 }
 
-
 /*t-setting-bar-title*/
 .t-setting-bar-title-enter-active,
 .t-setting-bar-title-leave-active {
-  transition: all 0.2s ease
+  transition: 0.2s;
 }
 
 .t-setting-bar-title-enter {
   opacity: 0;
   transform: translateX(-3rem);
+  color: var(--color-2) !important;
 }
 
 .t-setting-bar-title-leave-to {
   opacity: 0;
   transform: translateX(3rem);
+  color: var(--color-2) !important;
 }
 </style>

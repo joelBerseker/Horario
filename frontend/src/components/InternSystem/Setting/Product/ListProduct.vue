@@ -37,51 +37,19 @@
         </b-row>
       </div>
     </transition>
-    <div>
-      <b-table
-        :busy="isBusy"
-        hover
-        :show-empty="!isBusy"
-        :items="items"
-        :fields="fields"
-        responsive
-        :per-page="perPage"
-        :current-page="currentPage"
-        empty-text="No hay registros para mostrar"
-        empty-filtered-text="No hay registros para mostrar que coincidan con su solicitud"
-      >
-        <template #cell(option)="data">
-          <b-button
-            variant="secondary"
-            size="sm"
-            @click="detailProduct(data.item, 1)"
-          >
-            <b-icon icon="eye"></b-icon>&nbsp;Ver
-          </b-button>
-        </template>
-        <template #table-busy>
-          <div class="text-center c2 my-2" v-if="isBusy">
-            <b-spinner class="align-middle"></b-spinner>&nbsp;
-            <span>Cargando ...</span>
-          </div>
-        </template>
-      </b-table>
-      <div v-if="!isBusy && perPage < items.length">
-        <b-pagination
-          v-model="currentPage"
-          :total-rows="rows"
-          :per-page="perPage"
-          aria-controls="my-table"
-          align="center"
-        ></b-pagination>
-      </div>
-    </div>
+    <TablePersonalized
+      :isBusy="isBusy"
+      :items="items"
+      :fields="fields"
+      :detailItem="detailProduct"
+    />
   </div>
 </template>
 
 <script>
 import axios from "axios";
 import DetailProduct from "@/components/InternSystem/Setting/Product/DetailProduct";
+import TablePersonalized from "@/components/InternSystem/ReusableComponents/TablePersonalized";
 import UtilityFunctions from "@/mixin/UtilityFunctions.js";
 const url = process.env.VUE_APP_RUTA_API;
 
@@ -89,6 +57,7 @@ export default {
   mixins: [UtilityFunctions],
   components: {
     DetailProduct,
+    TablePersonalized,
   },
   data() {
     return {
@@ -159,7 +128,6 @@ export default {
       this.$bvModal.show("detail-" + this.modalName + "-modal");
     },
     getProductList() {
-      
       this.isBusy = true;
       var path = url + this.pathName;
       console.log(path);

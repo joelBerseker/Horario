@@ -68,18 +68,18 @@ export default {
 
 <style scoped>
 .active-item-home {
-  border-bottom: 3px solid var(--first-color) !important;
+  border-bottom: 3px solid var(--color-1) !important;
 }
 .item-navbar a{
   transition: all ease-in-out 0.2s;
   border-bottom: 3px solid ;
   border-top: 3px solid ;
-  border-color: var(--second-color);
+  border-color: var(--color-2);
   margin-left: 0.1rem;
   margin-right: 0.1rem;
 }
 .item-navbar a:hover {
-  border-bottom: 3px solid var(--first-color);
+  border-bottom: 3px solid var(--color-1);
 }
 
 
