@@ -25,7 +25,6 @@ class Role extends Model{
 
     public function save(){
         try{
-            //verificar que el nombre del rol no se repita
             $query = $this->prepare('INSERT INTO role (RoleName) VALUES(:RoleName)');
             $query->execute([
                 'RoleName'  => $this->RoleName, 
@@ -48,6 +47,23 @@ class Role extends Model{
             return false;
         }
     }
+
+    public static function exists($RoleName){
+        try{
+            $db = new Database();
+            $query = $db->connect()->prepare('SELECT RoleName FROM role WHERE RoleName = :RoleName');
+            $query->execute( ['RoleName' => $RoleName]);
+            if($query->rowCount() > 0){
+                return true;
+            }else{
+                return false;
+            }
+        }catch(PDOException $e){
+            echo $e;
+            return false;
+        }
+    }
+
     public function update(){
         try{
             $query = $this->prepare('UPDATE role SET RoleName =:RoleName, RoleEstReg=:RoleEstReg WHERE RoleID=:RoleID');
@@ -94,12 +110,16 @@ class Role extends Model{
     public static function delete($RoleID){
         try{
             $db = new Database();
-            $query = $db->connect()->prepare('DELETE FROM role WHERE RoleID = :RoleID');
-            if ($query->execute([ 'RoleID' => $RoleID])){
-                return true;
-            }
-            else
-                return false;
+            $query1 = $db->connect()->prepare('DELETE FROM access WHERE AccRoleID = :AccRoleID');
+            if ($query1->execute([ 'AccRoleID' => $RoleID])){
+                $query2 = $db->connect()->prepare('DELETE FROM role WHERE RoleID = :RoleID');
+                if ($query2->execute([ 'RoleID' => $RoleID])){
+                    return true;
+                }
+                else{
+                    return false;
+                }
+            }             
         }catch(PDOException $e){
             return false;
         } 
