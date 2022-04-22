@@ -137,7 +137,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 .title-selected {
   padding-left: 0.75rem;
   padding-right: 0.75rem;

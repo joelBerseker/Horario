@@ -8,7 +8,18 @@
       :modalName="modalName"
       :getTableList="getTableList"
     />
+    <b-card class="c1 table-card mb-2">
+      <b-card-text class="py-0">
+        <h5 class="mt-1">
+        <b-icon
+          icon="table"
 
+        ></b-icon>
+        &nbsp;Mesas</h5
+      >
+      </b-card-text>
+    </b-card>
+  
     <div class="mb-2">
       <b-dropdown id="dropdown-left" variant="dark" size="sm">
         <template #button-content>
@@ -25,7 +36,7 @@
     </div>
     <div>
       <b-row>
-        <b-col v-for="item in list" :key="item.id" cols="12" lg="6">
+        <b-col v-for="item in list" :key="item.id" cols="12" lg="6" xl="4">
           <b-card class="mb-2 c1 table-card">
             <b-card-text>
               <b-row>
@@ -40,9 +51,7 @@
                   >
                     <h6 class="m-0 p-0">
                       {{ state_validation[item.reserved].text }}
-                      <span v-if="item.reserved == 2"
-                        >: {{ item.hour }}</span
-                      >
+                      <span v-if="item.reserved == 2">: {{ item.hour }}</span>
                     </h6>
                   </div>
                 </b-col>
@@ -63,7 +72,7 @@
                 <b-button
                   block
                   variant="primary"
-                  :to="{ name: 'TableOrder', params: {itemSelected: item}}"
+                  :to="{ name: 'TableOrder', params: { itemSelected: item } }"
                 >
                   <b-icon icon="list-task" scale="1"></b-icon> &nbsp;Ver pedidos
                 </b-button>
@@ -180,5 +189,9 @@ export default {
 }
 .free {
   background-color: var(--color-4);
+}
+.title-table{
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
 }
 </style>

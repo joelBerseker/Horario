@@ -43,14 +43,14 @@
         </b-row>
       </div>
     </transition>
-    <b-card class="c1 table-card">
+    <b-card class="c1 table-card mb-2">
       <b-card-text class="py-0">
         <b-row>
           <b-col cols="auto" v-on:click="back()" class="pr-0">
-            <h5 class="mt-1" ><b-icon icon="arrow-left"></b-icon></h5>
+            <h5 class="mt-1"><b-icon icon="arrow-left"></b-icon></h5>
           </b-col>
           <b-col>
-            <h5 class="mt-1">MESA {{ item.id }}</h5>
+            <h5 class="mt-1">Mesa {{ item.id }}</h5>
           </b-col>
           <b-col cols="auto">
             <div
@@ -66,16 +66,18 @@
       </b-card-text>
     </b-card>
     <b-row>
-      <b-col cols="12" lg="6">
-        <b-card class="table-card c1 mt-2">
+      <b-col cols="12" lg="6" xl="4" v-for="item in orderList" :key="item.id">
+        <b-card class="table-card c1 mb-2">
           <b-card-text>
             <b-row>
-              <b-col> <h5 class="mt-1">Pedido 58</h5> </b-col>
+              <b-col>
+                <h5 class="mt-1">Pedido {{ item.id }}</h5>
+              </b-col>
               <b-col cols="12">
                 <b-table
                   :busy="isBusy"
                   :show-empty="!isBusy"
-                  :items="items"
+                  :items="item.itemList"
                   :fields="fields"
                   responsive
                   class="table-order"
@@ -112,9 +114,28 @@ export default {
       sortBy: "id",
       sortDirection: "asc",
       item: this.$route.params.itemSelected,
-      items: [
-        { name: "Ceviche", number: "x2", delivered: 0 },
-        { name: "Care asasda", number: "x2", delivered: 1 },
+      orderList: [
+        {
+          id: 12,
+          itemList: [
+            { name: "Ceviche", number: "2", delivered: 0 },
+            { name: "Care asasda", number: "2", delivered: 1 },
+          ],
+        },
+        {
+          id: 16,
+          itemList: [
+            { name: "Estofado", number: "2", delivered: 0 },
+            { name: "Care asasda", number: "2", delivered: 1 },
+          ],
+        },
+        {
+          id: 17,
+          itemList: [
+            { name: "Carne ", number: "2", delivered: 0 },
+            { name: "Care asasda", number: "2", delivered: 1 },
+          ],
+        },
       ],
       fields: [
         {
@@ -124,10 +145,14 @@ export default {
         {
           key: "number",
           label: "Cantidad",
+          tdClass: "text-right",
+          thClass: "text-right",
         },
         {
           key: "delivered",
           label: "Entregado",
+          tdClass: "text-center",
+          thClass: "text-center",
           formatter: (value) => {
             return value ? true : false;
           },
@@ -136,8 +161,8 @@ export default {
     };
   },
   methods: {
-    back(){
-      this.$router.push({ name: 'Table'})
+    back() {
+      this.$router.push({ name: "Table" });
     },
     addOrder() {
       this.$bvModal.show("add-order-modal");
