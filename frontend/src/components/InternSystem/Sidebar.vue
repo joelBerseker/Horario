@@ -204,7 +204,7 @@ export default {
   /*padding: 2rem;*/
   min-height: 100vh;
   background-size: cover;
-  overflow-y: hidden;
+  overflow: hidden;
   padding-bottom: 2.6rem !important;
 }
 

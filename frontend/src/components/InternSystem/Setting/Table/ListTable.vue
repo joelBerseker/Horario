@@ -23,7 +23,7 @@
 
           <b-col class="pl-0">
             <b-button
-              class="buttom_add"
+              class="buttom_float"
               variant="primary"
               size="lg"
               block
@@ -85,7 +85,7 @@ export default {
           },
         },
         {
-          key: "date",
+          key: "hour",
           label: "Reservado...",
         },
         {
@@ -165,7 +165,7 @@ export default {
 </script>
 
 <style scoped>
-/*.buttom_add {
+/*.buttom_float {
   border-radius: 100px !important;
   position: fixed;
   bottom: 0;

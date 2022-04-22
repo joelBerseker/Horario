@@ -1,6 +1,6 @@
 <template>
   <div class="main-body">
-    <AddOrder/>
+    <AddOrder />
     <transition name="t-extra-buttoms">
       <div class="nav_buttoms">
         <b-row>
@@ -15,7 +15,7 @@
           </b-col>
           <b-col class="pl-2 pr-0" cols="auto">
             <b-button
-              class="buttom_add px-3"
+              class="buttom_float px-3"
               variant="warning"
               size="lg"
               @click="detailProduct(item_new, 0)"
@@ -28,7 +28,7 @@
           </b-col>
           <b-col class="pl-2">
             <b-button
-              class="buttom_add"
+              class="buttom_float"
               variant="primary"
               size="lg"
               block
@@ -46,6 +46,9 @@
     <b-card class="c1 table-card">
       <b-card-text class="py-0">
         <b-row>
+          <b-col cols="auto" v-on:click="back()" class="pr-0">
+            <h5 class="mt-1" ><b-icon icon="arrow-left"></b-icon></h5>
+          </b-col>
           <b-col>
             <h5 class="mt-1">MESA {{ item.id }}</h5>
           </b-col>
@@ -55,41 +58,46 @@
             >
               <h6 class="m-0 p-0">
                 {{ state_validation[item.reserved].text }}
-                <span v-if="item.reserved == 2">para: {{ item.date }}</span>
+                <span v-if="item.reserved == 2"> {{ item.hour }}</span>
               </h6>
             </div>
           </b-col>
         </b-row>
       </b-card-text>
     </b-card>
-    <b-card class="table-card c1 mt-2">
-      <b-card-text>
-        <b-row>
-          <b-col> <h5 class="mt-1">Pedido 58</h5> </b-col>
-          <b-col>
-            <b-table
-              :busy="isBusy"
-              :show-empty="!isBusy"
-              :items="items"
-              :fields="fields"
-              responsive
-              class="table-order"
-              empty-text="No hay registros para mostrar"
-              empty-filtered-text="No hay registros para mostrar que coincidan con su solicitud"
-            >
-              <template #cell(delivered)="data">
-                <b-form-checkbox
-                  v-model="data.value"
-                  value="accepted"
-                  unchecked-value="not_accepted" size="lg"
+    <b-row>
+      <b-col cols="12" lg="6">
+        <b-card class="table-card c1 mt-2">
+          <b-card-text>
+            <b-row>
+              <b-col> <h5 class="mt-1">Pedido 58</h5> </b-col>
+              <b-col cols="12">
+                <b-table
+                  :busy="isBusy"
+                  :show-empty="!isBusy"
+                  :items="items"
+                  :fields="fields"
+                  responsive
+                  class="table-order"
+                  empty-text="No hay registros para mostrar"
+                  empty-filtered-text="No hay registros para mostrar que coincidan con su solicitud"
                 >
-                </b-form-checkbox>
-              </template>
-            </b-table>
-          </b-col>
-        </b-row>
-      </b-card-text>
-    </b-card>
+                  <template #cell(delivered)="data">
+                    <b-form-checkbox
+                      v-model="data.value"
+                      value="accepted"
+                      unchecked-value="not_accepted"
+                      size="lg"
+                    >
+                    </b-form-checkbox>
+                  </template>
+                </b-table>
+              </b-col>
+            </b-row>
+          </b-card-text>
+        </b-card>
+      </b-col>
+    </b-row>
   </div>
 </template>
 
@@ -98,12 +106,12 @@ import UtilityFunctions from "@/mixin/UtilityFunctions.js";
 import AddOrder from "@/components/InternSystem/Table/Order";
 export default {
   mixins: [UtilityFunctions],
-  components: {AddOrder,},
+  components: { AddOrder },
   data() {
     return {
       sortBy: "id",
       sortDirection: "asc",
-      item: { id: 40, reserved: 1, date: "23:20" },
+      item: this.$route.params.itemSelected,
       items: [
         { name: "Ceviche", number: "x2", delivered: 0 },
         { name: "Care asasda", number: "x2", delivered: 1 },
@@ -127,11 +135,14 @@ export default {
       ],
     };
   },
-  methods:{
+  methods: {
+    back(){
+      this.$router.push({ name: 'Table'})
+    },
     addOrder() {
       this.$bvModal.show("add-order-modal");
     },
-  }
+  },
 };
 </script>
 

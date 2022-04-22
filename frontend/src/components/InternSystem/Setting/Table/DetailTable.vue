@@ -10,7 +10,7 @@
       :id="'detail-' + this.modalName + '-modal'"
       ref="modal"
       :title="title[mode]"
-      :scrollable="mode!==3"
+      :scrollable="mode !== 3"
       no-close-on-backdrop
       @ok="handleOk"
       ok-title="Agregar"
@@ -19,7 +19,7 @@
     >
       <b-form ref="form" @submit="handleSubmit">
         <InputTextPersonalized
-          v-if="mode !== 3"
+          v-if="mode === 0 || mode === 1"
           name="Numero:"
           :validation="validation_id"
           :disabled="mode === 1"
@@ -42,9 +42,9 @@
         <InputTimePersonalized
           v-if="item.reserved === 2"
           name="Reservado para:"
-          :validation="validation_description"
+          :validation="validation_hour"
           :disabled="mode === 1"
-          v-model="item.description"
+          v-model="item.hour"
           type="text"
           :required="true"
         />
@@ -130,23 +130,29 @@ export default {
   data() {
     return {
       validated: false,
-      title: ["Agregar registro", "Ver registro", "Editar registro", "Cambiar estado"],
+      title: [
+        "Agregar registro",
+        "Ver registro",
+        "Editar registro",
+        "Cambiar estado",
+      ],
       image: null,
       previewImage: null,
     };
   },
   computed: {
     validation_id() {
-      var text = this.item.name;
+      var text = this.item.id;
       var required = true;
       var validation_ = { status: null, value: "" };
       if (this.showValidation(text, required, this.validated, this.mode)) {
         validation_.status = true;
+        if (validation_.status) validation_ = this.textEmpty(text);
       }
       return validation_;
     },
-    validation_description() {
-      var text = this.item.description;
+    validation_hour() {
+      var text = this.item.hour;
       var required = true;
       var validation_ = { status: null, value: "" };
       if (this.showValidation(text, required, this.validated, this.mode)) {
@@ -183,51 +189,55 @@ export default {
       this.previewImage = null;
       this.validated = false;
     },
-    obtainImage(e) {
-      const file = e.target.files[0];
-      this.previewImage = URL.createObjectURL(file);
-    },
     handleOk(evt) {
       evt.preventDefault();
       this.handleSubmit();
     },
     handleSubmit() {
       this.validated = true;
-      if (this.formValidation()) {
-        if (this.mode == 3) this.mode = 2;
-        switch (this.mode) {
-          case 0:
+      var isOk = false;
+      switch (this.mode) {
+        case 0:
+          if (this.formValidationAdd()) {
+            isOk = true;
             this.addItem();
-            break;
-          case 2:
+          }
+          break;
+        case 2:
+        case 3:
+          if (this.formValidationEdit()) {
+            isOk = true;
             this.editItem();
-            break;
-          default:
-            console.log("Ocurrio un error");
-            break;
-        }
-      } else {
+          }
+          break;
+        default:
+          console.log("Ocurrio un error");
+          break;
+      }
+      if (!isOk)
         this.makeToast(
           "Revise que todos los campos se llenaron correctamente",
           "danger"
         );
-      }
     },
-    formValidation() {
+    formValidationAdd() {
+      return this.$refs.form.checkValidity() && this.validation_id.status;
+    },
+    formValidationEdit() {
       var state = true;
       if (this.mode == 2) state = this.validation_state.status;
       return (
         this.$refs.form.checkValidity() &&
         this.validation_id.status &&
-        this.validation_description.status &&
+        this.validation_hour.status &&
         state
       );
     },
     editItem() {
-      console.log(this.item.id);
       var formData = new FormData();
-      formData.append("name", this.item.name);
-      formData.append("description", this.item.description);
+      formData.append("reserved", this.item.reserved);
+      formData.append("hour", this.item.hour);
+      console.log(this.item.hour);
       formData.append("state", this.item.state);
       var path = url + this.pathName + "/edit/" + this.item.id;
       this.$store.dispatch("loadingSwitch");
@@ -250,9 +260,7 @@ export default {
     },
     addItem() {
       var formData = new FormData();
-      formData.append("name", this.item.name);
-      formData.append("description", this.item.description);
-      formData.append("image", this.image);
+      formData.append("id", this.item.id);
       var path = url + this.pathName + "/";
       this.$store.dispatch("loadingSwitch");
       setTimeout(() => {

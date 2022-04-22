@@ -155,33 +155,41 @@ export default {
     },
     handleSubmit() {
       this.validated = true;
-      if (this.formValidation()) {
-        switch (this.mode) {
-          case 0:
+      var isOk = false;
+      switch (this.mode) {
+        case 0:
+          if (this.formValidationAdd()) {
+            isOk = true;
             this.addItem();
-            break;
-          case 2:
+          }
+          break;
+        case 2:
+          if (this.formValidationEdit()) {
+            isOk = true;
             this.editItem();
-            break;
-          default:
-            console.log("Ocurrio un error");
-            break;
-        }
-      } else {
+          }
+          break;
+        default:
+          console.log("Ocurrio un error");
+          break;
+      }
+      if (!isOk)
         this.makeToast(
           "Revise que todos los campos se llenaron correctamente",
           "danger"
         );
-      }
     },
-    formValidation() {
-      var state = true;
-      if (this.mode == 2) state = this.validation_state.status;
-      console.log(state);
+    formValidationAdd() {
+      return (
+        this.$refs.form.checkValidity() &&
+        this.validation_name.status
+      );
+    },
+    formValidationEdit() {
       return (
         this.$refs.form.checkValidity() &&
         this.validation_name.status &&
-        state
+        this.validation_state.status
       );
     },
     editItem() {

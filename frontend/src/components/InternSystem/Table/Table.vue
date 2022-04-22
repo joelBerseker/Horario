@@ -24,42 +24,54 @@
       </b-dropdown>
     </div>
     <div>
-      <b-card v-for="item in list" :key="item.id" class="mb-2 c1 table-card">
-        <b-card-text>
-          <b-row>
-            <b-col
-              ><h5 class="mt-1">Mesa n° {{ item.id }}</h5>
-            </b-col>
-            <b-col cols="auto">
-              <div
-                :class="'state-table ' + state_validation[item.reserved].class"
-              >
-                <h6 class="m-0 p-0">
-                  {{ state_validation[item.reserved].text }}
-                  <span v-if="item.reserved == 2">para: {{ item.date }}</span>
-                </h6>
-              </div>
-            </b-col>
-          </b-row>
-        </b-card-text>
-        <b-row>
-          <b-col cols="auto" class="pr-0">
-            <b-button
-              variant="outline-light"
-              class="px-2"
-              @click="detailTable(item, 3)"
-            >
-              <b-icon icon="pencil-square" scale="1"></b-icon>
-              &nbsp;Editar
-            </b-button>
-          </b-col>
-          <b-col>
-            <b-button block variant="primary" :to="{ name: 'TableOrder' }">
-              <b-icon icon="list-task" scale="1"></b-icon> &nbsp;Ver pedidos
-            </b-button>
-          </b-col>
-        </b-row>
-      </b-card>
+      <b-row>
+        <b-col v-for="item in list" :key="item.id" cols="12" lg="6">
+          <b-card class="mb-2 c1 table-card">
+            <b-card-text>
+              <b-row>
+                <b-col
+                  ><h5 class="mt-1">Mesa {{ item.id }}</h5>
+                </b-col>
+                <b-col cols="auto">
+                  <div
+                    :class="
+                      'state-table ' + state_validation[item.reserved].class
+                    "
+                  >
+                    <h6 class="m-0 p-0">
+                      {{ state_validation[item.reserved].text }}
+                      <span v-if="item.reserved == 2"
+                        >: {{ item.hour }}</span
+                      >
+                    </h6>
+                  </div>
+                </b-col>
+              </b-row>
+            </b-card-text>
+            <b-row>
+              <b-col cols="auto" class="pr-0">
+                <b-button
+                  variant="outline-light"
+                  class="px-2"
+                  @click="detailTable(item, 3)"
+                >
+                  <b-icon icon="pencil-square" scale="1"></b-icon>
+                  &nbsp;Editar
+                </b-button>
+              </b-col>
+              <b-col>
+                <b-button
+                  block
+                  variant="primary"
+                  :to="{ name: 'TableOrder', params: {itemSelected: item}}"
+                >
+                  <b-icon icon="list-task" scale="1"></b-icon> &nbsp;Ver pedidos
+                </b-button>
+              </b-col>
+            </b-row>
+          </b-card>
+        </b-col>
+      </b-row>
     </div>
   </div>
 </template>
@@ -67,6 +79,8 @@
 <script>
 import UtilityFunctions from "@/mixin/UtilityFunctions.js";
 import DetailTable from "@/components/InternSystem/Setting/Table/DetailTable";
+const url = process.env.VUE_APP_RUTA_API;
+import axios from "axios";
 export default {
   mixins: [UtilityFunctions],
   components: { DetailTable },
@@ -83,11 +97,11 @@ export default {
       mode: 0, //0: agregar , 1: ver, 2: update
       itemSelected: {},
       list: [
-        { id: 40, reserved: 1, date: "23:20" },
-        { id: 21, reserved: 2, date: "15:20" },
-        { id: 89, reserved: 3, date: "13:40" },
-        { id: 38, reserved: 1, date: "11:30" },
-        { id: 37, reserved: 2, date: "11:30" },
+        { id: 40, reserved: 1, hour: "23:20" },
+        { id: 21, reserved: 2, hour: "15:20" },
+        { id: 89, reserved: 3, hour: "13:40" },
+        { id: 38, reserved: 1, hour: "11:30" },
+        { id: 37, reserved: 2, hour: "11:30" },
       ],
     };
   },
@@ -123,12 +137,26 @@ export default {
       this.mode = mode;
       this.$bvModal.show("detail-" + this.modalName + "-modal");
     },
-    getTableList() {},
+    getTableList() {
+      var path = url + "tabl";
+      console.log(path);
+      setTimeout(() => {
+        axios
+          .get(path)
+          .then((response) => {
+            this.list = response.data.data.tabl;
+          })
+          .catch((error) => {
+            this.makeToast(error, "danger");
+          });
+      }, 500);
+    },
     changeMode(mode) {
       this.mode = mode;
     },
   },
   created() {
+    this.getTableList();
     this.sort("id");
   },
 };

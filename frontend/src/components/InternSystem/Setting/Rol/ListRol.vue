@@ -24,7 +24,7 @@
 
           <b-col class="pl-2">
             <b-button
-              class="buttom_add"
+              class="buttom_float"
               variant="primary"
               size="lg"
               block
