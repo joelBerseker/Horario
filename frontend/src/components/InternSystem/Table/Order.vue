@@ -6,7 +6,7 @@
       ref="modal"
       scrollable
       no-close-on-backdrop
-      title="Agregar pedido"
+      :title="'Mesa ' + table.id + ' - Agregar pedido'"
       @ok="handleOk"
       ok-title="Agregar"
       cancel-title="Cancelar"
@@ -19,13 +19,13 @@
               <b-input-group prepend="$" class="mb-3">
                 <template #prepend>
                   <b-input-group-text class="item-left"
-                    ><b-icon icon="search" scale="0.9"></b-icon></b-input-group-text
-                  >
+                    ><b-icon icon="search" scale="0.9"></b-icon
+                  ></b-input-group-text>
                 </template>
                 <b-form-input
                   v-model="filter"
                   type="search"
-                  placeholder="Escribe para buscar"
+                  placeholder="Buscar"
                 >
                 </b-form-input>
               </b-input-group>
@@ -58,8 +58,6 @@
                 empty-filtered-text="No hay registros para mostrar que coincidan con su solicitud"
               >
               </b-table>
-              
-
             </div>
           </b-tab>
           <b-tab title="Pedidos">
@@ -70,7 +68,7 @@
                 responsive
                 show-empty
                 class="table-add-order"
-                empty-text="No hay registros para mostrar"
+                empty-text="No se han agregado pedidos"
                 empty-filtered-text="No hay registros para mostrar que coincidan con su solicitud"
               >
                 <template #cell(option)="data">
@@ -81,6 +79,56 @@
                   >
                     <b-icon icon="trash"></b-icon>
                   </b-button>
+                  
+                </template>
+                <template #row-details="data">
+                  <b-form-textarea
+                  class="mb-1"
+                    v-model="data.item.coment"
+                    size="sm"
+                    placeholder="Ingresa un comentario"
+                  ></b-form-textarea>
+                </template>
+                <template #cell(name)="data">
+                  <span class="mb-2">{{data.value}}</span>
+                  <b-form-checkbox
+                  size="sm"
+                    v-model="data.detailsShowing"
+                    @change="data.toggleDetails"
+                  >
+                    <small>Comentario</small>
+                  </b-form-checkbox>
+                </template>
+                <template #cell(number)="data">
+                  <div class="float-right">
+                    <b-input-group size="sm">
+                      <b-input-group-prepend>
+                        <b-button
+                          size="sm"
+                          variant="outline-success"
+                          @click="subtractAmount(data.item)"
+                          class="btn-amount px-2"
+                        >
+                          &nbsp; <span class="btn-amount-text">-</span>
+                        </b-button>
+                      </b-input-group-prepend>
+                      <b-input-group-text class="py-0 amount">
+                        &nbsp;<small class="amount-text">{{
+                          data.value
+                        }}</small>
+                      </b-input-group-text>
+                      <b-input-group-append>
+                        <b-button
+                          size="sm"
+                          variant="outline-success"
+                          @click="addAmount(data.item)"
+                          class="btn-amount px-2"
+                        >
+                          &nbsp;<span class="btn-amount-text">+</span>
+                        </b-button>
+                      </b-input-group-append>
+                    </b-input-group>
+                  </div>
                 </template>
               </b-table>
             </div>
@@ -98,14 +146,27 @@ import UtilityFunctions from "@/mixin/UtilityFunctions.js";
 export default {
   mixins: [UtilityFunctions],
   components: {},
+  props: ["table"],
   data() {
     return {
       search: "",
       filter: "",
       filterOn: ["name", "typeproname"],
       orderList: [
-        { name: "Ceviche", number: "12", delivered: 0 },
-        { name: "Care asasda", number: "2", delivered: 1 },
+        {
+          name: "Ceviche",
+          number: "99",
+          delivered: 0,
+          coment: "",
+          _showDetails: false,
+        },
+        {
+          name: "Care asasda",
+          number: "0",
+          delivered: 1,
+          coment: "",
+          _showDetails: true,
+        },
       ],
       productList: [],
       typeOfProductList: [],
@@ -122,18 +183,19 @@ export default {
       orderFields: [
         {
           key: "name",
-          label: "",
+          label: "Nombre",
         },
         {
           key: "number",
           label: "Cantidad",
-          tdClass: "text-right",
-          thClass: "text-right",
+          tdClass: "text-center",
+          thClass: "text-center",
+          thStyle: "width: 100px !important",
         },
 
         {
           key: "option",
-          label: "Opciones",
+          label: "",
           tdClass: "text-center",
           thClass: "text-center",
         },
@@ -141,6 +203,14 @@ export default {
     };
   },
   methods: {
+    addAmount(item) {
+      item.number++;
+    },
+    subtractAmount(item) {
+      if (item.number > 0) {
+        item.number--;
+      }
+    },
     deleteOrderFromList(index) {
       this.orderList.splice(index, 1);
     },
@@ -186,10 +256,24 @@ export default {
 </script>
 
 <style>
-.item-left {
-  border-top-left-radius: 0rem !important;
-  border-bottom-left-radius: 0rem !important;
+.btn-amount-text {
+  position: absolute;
+  left: 0;
+  right: 0;
 }
+.amount-text {
+  position: absolute;
+  right: 0;
+  left: 0;
+}
+.amount {
+  position: relative;
+  width: 35px !important;
+}
+.btn-amount {
+  position: relative;
+}
+
 .table-add-order td {
 }
 .order-tab {

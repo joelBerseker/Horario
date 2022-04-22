@@ -267,12 +267,12 @@ table.b-table[aria-busy='false'] {
 .custom-file-label,
 .modal-content,
 .custom-select {
-  border-radius: 0px !important;
+  /*border-radius: 0px !important;*/
 }
 
 .b-toast-success .toast {
   background-color: rgba(230, 245, 233) !important;
-  border-radius: 0px !important;
+  /*border-radius: 0px !important;*/
 }
 
 .b-toast-success .toast .toast-header {

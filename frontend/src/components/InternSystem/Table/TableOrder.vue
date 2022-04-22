@@ -1,6 +1,6 @@
 <template>
   <div class="main-body">
-    <AddOrder />
+    <AddOrder :table="item"/>
     <transition name="t-extra-buttoms">
       <div class="nav_buttoms">
         <b-row>
