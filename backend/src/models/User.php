@@ -77,7 +77,7 @@ class User extends Model{
                 'UserRoleID'  => $this->UserRoleID,
                 'UserName'  => $this->UserName,
                 'UserNickName'  => $this->UserNickName,
-                'UserPass'  => $this->hash,
+                'UserPass'  => $hash,
                 'UserEstReg' =>$this->UserEstReg,
                 'UserID'=> $this->id,
                 ]);
