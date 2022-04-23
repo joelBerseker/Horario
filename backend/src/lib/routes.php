@@ -268,9 +268,7 @@ $router->mount('/api/ticketdetail', function () use ($router) {
 });
 
 $router->get('/active', function () {
-    $user = unserialize($_SESSION['user']);
-    
-    $controller = new homeController($user);
+    $controller = new homeController();
     $controller->homeindex();
 });
 $router->post('/login', function () {

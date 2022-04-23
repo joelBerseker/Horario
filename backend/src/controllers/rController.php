@@ -30,7 +30,7 @@ class rController extends Controller{
             }
             
         }else{
-            echo "error";
+            echo "Es necesario: \n- Name";
             //$this->render('errors/index');
         }
     }

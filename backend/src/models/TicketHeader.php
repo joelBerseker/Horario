@@ -46,21 +46,14 @@ class TicketHeader extends Model{
         }
     }
     public function update(){
+
         try{
-            
-            $query = $this->prepare('UPDATE ticketheader SET 
-            TicHeadUserID =:TicHeadUserID, 
-            TicHeadFec=:TicHeadFec, 
-            TicHeadRUC=: TicHeadRUC, 
-            TicHeadLocName= :TicHeadLocName, 
-            TicHeadPorDesc= :TicHeadPorDesc, 
-            TicHeadEstReg=:TicHeadEstReg, 
-            TicHeadTabID =:TicHeadTabID WHERE TicHeadID=:TicHeadID');
+            $query = $this->prepare('UPDATE ticketheader SET TicHeadUserID =:TicHeadUserID, TicHeadFec =:TicHeadFec, TicHeadRUC =:TicHeadRUC, TicHeadLocName =:TicHeadLocName, TicHeadPorDesc =:TicHeadPorDesc, TicHeadEstReg =:TicHeadEstReg, TicHeadTabID =:TicHeadTabID WHERE TicHeadID =:TicHeadID');
             
             return $query->execute([
-                'TicHeadUserID'  => $this->TicHeadUserID, 
+                'TicHeadUserID'  => $this->TicHeadUserID,             
                 'TicHeadFec'  => $this->TicHeadFec,
-                'TicHeadRUC'  => $this->TicHeadRUC,
+                'TicHeadRUC'  => $this->TicHeadRUC,  
                 'TicHeadLocName'  => $this->TicHeadLocName,
                 'TicHeadPorDesc'  => $this->TicHeadPorDesc,
                 'TicHeadEstReg' =>$this->TicHeadEstReg,
@@ -68,8 +61,9 @@ class TicketHeader extends Model{
                 'TicHeadID'=> $this->id,
                 ]);
         }catch(PDOException $e){
-            error_log($e);
-            echo "error";
+            
+            echo $e;
+            echo "error de putos";
             return false;
         }
     } 
@@ -169,10 +163,10 @@ class TicketHeader extends Model{
         $this->TicHeadUserID = $value;
     }
     public function getTicHeadTabID(){
-        return $this->TicHeadUserID;
+        return $this->TicHeadTabID;
     }
     public function setTicHeadTabID($value){
-        $this->TicHeadUserID = $value;
+        $this->TicHeadTabID = $value;
     }
     public function getTicHeadFec():string{
         return $this->TicHeadFec;

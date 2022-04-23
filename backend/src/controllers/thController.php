@@ -45,7 +45,7 @@ class thController extends Controller{
         $TicHeadLocName = $data['localname'];
         $TicHeadPorDesc = $data['perdesc'];
         $TicHeadEstReg  = $data['state'];
-        if(! is_null($id) && !is_null($TicHeadUserID)&& !is_null($TicHeadTabID) &&!is_null($TicHeadFec) &&!is_null($TicHeadRUC) &&!is_null($TicHeadLocName) && !is_null($TicHeadEstReg)){
+        if(! is_null($id) && !is_null($TicHeadUserID)&& !is_null($TicHeadTabID) &&!is_null($TicHeadFec) &&!is_null($TicHeadLocName) && !is_null($TicHeadEstReg)){
             $r = TicketHeader::getByIds($id);
             $r->setTicHeadUserID($TicHeadUserID);
             $r->setTicHeadTabID($TicHeadTabID);

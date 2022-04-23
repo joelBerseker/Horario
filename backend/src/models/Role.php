@@ -159,7 +159,7 @@ class Role extends Model{
         $items = [];
         try{
             $db = new Database();
-            $query = $db->connect()->query('SELECT * FROM Role ORDER BY RoleFecAct DESC');
+            $query = $db->connect()->query('SELECT * FROM Role ORDER BY RoleFecAct');
             while($p = $query->fetch(PDO::FETCH_ASSOC)){
                 $item = new Role($p['RoleName']);
                 $item->setId($p['RoleID']);
