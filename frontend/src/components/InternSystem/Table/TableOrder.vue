@@ -1,6 +1,6 @@
 <template>
   <div class="main-body">
-    <AddOrder :table="item"/>
+    <AddOrder :table="item" />
     <transition name="t-extra-buttoms">
       <div class="nav_buttoms">
         <b-row>
@@ -67,37 +67,7 @@
     </b-card>
     <b-row>
       <b-col cols="12" lg="6" xl="4" v-for="item in orderList" :key="item.id">
-        <b-card class="table-card c1 mb-2">
-          <b-card-text>
-            <b-row>
-              <b-col>
-                <h5 class="mt-1">Pedido {{ item.id }}</h5>
-              </b-col>
-              <b-col cols="12">
-                <b-table
-                  :busy="isBusy"
-                  :show-empty="!isBusy"
-                  :items="item.itemList"
-                  :fields="fields"
-                  responsive
-                  class="table-order"
-                  empty-text="No hay registros para mostrar"
-                  empty-filtered-text="No hay registros para mostrar que coincidan con su solicitud"
-                >
-                  <template #cell(delivered)="data">
-                    <b-form-checkbox
-                      v-model="data.value"
-                      value="accepted"
-                      unchecked-value="not_accepted"
-                      size="lg"
-                    >
-                    </b-form-checkbox>
-                  </template>
-                </b-table>
-              </b-col>
-            </b-row>
-          </b-card-text>
-        </b-card>
+        <OrderItem :item="item" />
       </b-col>
     </b-row>
   </div>
@@ -106,9 +76,10 @@
 <script>
 import UtilityFunctions from "@/mixin/UtilityFunctions.js";
 import AddOrder from "@/components/InternSystem/Table/Order";
+import OrderItem from "@/components/InternSystem/ReusableComponents/OrderItem";
 export default {
   mixins: [UtilityFunctions],
-  components: { AddOrder },
+  components: { AddOrder, OrderItem },
   data() {
     return {
       sortBy: "id",
@@ -118,8 +89,8 @@ export default {
         {
           id: 12,
           itemList: [
-            { name: "Ceviche", number: "2", delivered: 0 },
-            { name: "Care asasda", number: "2", delivered: 1 },
+            { name: "Ceviche", number: "2", delivered: 0, coment: "Sin lechuga" ,_showDetails:true},
+            { name: "Care asasda", number: "2", delivered: 1, coment: "" },
           ],
         },
         {
@@ -137,27 +108,6 @@ export default {
           ],
         },
       ],
-      fields: [
-        {
-          key: "name",
-          label: "",
-        },
-        {
-          key: "number",
-          label: "Cantidad",
-          tdClass: "text-right",
-          thClass: "text-right",
-        },
-        {
-          key: "delivered",
-          label: "Entregado",
-          tdClass: "text-center",
-          thClass: "text-center",
-          formatter: (value) => {
-            return value ? true : false;
-          },
-        },
-      ],
     };
   },
   methods: {
@@ -172,10 +122,5 @@ export default {
 </script>
 
 <style>
-.table-order td {
-  color: var(--color-1) !important;
-}
-.table-order thead th {
-  border: none;
-}
+
 </style>
