@@ -46,7 +46,7 @@ class tdController extends Controller{
             $r->setTicDetCant($TicDetCant);
             $r->setTicDetEstReg($TicDetEstReg);
             $r->update();
-            $this->render('TicketDetail/home', ['op'=>3,'response'=>1,'message'=>'update successfuly','ticketdetail' => $r]);
+            $this->render('TicketDetail/home', ['op'=>3,'response'=>1,'message'=>'update successfuly','ticketdetail' => $r->toArray()]);
         }else{
             echo "Error";
         }

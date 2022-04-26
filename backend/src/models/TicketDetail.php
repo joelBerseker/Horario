@@ -15,7 +15,7 @@ class TicketDetail extends Model{
     private $TicDetFecAct;
     
     public function __construct(
-        private int $TicDetHeadID,
+        private int $TicDetTicHeadID,
         private int $TicDetProID,
         private string $TicDetDes,
         private int $TicDetCant
@@ -28,10 +28,10 @@ class TicketDetail extends Model{
 
     public function save(){
         try{
-            
-            $query = $this->prepare('INSERT INTO TicketDetail (TicDetHeadID, TicDetDes, TicDetCant) VALUES(:TicDetHeadID, :TicDetDes, :TicDetCant)');
+            $query = $this->prepare('INSERT INTO ticketdetail (TicDetTicHeadID, TicDetProID, TicDetDes, TicDetCant) VALUES(:TicDetTicHeadID, :TicDetProID, :TicDetDes, :TicDetCant)');
             $query->execute([
-                'TicDetHeadID'  => $this->TicDetHeadID, 
+                'TicDetTicHeadID'  => $this->TicDetTicHeadID, 
+                'TicDetProID'  => $this->TicDetProID, 
                 'TicDetDes'  => $this->TicDetDes,
                 'TicDetCant'  => $this->TicDetCant,
                 ]);
@@ -43,9 +43,14 @@ class TicketDetail extends Model{
     }
     public function update(){
         try{
-            $query = $this->prepare('UPDATE TicketDetail SET TicDetHeadID =:TicDetHeadID, TicDetDes=:TicDetDes, TicDetCant=: TicDetCant, TicDetEstReg=:TicDetEstReg WHERE TicDetID=:TicDetID');
+            $query = $this->prepare('UPDATE ticketdetail SET 
+            TicDetTicHeadID =:TicDetTicHeadID, 
+            TicDetProID =:TicDetProID, 
+            TicDetDes=:TicDetDes, 
+            TicDetCant=:TicDetCant, TicDetEstReg=:TicDetEstReg WHERE TicDetID=:TicDetID');
             return $query->execute([
-                'TicDetHeadID'  => $this->TicDetHeadID, 
+                'TicDetTicHeadID'  => $this->TicDetTicHeadID, 
+                'TicDetProID'  => $this->TicDetProID, 
                 'TicDetDes'  => $this->TicDetDes,
                 'TicDetCant'  => $this->TicDetCant,
                 'TicDetEstReg' =>$this->TicDetEstReg,
@@ -75,11 +80,8 @@ class TicketDetail extends Model{
             $query = $db->connect()->prepare('SELECT * FROM TicketDetail WHERE TicDetID = :TicDetID');
             $query->execute([ 'TicDetID' => $TicDetID]);
             $data = $query->fetch(PDO::FETCH_ASSOC);
-            $TicketDetail = new TicketDetail($data['TicDetHeadID'], $data['TicDetDes'], $data['TicDetCant']);
+            $TicketDetail = new TicketDetail($data['TicDetTicHeadID'], $data['TicDetProID'], $data['TicDetDes'], $data['TicDetCant']);
             $TicketDetail->setId($data['TicDetID']);
-            $TicketDetail->setTicDetHeadID($data['TicDetHeadID']);
-            $TicketDetail->setTicDetDes($data['TicDetDes']);
-            $TicketDetail->setTicDetCant($data['TicDetCant']);
             $TicketDetail->setTicDetEstReg($data['TicDetEstReg']);
             $TicketDetail->setTicDetFecAct($data['TicDetFecAct']);
             return $TicketDetail->toArray();
@@ -93,11 +95,8 @@ class TicketDetail extends Model{
             $query = $db->connect()->prepare('SELECT * FROM TicketDetail WHERE TicDetID = :TicDetID');
             $query->execute([ 'TicDetID' => $TicDetID]);
             $data = $query->fetch(PDO::FETCH_ASSOC);
-            $TicketDetail = new TicketDetail($data['TicDetHeadID'], $data['TicDetDes'], $data['TicDetCant']);
+            $TicketDetail = new TicketDetail($data['TicDetTicHeadID'], $data['TicDetProID'], $data['TicDetDes'], $data['TicDetCant']);
             $TicketDetail->setId($data['TicDetID']);
-            $TicketDetail->setTicDetHeadID($data['TicDetHeadID']);
-            $TicketDetail->setTicDetDes($data['TicDetDes']);
-            $TicketDetail->setTicDetCant($data['TicDetCant']);
             $TicketDetail->setTicDetEstReg($data['TicDetEstReg']);
             $TicketDetail->setTicDetFecAct($data['TicDetFecAct']);
             return $TicketDetail;
@@ -112,14 +111,10 @@ class TicketDetail extends Model{
             $db = new Database();
             $query = $db->connect()->query('SELECT * FROM TicketDetail ORDER BY TicDetFecAct DESC');
             while($p = $query->fetch(PDO::FETCH_ASSOC)){
-                $item = new TicketDetail($p['TicDetHeadID'], $p['TicDetDes'], $p['TicDetCant']);
+                $item = new TicketDetail($p['TicDetTicHeadID'], $p['TicDetProID'], $p['TicDetDes'], $p['TicDetCant']);
                 $item->setId($p['TicDetID']);
-                $item->setTicDetHeadID($p['TicDetHeadID']);
-                $item->setTicDet>Fec($p['TicDetDes']);
-                $item->setTicDetCant($p['TicDetCant']);
                 $item->setTicDetEstReg($p['TicDetEstReg']);
                 $item->setTicDetFecAct($p['TicDetFecAct']);
-                
                 array_push($items, $item->toArray());
             }
             return $items;
@@ -151,19 +146,25 @@ class TicketDetail extends Model{
     public function toArray():array{
         $arr = array(
             "id"        =>  $this->id,
-            "tichead"   =>  $this->TicDetTicHeadID,
-            "proid"     =>  $this->TicHeadProID,
+            "ticheadid" =>  $this->TicDetTicHeadID,
+            "proid"     =>  $this->TicDetProID,
             "description"=> $this->TicDetDes,
             "quantity"  =>  $this->TicDetCant,
-            "state"     =>  $this->TicHeadEstReg,
-            "UpdateDate"=>  $this->TicHeadFecAct);
+            "state"     =>  $this->TicDetEstReg,
+            "UpdateDate"=>  $this->TicDetFecAct);
         return $arr;
     }
-    public function getTicDetHeadID(){
-        return $this->TicDetHeadID;
+    public function getTicDetTicHeadID(){
+        return $this->TicDetTicHeadID;
     }
-    public function setTicDetHeadID($value){
-        $this->TicDetHeadID = $value;
+    public function setTicDetTicHeadID($value){
+        $this->TicDetTicHeadID = $value;
+    }
+    public function getTicDetProID(){
+        return $this->TicDetProID;
+    }
+    public function setTicDetProID($value){
+        $this->TicDetProID = $value;
     }
     public function getTicDetDes(){
         return $this->TicDetDes;
