@@ -14,34 +14,35 @@ class TicketHeader extends Model{
     private int $TicHeadEstReg;
     private $TicHeadFecAct;
     private $TicHeadPorDesc;
+    private string $TicHeadRUC;
     
     public function __construct(
         private int $TicHeadUserID,
         private int $TicHeadTabID,
         private $TicHeadFec,
-        private string $TicHeadRUC,
         private string $TicHeadLocName
     )
     {
         parent::__construct();
         $this->TicHeadEstReg=0;
         $this->TicHeadFecAct='';
-
+        $this->TicHeadPorDesc=0;
+        $this->TicHeadRUC='';
     }
 
     public function save(){
         try{
-            $query = $this->prepare('INSERT INTO Ticketheader (TicHeadUserID, TicHeadFec, TicHeadRUC, TicHeadLocName, TicHeadTabID) VALUES(:TicHeadUserID, :TicHeadFec, :TicHeadRUC, :TicHeadLocName, :TicHeadTabID)');
+            $query = $this->prepare('INSERT INTO Ticketheader (TicHeadUserID, TicHeadFec, TicHeadLocName, TicHeadTabID) VALUES(:TicHeadUserID, :TicHeadFec, :TicHeadLocName, :TicHeadTabID)');
             $query->execute([
                 'TicHeadUserID'  => $this->TicHeadUserID, 
                 'TicHeadFec'  => $this->TicHeadFec,
-                'TicHeadRUC'  => $this->TicHeadRUC,
                 'TicHeadLocName'  => $this->TicHeadLocName,
                 'TicHeadTabID'  => $this->TicHeadTabID, 
                 ]);
+            //echo $this->lastInsertId();
             return true;
         }catch(PDOException $e){
-            error_log($e);
+            echo $e;
             return false;
         }
     }
@@ -86,8 +87,9 @@ class TicketHeader extends Model{
             $query = $db->connect()->prepare('SELECT * FROM Ticketheader WHERE TicHeadID = :TicHeadID');
             $query->execute([ 'TicHeadID' => $TicHeadID]);
             $data = $query->fetch(PDO::FETCH_ASSOC);
-            $TicketHeader = new TicketHeader($data['TicHeadUserID'],$data['TicHeadTabID'], $data['TicHeadFec'], $data['TicHeadRUC'], $data['TicHeadLocName']);
+            $TicketHeader = new TicketHeader($data['TicHeadUserID'],$data['TicHeadTabID'], $data['TicHeadFec'], $data['TicHeadLocName']);
             $TicketHeader->setId($data['TicHeadID']);
+            $TicketHeader->setTicHeadRUC($data['TicHeadRUC']);
             $TicketHeader->setTicHeadPorDesc($data['TicHeadPorDesc']);
             $TicketHeader->setTicHeadEstReg($data['TicHeadEstReg']);
             $TicketHeader->setTicHeadFecAct($data['TicHeadFecAct']);
@@ -102,8 +104,9 @@ class TicketHeader extends Model{
             $query = $db->connect()->prepare('SELECT * FROM Ticketheader WHERE TicHeadID = :TicHeadID');
             $query->execute([ 'TicHeadID' => $TicHeadID]);
             $data = $query->fetch(PDO::FETCH_ASSOC);
-            $TicketHeader = new TicketHeader($data['TicHeadUserID'],$data['TicHeadTabID'], $data['TicHeadFec'], $data['TicHeadRUC'], $data['TicHeadLocName']);
+            $TicketHeader = new TicketHeader($data['TicHeadUserID'],$data['TicHeadTabID'], $data['TicHeadFec'], $data['TicHeadLocName']);
             $TicketHeader->setId($data['TicHeadID']);
+            $TicketHeader->setTicHeadRUC($data['TicHeadRUC']);
             $TicketHeader->setTicHeadPorDesc($data['TicHeadPorDesc']);
             $TicketHeader->setTicHeadEstReg($data['TicHeadEstReg']);
             $TicketHeader->setTicHeadFecAct($data['TicHeadFecAct']);
@@ -119,8 +122,9 @@ class TicketHeader extends Model{
             $db = new Database();
             $query = $db->connect()->query('SELECT * FROM Ticketheader ORDER BY TicHeadFecAct DESC');
             while($p = $query->fetch(PDO::FETCH_ASSOC)){
-                $item = new TicketHeader($p['TicHeadUserID'],$p['TicHeadTabID'], $p['TicHeadFec'], $p['TicHeadRUC'], $p['TicHeadLocName']);
+                $item = new TicketHeader($p['TicHeadUserID'],$p['TicHeadTabID'], $p['TicHeadFec'], $p['TicHeadLocName']);
                 $item->setId($p['TicHeadID']);
+                $item->setTicHeadRUC($p['TicHeadRUC']);
                 $item->setTicHeadPorDesc($p['TicHeadPorDesc']);
                 $item->setTicHeadEstReg($p['TicHeadEstReg']);
                 $item->setTicHeadFecAct($p['TicHeadFecAct']);
