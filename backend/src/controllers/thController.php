@@ -22,18 +22,18 @@ class thController extends Controller{
         $TicHeadUserID = $data['userid'];
         $TicHeadTabID = $data['tabid'];
         $TicHeadFec = $data['fecha'];
-        $TicHeadRUC = $data['ruc'];
         $TicHeadLocName = $data['localname'];
         $TicHeadPorDesc = $data['perdesc'];
-        if(!is_null($TicHeadUserID) && !is_null($TicHeadTabID) &&!is_null($TicHeadFec) &&!is_null($TicHeadRUC) &&!is_null($TicHeadLocName)){
-            $r = new TicketHeader($TicHeadUserID,$TicHeadTabID,$TicHeadFec,$TicHeadRUC,$TicHeadLocName);
+        if(!is_null($TicHeadUserID) && !is_null($TicHeadTabID) &&!is_null($TicHeadFec) &&!is_null($TicHeadLocName)){
+            
+            $r = new TicketHeader($TicHeadUserID,$TicHeadTabID,$TicHeadFec,$TicHeadLocName);
             if(!is_null($TicHeadPorDesc)){
                 $r->setTicHeadPorDesc($TicHeadPorDesc);
             }
             $r->save();
             $this->render('TicketHeader/home', ['op'=>1,'response'=>1,'message'=>'add successfuly']);
         }else{
-            echo "error";
+            echo "error faltan datos";
             //$this->render('errors/index');
         }
     }
@@ -55,6 +55,9 @@ class thController extends Controller{
             $r->setTicHeadEstReg($TicHeadEstReg);
             if(!is_null($TicHeadPorDesc)){
                 $r->setTicHeadPorDesc($TicHeadPorDesc);
+            }
+            if(!is_null($TicHeadRUC)){
+                $r->setTicHeadRUC($TicHeadRUC);
             }
             $r->update();
             $this->render('TicketHeader/home', ['op'=>3,'response'=>1,'message'=>'update successfuly','ticketheader' => $r->toArray()]);
