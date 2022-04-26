@@ -1,7 +1,17 @@
 <template>
   <div>
+    <div class="c1 main-title" body-class="">
+      <b-row>
+        <b-col class="text-aling-v-center">
+          <h5 class="m-0 p-0">
+            <b-icon icon="gear-fill"></b-icon>
+            &nbsp;Configuración
+          </h5></b-col
+        >
+      </b-row>
+    </div>
     <div class="mb-2 setting-bar">
-      <b-nav tabs fill class="setting-tabs pt-1">
+      <b-nav tabs fill class="setting-tabs">
         <b-nav-item
           class="nav-setting"
           v-for="item in navItems"
@@ -20,7 +30,7 @@
     </div>
     <div class="setting-body">
       <transition name="t-setting-bar-title" mode="out-in">
-        <div class="bg2 c1 py-2 title-selected mb-2" v-if="showTitle">
+        <div class="bg3 c1 py-2 title-selected mb-2" v-if="showTitle">
           <span v-show="showTitleText">
             <b-icon
               :icon="navItemSelected.icon"
@@ -158,26 +168,38 @@ export default {
 }
 .nav-setting a {
   position: relative;
-  color: #707070;
+  /*color: #707070;*/
+  color: var(--color-1);
   min-height: 3.2rem;
   padding-top: 0.3rem;
 }
 .active a {
   background-color: var(--second-color) !important;
   color: var(--first-color) !important;
-  
 }
-.active{
-border: none !important;
+.active {
+  border: none !important;
 }
 .setting-bar {
-  background-color: #7c7c7c2f;
+  /*background-color: #7c7c7c4b;*/
+  background-color: var(--color-2) !important;
+  position: relative;
+}
+.setting-bar::before {
+  content: "";
+  position: absolute;
+  top:-1px;
+  background-color: var(--color-5); 
+  min-width: 0.3rem;
+  height: 100%;
+  margin-bottom: 3px ;
+ 
 }
 .setting-body {
   padding: 2rem;
 }
 .setting-tabs {
-  padding-left: 2rem;
+  padding-left: 2rem !important;
   padding-right: 2rem;
   border: none;
 }
@@ -187,7 +209,7 @@ border: none !important;
     padding: 0.3rem;
   }
   .setting-tabs {
-    padding-left: 0.3rem;
+    padding-left: 0.3rem !important;
     padding-right: 0.3rem;
   }
 }

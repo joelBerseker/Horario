@@ -8,21 +8,26 @@ import About from "@/components/PublicPage/About";
 import FoodMenu from "@/components/PublicPage/FoodMenu/FoodMenu";
 import Promotion from "@/components/PublicPage/Promotion";
 
+import Sidebar from "@/components/InternSystem/Sidebar";
+
 import Table from "@/components/InternSystem/Table/Table";
 import TableOrder from "@/components/InternSystem/Table/TableOrder";
 import Logout from "@/components/InternSystem/Autentication/Logout";
 import User from "@/components/InternSystem/User/User";
 import Order from "@/components/InternSystem/Order/Order";
 import MyOrder from "@/components/InternSystem/Order/MyOrder";
-import Sidebar from "@/components/InternSystem/Sidebar";
+
+import Settingbar from "@/components/InternSystem/Setting/Settingbar";
 
 import Access from "@/components/InternSystem/Setting/Access";
 import ListProduct from "@/components/InternSystem/Setting/Product/ListProduct";
 import ListRol from "@/components/InternSystem/Setting/Rol/ListRol";
-import Settingbar from "@/components/InternSystem/Setting/Settingbar";
 import ListSettingTable from "@/components/InternSystem/Setting/Table/ListTable";
 import ListTypeOfProduct from "@/components/InternSystem/Setting/TypeOfProduct/ListTypeOfProduct";
 import ListSettingUser from "@/components/InternSystem/Setting/User/ListUser";
+
+import System from "@/components/InternSystem/System";
+import Login from "@/components/InternSystem/Autentication/Login";
 
 Vue.use(VueRouter);
 
@@ -66,89 +71,103 @@ const routes = [
   },
   {
     path: "/system",
-    name: "Sidebar",
-    redirect: "/system/setting/",
-    component: Sidebar,
+    name: "System",
+    component: System,
+    props: true,
     children: [
       {
-        path: "/system/user",
-        name: "User",
-        component: User,
+        path: "/system/login",
+        name: "Login",
+        component: Login,
         props: true,
       },
       {
-        path: "/system/logout",
-        name: "Logout",
-        component: Logout,
-        props: true,
-      },
-      {
-        path: "/system/table",
-        name: "Table",
-        component: Table,
-        props: true,
-      },
-      {
-        path: "/system/table/order",
-        name: "TableOrder",
-        component: TableOrder,
-        props: true,
-      },
-      {
-        path: "/system/order",
-        name: "Order",
-        component: Order,
-        props: true,
-      },
-      {
-        path: "/system/myorder",
-        name: "MyOrder",
-        component: MyOrder,
-        props: true,
-      },
-      {
-        path: "/system/setting/",
-        name: "Settingbar",
-
-        component: Settingbar,
-        redirect: "/system/setting/table",
-        props: true,
+        path: "/system/",
+        name: "Sidebar",
+        redirect: "/system/setting/",
+        component: Sidebar,
         children: [
           {
-            path: "/system/setting/table",
-            name: "ListSettingTable",
-            component: ListSettingTable,
+            path: "/system/user",
+            name: "User",
+            component: User,
             props: true,
           },
           {
-            path: "/system/setting/access",
-            name: "Access",
-            component: Access,
+            path: "/system/logout",
+            name: "Logout",
+            component: Logout,
             props: true,
           },
           {
-            path: "/system/setting/product",
-            name: "ListProduct",
-            component: ListProduct,
+            path: "/system/table",
+            name: "Table",
+            component: Table,
             props: true,
           },
           {
-            path: "/system/setting/rol",
-            name: "ListRol",
-            component: ListRol,
+            path: "/system/table/order",
+            name: "TableOrder",
+            component: TableOrder,
             props: true,
           },
           {
-            path: "/system/setting/typeofproduct",
-            name: "ListTypeOfProduct",
-            component: ListTypeOfProduct,
+            path: "/system/order",
+            name: "Order",
+            component: Order,
             props: true,
           },
           {
-            path: "/system/setting/user",
-            name: "ListSettingUser",
-            component: ListSettingUser,
+            path: "/system/myorder",
+            name: "MyOrder",
+            component: MyOrder,
             props: true,
+          },
+          {
+            path: "/system/setting/",
+            name: "Settingbar",
+
+            component: Settingbar,
+            redirect: "/system/setting/table",
+            props: true,
+            children: [
+              {
+                path: "/system/setting/table",
+                name: "ListSettingTable",
+                component: ListSettingTable,
+                props: true,
+              },
+              {
+                path: "/system/setting/access",
+                name: "Access",
+                component: Access,
+                props: true,
+              },
+              {
+                path: "/system/setting/product",
+                name: "ListProduct",
+                component: ListProduct,
+                props: true,
+              },
+              {
+                path: "/system/setting/rol",
+                name: "ListRol",
+                component: ListRol,
+                props: true,
+              },
+              {
+                path: "/system/setting/typeofproduct",
+                name: "ListTypeOfProduct",
+                component: ListTypeOfProduct,
+                props: true,
+              },
+              {
+                path: "/system/setting/user",
+                name: "ListSettingUser",
+                component: ListSettingUser,
+                props: true,
+              },
+            ],
           },
         ],
       },

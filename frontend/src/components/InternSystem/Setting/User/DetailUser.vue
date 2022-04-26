@@ -1,6 +1,11 @@
 <template>
   <div>
-    <DeleteItem :item="item" :pathName="pathName" :modalName="modalName" />
+    <DeleteItem
+      :item="item"
+      :pathName="pathName"
+      :modalName="modalName"
+      :getList="getUserList"
+    />
     <b-modal
       :id="'detail-' + this.modalName + '-modal'"
       ref="modal"
@@ -13,92 +18,55 @@
       @hidden="closeModal"
     >
       <b-form ref="form" @submit="handleSubmit">
-        <div class="mb-2 row justify-content-center">
-          <div
-            class="image-product"
-            :style="
-              'background-image: url(' +
-              selectImage +
-              '); width: 25vh; height: 25vh;'
-            "
-          ></div>
-        </div>
-        <b-form-group
-          class="mb-2"
-          label="Nombre:"
-          label-size="sm"
-          label-class="mb-0"
-        >
-          <b-form-input
-            :disabled="mode === 1"
-            v-model="item.name"
-            type="text"
-            required
-            :state="validationName.status"
-          ></b-form-input>
-          <small v-if="validationName.status == false" class="text-danger">
-            <b-icon icon="exclamation-circle" variant="danger"></b-icon>&nbsp;
-            {{ validationName.value }}
-          </small>
-        </b-form-group>
-        <b-form-group
-          class="mb-2"
-          label="Descripcion:"
-          label-size="sm"
-          label-class="mb-0"
-        >
-          <b-form-input
-            :disabled="mode === 1"
-            v-model="item.description"
-            type="text"
-            required
-            :state="validationDescription.status"
-          ></b-form-input>
-          <small
-            v-if="validationDescription.status == false"
-            class="text-danger"
-          >
-            <b-icon icon="exclamation-circle" variant="danger"></b-icon>&nbsp;
-            {{ validationDescription.value }}
-          </small>
-        </b-form-group>
-
-        <b-form-group
+       
+        <InputTextPersonalized
+          :name="'Nombre'"
+          :validation="validation_name"
+          :disabled="mode === 1"
+          v-model="item.name"
+          type="text"
+          :required="true"
+        />
+        <InputTextPersonalized
+          :name="'Usuario'"
+          :validation="validation_nickname"
+          :disabled="mode === 1"
+          v-model="item.nickname"
+          type="text"
+          :required="true"
+        />
+         <InputTextPersonalized
+          :name="'Contraseña'"
+          :validation="validation_password"
+          :disabled="mode === 1"
+          v-model="item.password"
+          type="password"
+          :required="true"
+        />
+        <InputSelectPersonalized
+          name="Rol:"
+          :validation="validation_roleid"
+          :disabled="mode === 1"
+          v-model="item.roleid"
+          :list="list_role"
+          :editFirst="true"
+          :required="true"
+          valueField="id"
+          textField="name"
+        />
+        <InputSelectPersonalized
           v-if="mode !== 0"
-          class="mb-2"
-          label="Estado:"
-          label-size="sm"
-          label-class="mb-0"
-        >
-          <b-form-select
-            :disabled="mode === 1"
-            v-model="item.state"
-            :options="status"
-            :state="validationState.status"
-          ></b-form-select>
-          <small v-if="validationState.status == false" class="text-danger">
-            <b-icon icon="exclamation-circle" variant="danger"></b-icon>&nbsp;
-            {{ validationState.value }}
-          </small>
-        </b-form-group>
-
-        <b-form-group
-          v-if="mode === 0 || mode === 2"
-          class="mb-2"
-          label="Imagen:"
-          label-class="mb-0"
-          label-size="sm"
-          description="No es necesario ingresar una imagen"
-        >
-          <b-form-file
-            @change="obtainImage"
-            accept="image/*"
-            v-model="image"
-            :state="validationImage.status"
-            placeholder="Escoge una imagen..."
-            drop-placeholder="Suelta una imagen aqui..."
-          ></b-form-file>
-        </b-form-group>
+          name="Estado:"
+          :validation="validation_state"
+          :disabled="mode === 1"
+          v-model="item.state"
+          :list="status"
+          :editFirst="false"
+          :required="true"
+          valueField="value"
+          textField="text"
+        />
+    
       </b-form>
       <template #modal-footer="{ ok }">
         <!----
@@ -142,14 +110,17 @@
 <script>
 import axios from "axios";
 import DeleteItem from "@/components/InternSystem/ReusableComponents/DeleteItem";
+import InputTextPersonalized from "@/components/InternSystem/ReusableComponents/InputTextPersonalized";
+import InputSelectPersonalized from "@/components/InternSystem/ReusableComponents/InputSelectPersonalized";
 import UtilityFunctions from "@/mixin/UtilityFunctions.js";
 import UtilityValidations from "@/mixin/UtilityValidations.js";
 const url = process.env.VUE_APP_RUTA_API;
-const url_public = process.env.VUE_APP_RUTA_PUBLIC;
 
 export default {
   components: {
     DeleteItem,
+    InputTextPersonalized,
+    InputSelectPersonalized,
   },
   mixins: [UtilityFunctions, UtilityValidations],
   props: [
@@ -158,82 +129,78 @@ export default {
     "changeMode",
     "pathName",
     "modalName",
-    "getTypeOfProductList",
+    "getUserList",
   ],
 
   data() {
     return {
-      activate_validation: false,
+      list_role: [],
+      validated: false,
       title: ["Agregar registro", "Ver registro", "Editar registro"],
       image: null,
       previewImage: null,
     };
   },
   computed: {
-    validationName() {
+    validation_name() {
       var text = this.item.name;
-      if ((text == null && !this.activate_validation) || this.mode == 1)
-        return { status: null, value: "" };
-
-      var resp = this.textEmpty(text);
-      if (!resp.status) return resp;
-      resp = this.onlyText(text);
-      if (!resp.status) return resp;
-      return resp;
-    },
-    validationDescription() {
-      var text = this.item.description;
-      if ((text == null && !this.activate_validation) || this.mode == 1)
-        return { status: null, value: "" };
-
-      var resp = this.textEmpty(text);
-      if (!resp.status) return resp;
-
-   
-
-      return resp;
-    },
-
-    validationState() {
-      var text = this.item.state;
-      if ((text == 0 && !this.activate_validation) || this.mode == 1)
-        return { status: null, value: "" };
-
-      var resp = this.optionSelect(text);
-      if (!resp.status) return resp;
-      return resp;
-    },
-    validationImage() {
-      var text = this.image;
-      if (text === null || this.mode == 1) return { status: null, value: "" };
-
-      var resp = this.fileUploaded(text);
-      if (!resp.status) return resp;
-      return resp;
-    },
-
-    selectImage() {
-      switch (this.mode) {
-        case 0:
-          if (this.image) return this.previewImage;
-          else return "/no_image.jpg";
-        case 1:
-          if (this.item.image == "") return "/no_image.jpg";
-          else return url_public+this.item.image;
-        case 2:
-          if (this.image) return this.previewImage;
-          else if (this.item.image != "") return url_public+this.item.image;
-          else return "/no_image.jpg";
-        default:
-          return "/no_image.jpg";
+      var required = true;
+      var validation_ = { status: null, value: "" };
+      if (this.showValidation(text, required, this.validated, this.mode)) {
+        validation_.status = true;
+        if (validation_.status) validation_ = this.textEmpty(text);
+    
       }
+      return validation_;
+    },
+    validation_nickname() {
+      var text = this.item.nickname;
+      var required = true;
+      var validation_ = { status: null, value: "" };
+      if (this.showValidation(text, required, this.validated, this.mode)) {
+        validation_.status = true;
+        if (validation_.status) validation_ = this.textEmpty(text);
+    
+      }
+      return validation_;
+    },
+    validation_password() {
+      var text = this.item.password;
+      var required = true;
+      var validation_ = { status: null, value: "" };
+      if (this.showValidation(text, required, this.validated, this.mode)) {
+        validation_.status = true;
+        if (validation_.status) validation_ = this.textEmpty(text);
+    
+      }
+      return validation_;
+    },
+    validation_roleid() {
+      var text = this.item.roleid;
+      var required = true;
+      var validation_ = { status: null, value: "" };
+      if (this.showValidation(text, required, this.validated, this.mode)) {
+        validation_.status = true;
+        if (validation_.status) validation_ = this.optionSelect(text);
+      }
+      return validation_;
+    },
+    validation_state() {
+      var text = this.item.state;
+      var required = true;
+      var validation_ = { status: null, value: "" };
+      if (this.showValidation(text, required, this.validated, this.mode)) {
+        validation_.status = true;
+        if (validation_.status) validation_ = this.optionSelect(text);
+      }
+      return validation_;
     },
   },
   methods: {
     closeModal() {
       this.image = null;
       this.previewImage = null;
-      this.activate_validation = false;
+      this.validated = false;
     },
     obtainImage(e) {
       const file = e.target.files[0];
@@ -244,40 +211,59 @@ export default {
       this.handleSubmit();
     },
     handleSubmit() {
-      this.activate_validation = true;
-      if (this.formValidation()) {
-        switch (this.mode) {
-          case 0:
+      this.validated = true;
+      var isOk = false;
+      switch (this.mode) {
+        case 0:
+          if (this.formValidationAdd()) {
+            isOk = true;
             this.addItem();
-            break;
-          case 2:
+          }
+          break;
+        case 2:
+          if (this.formValidationEdit()) {
+            isOk = true;
             this.editItem();
-            break;
-          default:
-            console.log("Ocurrio un error");
-            break;
-        }
-      } else {
+          }
+          break;
+        default:
+          console.log("Ocurrio un error");
+          break;
+      }
+      if (!isOk)
         this.makeToast(
           "Revise que todos los campos se llenaron correctamente",
           "danger"
         );
-      }
     },
-    formValidation() {
+    formValidationAdd() {
       return (
         this.$refs.form.checkValidity() &&
-        this.validationName.status &&
-        this.validationDescription.status
+        this.validation_name.status &&
+        this.validation_nickname.status &&
+        this.validation_password.status &&
+        this.validation_roleid.status
+      );
+    },
+    formValidationEdit() {
+      return (
+        this.$refs.form.checkValidity() &&
+        this.validation_name.status &&
+        this.validation_nickname.status &&
+        this.validation_password.status &&
+        this.validation_roleid.status &&
+        this.validation_state.status
       );
     },
     editItem() {
       console.log(this.item.id);
       var formData = new FormData();
       formData.append("name", this.item.name);
-      formData.append("description", this.item.description);
+      formData.append("nickname", this.item.nickname);
+      formData.append("password", this.item.password);
+      formData.append("roleid", this.item.roleid);
       formData.append("state", this.item.state);
-      var path = url + this.pathName + "/" + this.item.id;
+      var path = url + this.pathName + "/edit/" + this.item.id;
       this.$store.dispatch("loadingSwitch");
       setTimeout(() => {
         axios
@@ -288,7 +274,7 @@ export default {
             this.$nextTick(() => {
               this.$bvModal.hide("detail-" + this.modalName + "-modal");
             });
-            this.getTypeOfProductList();
+            this.getUserList();
           })
           .catch(() => {
             this.$store.dispatch("loadingSwitch");
@@ -299,9 +285,11 @@ export default {
     addItem() {
       var formData = new FormData();
       formData.append("name", this.item.name);
-      formData.append("description", this.item.description);
-      formData.append("image", this.image);
+      formData.append("nickname", this.item.nickname);
+      formData.append("password", this.item.password);
+      formData.append("roleid", this.item.roleid);
       var path = url + this.pathName + "/";
+      console.log(path);
       this.$store.dispatch("loadingSwitch");
       setTimeout(() => {
         axios
@@ -312,7 +300,7 @@ export default {
             this.$nextTick(() => {
               this.$bvModal.hide("detail-" + this.modalName + "-modal");
             });
-            this.getTypeOfProductList();
+            this.getUserList();
           })
           .catch(() => {
             this.$store.dispatch("loadingSwitch");
@@ -324,7 +312,7 @@ export default {
     detailItemButtom() {
       this.image = null;
       this.previewImage = null;
-      this.activate_validation = false;
+      this.validated = false;
       this.changeMode(1);
     },
     editItemButtom() {
@@ -333,6 +321,21 @@ export default {
     deleteItemButtom() {
       this.$bvModal.show("delete-" + this.modalName + "-modal");
     },
+    getRolList() {
+      var path = url + "role";
+
+      axios
+        .get(path)
+        .then((response) => {
+          this.list_role = response.data.data.roles;
+        })
+        .catch((error) => {
+          this.makeToast(error, "danger");
+        });
+    },
+  },
+  created() {
+    this.getRolList();
   },
 };
 </script>

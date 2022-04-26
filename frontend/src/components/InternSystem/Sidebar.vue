@@ -26,14 +26,16 @@
         >
           <b-icon icon="x"></b-icon>
         </b-button>
-        <div id="side-bar">
+
+        <div id="side-bar" class="py-5">
           <div>
-            <b-list-group flush class="mt-4">
+            <Logo size="1.2" class="side-bar-item mb-4" />
+            <b-list-group flush>
               <b-list-group-item
                 v-for="item in navItems"
                 :key="item.value"
-                class="bg2 c1 border-0 side-bar-item"
-                active-class="active-item"
+                class="bg2 c1 side-bar-item"
+                active-class="side-bar-active-item"
                 :to="{ name: item.to }"
                 v-on:click="closeNavAuto()"
               >
@@ -64,8 +66,9 @@
 </template>
 
 <script>
+import Logo from "@/components/InternSystem/ReusableComponents/Logo";
 export default {
-  components: {},
+  components: { Logo },
   data() {
     return {
       marginWidth: "200px",
@@ -173,7 +176,9 @@ export default {
 .side-bar-item {
   text-overflow: ellipsis;
   white-space: nowrap;
+  border: none !important;
 }
+
 .side-bar-cover {
   height: 100%;
   width: 100%;
@@ -193,9 +198,19 @@ export default {
   transition: width 0.2s;
 }
 
-.active-item {
+.side-bar-active-item {
   background-color: var(--color-1) !important;
   color: var(--color-2) !important;
+}
+.side-bar-active-item::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0px;
+  background-color: var(--color-5);
+  min-width: 0.3rem;
+  height: 100%;
+  margin-bottom: 3px;
 }
 
 #main-side {

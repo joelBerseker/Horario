@@ -1,44 +1,62 @@
 <template>
   <div>
-    <b-card class="c1 table-card">
-      <b-card-text>
-        <b-row>
-          <b-col
-            ><h5 class="mt-1">MESA {{ item.id }}</h5></b-col
-          >
-          <b-col cols="auto">
-            <div
-              :class="'state-table ' + state_validation[item.reserved].class"
-            >
-              <h6 class="m-0 p-0">
-                {{ state_validation[item.reserved].text }}
-                <span v-if="item.reserved == 2">para: {{ item.date }}</span>
-              </h6>
-            </div></b-col
-          ></b-row
+    <div class="c1 main-title" body-class="">
+      <b-row>
+        <b-col class="text-aling-v-center">
+          <h5 class="m-0 p-0">
+            <b-icon icon="receipt"></b-icon>
+            &nbsp;Pedidos
+          </h5></b-col
         >
-      </b-card-text>
-    </b-card>
-    <b-card class="c1 table-card">
-      <b-card-text>
-        <b-row>
-          <b-col> <h5 class="mt-1">Pedidos</h5> </b-col>
-        </b-row>
-      </b-card-text>
-    </b-card>
+      </b-row>
+    </div>
+    <div class="main-body">
+      <b-row>
+        <b-col cols="12" lg="6" xl="4" v-for="item in orderList" :key="item.id">
+          <OrderItem :item="item" :showTable="true" />
+        </b-col>
+      </b-row>
+    </div>
   </div>
 </template>
 
 <script>
 import UtilityFunctions from "@/mixin/UtilityFunctions.js";
+import OrderItem from "@/components/InternSystem/ReusableComponents/OrderItem";
 export default {
   mixins: [UtilityFunctions],
-  components: {},
+  components: { OrderItem },
   data() {
     return {
-      sortBy: "id",
-      sortDirection: "asc",
-      item: { id: 40, reserved: 1, date: "23:20" },
+      orderList: [
+        {
+          id: 12,
+          itemList: [
+            {
+              name: "Ceviche",
+              number: "2",
+              delivered: 0,
+              coment: "Sin lechuga",
+              _showDetails: true,
+            },
+            { name: "Care asasda", number: "2", delivered: 1, coment: "" },
+          ],
+        },
+        {
+          id: 16,
+          itemList: [
+            { name: "Estofado", number: "2", delivered: 0 },
+            { name: "Care asasda", number: "2", delivered: 1 },
+          ],
+        },
+        {
+          id: 17,
+          itemList: [
+            { name: "Carne ", number: "2", delivered: 0 },
+            { name: "Care asasda", number: "2", delivered: 1 },
+          ],
+        },
+      ],
     };
   },
 };

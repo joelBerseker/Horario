@@ -28,7 +28,7 @@
               variant="primary"
               size="lg"
               block
-              @click="detailProduct(item_new, 0)"
+              @click="addProduct(item_new)"
             >
               <b-icon icon="plus"></b-icon>
               <small>Agregar</small>
@@ -104,12 +104,6 @@ export default {
             return this.status[value].text;
           },
         },
-        {
-          key: "option",
-          label: "Opciones",
-          tdClass: "toption-class text-center",
-          thClass: "option-class text-center",
-        },
       ],
     };
   },
@@ -122,9 +116,14 @@ export default {
     changeMode(mode) {
       this.mode = mode;
     },
-    detailProduct(item, mode) {
+    detailProduct(item) {
       this.itemSelected = Object.assign({}, item);
-      this.mode = mode;
+      this.mode = 1;
+      this.$bvModal.show("detail-" + this.modalName + "-modal");
+    },
+    addProduct(item) {
+      this.itemSelected = Object.assign({}, item);
+      this.mode = 0;
       this.$bvModal.show("detail-" + this.modalName + "-modal");
     },
     getProductList() {

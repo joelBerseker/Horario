@@ -27,7 +27,7 @@
               variant="primary"
               size="lg"
               block
-              @click="detailTable(item_new, 0)"
+              @click="addTable(item_new)"
             >
               <b-icon icon="plus"></b-icon>
               <small>Agregar</small>
@@ -95,12 +95,6 @@ export default {
             return this.status[value].text;
           },
         },
-        {
-          key: "option",
-          label: "Opciones",
-          tdClass: "option-class text-center",
-          thClass: "option-class text-center",
-        },
       ],
     };
   },
@@ -113,9 +107,15 @@ export default {
     changeMode(mode) {
       this.mode = mode;
     },
-    detailTable(item, mode) {
+    detailTable(item) {
       this.itemSelected = Object.assign({}, item);
-      this.mode = mode;
+      this.mode = 1;
+      this.$bvModal.show("detail-" + this.modalName + "-modal");
+    },
+    
+    addTable(item) {
+      this.itemSelected = Object.assign({}, item);
+      this.mode = 0;
       this.$bvModal.show("detail-" + this.modalName + "-modal");
     },
     addTableFast() {
