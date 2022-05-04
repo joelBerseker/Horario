@@ -14,7 +14,7 @@
         <b-row>
           <b-col cols="auto" class="pr-0">
             <b-button
-              variant="link "
+              variant="dark "
               class="c1 bg4 px-2 icon_menu_simulation"
               size="lg"
             >
@@ -30,8 +30,9 @@
               block
               @click="addProduct(item_new)"
             >
-              <b-icon icon="plus"></b-icon>
-              <small>Agregar</small>
+              <small>
+                <b-icon icon="plus" scale="1.2"></b-icon>&nbsp;Agregar
+              </small>
             </b-button>
           </b-col>
         </b-row>

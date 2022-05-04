@@ -11,11 +11,11 @@
       </b-row>
     </div>
     <div class="main-body">
-      <b-row>
-        <b-col cols="12" lg="6" xl="4" v-for="item in orderList" :key="item.id">
+      <div class="container-masonry">
+        <div v-for="item in orderList" :key="item.id" class="item-masonry">
           <OrderItem :item="item" :showTable="true" />
-        </b-col>
-      </b-row>
+        </div>
+      </div >
     </div>
   </div>
 </template>
@@ -51,6 +51,13 @@ export default {
         },
         {
           id: 17,
+          itemList: [
+            { name: "Carne ", number: "2", delivered: 0 },
+            { name: "Care asasda", number: "2", delivered: 1 },
+          ],
+        },
+        {
+          id: 19,
           itemList: [
             { name: "Carne ", number: "2", delivered: 0 },
             { name: "Care asasda", number: "2", delivered: 1 },

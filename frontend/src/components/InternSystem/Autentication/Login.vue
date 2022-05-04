@@ -3,8 +3,8 @@
     <b-container>
       <b-row align-h="center">
         <b-col xl="5" lg="6" md="8" sm="11">
-          <b-card class="table-card" body-class="mx-3 my-2">
-            <Logo size="1.6"/>
+          <b-card class="login-card" body-class="mx-3 my-2">
+            <Logo size="1.6" />
             <b-form @submit="onSubmit" ref="form">
               <b-form-group
                 class="mb-2"
@@ -16,7 +16,7 @@
                   <b-col>
                     <b-input-group>
                       <template #prepend>
-                        <b-input-group-text>
+                        <b-input-group-text class="login-input-icon">
                           <b-icon
                             icon="person-fill"
                             scale="1.2"
@@ -25,6 +25,7 @@
                         ></b-input-group-text>
                       </template>
                       <b-form-input
+                        class="login-input"
                         v-model="item.user"
                         type="text"
                         required
@@ -44,14 +45,14 @@
                   <b-col>
                     <b-input-group>
                       <template #prepend>
-                        <b-input-group-text>
+                        <b-input-group-text class="login-input-icon">
                           <b-icon icon="lock-fill" scale="1.1"></b-icon
                         ></b-input-group-text>
                       </template>
                       <b-form-input
+                        class="login-input"
                         type="password"
                         v-model="item.password"
-                        class="item-right"
                         required
                         autocomplete="current-password"
                       >
@@ -65,7 +66,7 @@
                   <b-button
                     :disabled="butom_loading"
                     block
-                    variant="dark"
+                    variant="primary"
                     class="float-right"
                     type="submit"
                   >
@@ -91,7 +92,7 @@ import UtilityFunctions from "@/mixin/UtilityFunctions.js";
 import UtilityValidations from "@/mixin/UtilityValidations.js";
 import Logo from "@/components/InternSystem/ReusableComponents/Logo";
 export default {
-  components: {Logo},
+  components: { Logo },
   mixins: [UtilityFunctions, UtilityValidations],
   data() {
     return {
@@ -139,9 +140,8 @@ export default {
     login() {
       this.butom_loading = true;
       setTimeout(() => {
-        this.$router.push({ name: 'Sidebar' });
+        this.$router.push({ name: "Sidebar" });
         this.butom_loading = false;
-        
       }, 500);
     },
   },
@@ -158,5 +158,18 @@ export default {
   overflow-x: hidden;
   overflow-y: hidden;
   min-height: 100%;
+}
+
+.login-card {
+  background-color: var(--color-2) !important;
+  border: none !important;
+}
+.login-input {
+  border-left-color: transparent !important;
+  background-color: #fff !important;
+}
+.login-input-icon {
+  border-right-color: transparent !important;
+  background-color: #fff !important;
 }
 </style>

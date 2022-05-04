@@ -1,77 +1,78 @@
 <template>
   <div>
-    <b-card class="table-card c1 mb-2" body-class="p-3">
+    <b-card class="table-card c1" body-class="p-3">
       <b-card-text>
         <b-row>
           <b-col>
-            <h5 class="mt-1">
-              Pedido {{ item.id }} &nbsp;<b-icon
-                v-if="isCompleted"
-                icon="check-circle"
-                scale="1.2"
-              ></b-icon>
+            <h5 class="m-0 p-0">
+              Pedido {{ item.id }}
+              <span v-if="showTable">| Mesa 3 </span>
+              <span v-if="isCompleted">
+                &nbsp;<b-icon icon="check-circle-fill" class="c23 bg1 rounded-circle" scale="1.2"> </b-icon>
+                <span v-if="!collapseButtom" @click="collapseButtom = true">
+                  &nbsp;<b-icon icon="chevron-down" scale="0.9"></b-icon>
+                </span>
+                <span v-else @click="collapseButtom = false">
+                  &nbsp;<b-icon icon="chevron-up" scale="0.9"></b-icon>
+                </span>
+              </span>
             </h5>
           </b-col>
-          <b-col cols="auto" v-if="showTable">
-            <div class="state-table py-1 bg6">
-              <p class="my-0 py-0">mesa 3</p>
-            </div>
+
+          <b-col cols="auto">
+            <b-button variant="link c1 py-0 px-1" @click="deleteOrder(item)">
+              <b-icon icon="x" scale="1"> </b-icon>
+            </b-button>
           </b-col>
         </b-row>
-        <hr class="my-1 p-0 bg1">
-        <b-collapse :visible="isCompleted">
-          <b-row v-if="isCompleted">
-            <b-col cols="12">
-              
-            </b-col>
-            <b-col cols="12" class="text-center">
-              <small v-if="!collapseButtom" @click="collapseButtom = true"
-                >Ver más&nbsp; <b-icon icon="arrow-bar-down"></b-icon
-              ></small>
-              <small v-else @click="collapseButtom = false"
-                >Ver menos&nbsp; <b-icon icon="arrow-bar-up"></b-icon
-              ></small>
-            </b-col>
-          </b-row>
-        </b-collapse>
         <b-collapse :visible="!isCompleted || collapseButtom">
-          <b-row class="mt-0">
-            <b-col cols="12">
-              <b-list-group class="" flush>
-                <b-list-group-item class="item-order px-0">
-                  <b-row>
-                    <b-col cols="5" class="pr-1"></b-col>
-                    <b-col cols="3" class="text-right px-2">Cantidad</b-col>
-                    <b-col cols="4" class="text-center pl-1">Entregado</b-col>
-                  </b-row>
-                </b-list-group-item>
-                <b-list-group-item
-                  v-for="item in item.itemList"
-                  :key="item.id"
-                  :class="' item-order px-0 ' + crossOut(item.delivered)"
-                >
-                  <b-row>
-                    <b-col cols="5" class="pr-1">{{ item.name }}</b-col>
-                    <b-col cols="3" class="text-right px-2">{{
-                      item.number
-                    }}</b-col>
-                    <b-col cols="4" class="text-center pl-1">
-                      <b-form-checkbox
-                        v-model="item.delivered"
-                        :value="1"
-                        :unchecked-value="0"
-                        size="lg"
-                      >
-                      </b-form-checkbox>
-                    </b-col>
-                    <b-col cols="12" v-if="item.coment != ''">
+          <div class="mt-0">
+            <b-list-group class="" flush>
+              <b-list-group-item class="item-order px-0">
+                <b-row>
+                  <b-col cols="1" class="text-center"></b-col>
+                  <b-col cols="5" class="pr-1"></b-col>
+                  <b-col cols="4" class="text-right">Cantidad</b-col>
+                  <b-col cols="auto" class="text-right"></b-col>
+                </b-row>
+              </b-list-group-item>
+              <b-list-group-item
+                v-for="item in item.itemList"
+                :key="item.id"
+                :class="' item-order px-0 ' + crossOut(item.delivered)"
+              >
+                <b-row>
+                  <b-col cols="1">
+                    <b-form-checkbox
+                      v-model="item.delivered"
+                      :value="1"
+                      :unchecked-value="0"
+                    >
+                    </b-form-checkbox>
+                  </b-col>
+                  <b-col cols="5">
+                    <div>{{ item.name }}</div>
+                    <div v-if="item.coment != ''">
                       <small>{{ item.coment }}</small>
-                    </b-col>
-                  </b-row>
-                </b-list-group-item>
-              </b-list-group>
-            </b-col>
-          </b-row>
+                    </div>
+                  </b-col>
+                  <b-col cols="4" class="text-right">
+                    {{ item.number }}
+                  </b-col>
+                  <b-col cols="1" class="text-right">
+                    <b-button
+                      variant="link c1 "
+                      size="sm"
+                      @click="deleteItemOrder(item)"
+                      class="py-0 px-1"
+                    >
+                      <b-icon icon="x" scale="1"></b-icon>
+                    </b-button>
+                  </b-col>
+                </b-row>
+              </b-list-group-item>
+            </b-list-group>
+          </div>
         </b-collapse>
       </b-card-text>
     </b-card>
@@ -113,6 +114,8 @@ export default {
       }
       return cross;
     },
+    deleteItemOrder() {},
+    deleteOrder() {},
   },
   created() {},
 };
@@ -121,7 +124,7 @@ export default {
 .cross-out-text {
   text-decoration: line-through 2px;
 }
-.item-order{
+.item-order {
   background-color: transparent !important;
   border-color: rgba(255, 255, 255, 0.877) !important;
   padding-bottom: 0.3rem !important;

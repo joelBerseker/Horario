@@ -87,7 +87,7 @@
         </b-button>
         <b-button
           v-if="mode === 2"
-          variant="secondary"
+          variant="info"
           @click="detailItemButtom()"
         >
           <b-icon icon="eye" scale="1"></b-icon>
@@ -96,7 +96,7 @@
 
         <b-button
           v-if="mode === 0 || mode === 2"
-          variant="primary"
+          variant="success"
           @click="ok()"
         >
           <b-icon icon="check2" scale="1.1"></b-icon>

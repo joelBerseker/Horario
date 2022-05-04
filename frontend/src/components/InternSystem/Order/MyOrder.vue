@@ -11,11 +11,11 @@
       </b-row>
     </div>
     <div class="main-body">
-      <b-row>
-        <b-col cols="12" lg="6" xl="4" v-for="item in orderList" :key="item.id">
+      <div class="container-masonry">
+        <div v-for="item in orderList" :key="item.id" class="item-masonry">
           <OrderItem :item="item" :showTable="true" />
-        </b-col>
-      </b-row>
+        </div>
+      </div >
     </div>
   </div>
 </template>
@@ -43,10 +43,34 @@ export default {
           ],
         },
         {
-          id: 16,
+          id: 13,
           count: 0,
           itemList: [
             { name: "Estofado", number: "2", delivered: 0 },
+            { name: "Care asasda", number: "2", delivered: 1 },
+          ],
+        },
+        {
+          id: 14,
+          count: 0,
+          itemList: [
+            { name: "Carne ", number: "2", delivered: 0 },
+            { name: "Care asasda", number: "2", delivered: 1 },
+          ],
+        },
+        {
+          id: 15,
+          count: 0,
+          itemList: [
+            { name: "Carne ", number: "2", delivered: 0 },
+            { name: "Care asasda", number: "2", delivered: 1 },
+          ],
+        },
+        {
+          id: 16,
+          count: 0,
+          itemList: [
+            { name: "Carne ", number: "2", delivered: 0 },
             { name: "Care asasda", number: "2", delivered: 1 },
           ],
         },
@@ -56,8 +80,31 @@ export default {
           itemList: [
             { name: "Carne ", number: "2", delivered: 0 },
             { name: "Care asasda", number: "2", delivered: 1 },
+            { name: "Carne ", number: "2", delivered: 0 },
+            { name: "Care asasda", number: "2", delivered: 1 },
+            { name: "Carne ", number: "2", delivered: 0 },
+            { name: "Care asasda", number: "2", delivered: 1 },
+            { name: "Carne ", number: "2", delivered: 0 },
+            { name: "Care asasda", number: "2", delivered: 1 },
           ],
         },
+        {
+          id: 18,
+          count: 0,
+          itemList: [
+            { name: "Carne ", number: "2", delivered: 0 },
+            { name: "Care asasda", number: "2", delivered: 1 },
+          ],
+        },
+        {
+          id: 19,
+          count: 0,
+          itemList: [
+            { name: "Carne ", number: "2", delivered: 0 },
+            { name: "Care asasda", number: "2", delivered: 1 },
+          ],
+        },
+        
       ],
     };
   },

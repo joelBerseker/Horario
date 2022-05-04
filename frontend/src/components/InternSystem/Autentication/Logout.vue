@@ -1,20 +1,33 @@
 <template>
-  <div>
-    <div class="text-center c3 mt-5">
-      <b-spinner class="align-middle"></b-spinner>&nbsp;
-      <span>Cerrando sesion ...</span>
-    </div>
-  </div>
+  <div></div>
 </template>
 
 <script>
 export default {
-   created() {
-     setTimeout(() => {
-    this.$router.push({ name: 'Login' });
-    }, 1000);
+  methods: {
+    logout() {
+      this.$store.dispatch("loadingSwitch");
+      setTimeout(() => {
+        this.$store.dispatch("loadingSwitch");
+        this.$router.push({ name: "Login" });
+      }, 1000);
+    },
   },
-}
+  created() {
+    this.$bvModal
+      .msgBoxConfirm("¿Estas seguro que quieres cerrar sesión?", {
+        title: "Cerrar Sesión",
+        okVariant: "success",
+        cancelVariant: "danger",
+        okTitle: "Si",
+        cancelTitle: "No",
+      })
+      .then((value) => {
+        if(value) this.logout();
+        else history.back();
+      });
+  },
+};
 </script>
 
 <style scoped>

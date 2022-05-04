@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-table
-    class="mb-0"
+      class="mb-0 table-border-radius"
       :busy="isBusy"
       hover
       :show-empty="!isBusy"
@@ -70,3 +70,8 @@ export default {
   },
 };
 </script>
+<style>
+.table-border-radius {
+  border-radius: 0.3rem !important;
+}
+</style>

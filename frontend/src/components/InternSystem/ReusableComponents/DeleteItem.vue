@@ -9,7 +9,7 @@
       ¿Está seguro que quiere eliminar el registro?
       <template #modal-footer="{ cancel, ok }">
         <b-button variant="danger" @click="cancel()"> No </b-button>
-        <b-button variant="primary" @click="ok()"> Si </b-button>
+        <b-button variant="success" @click="ok()"> Si </b-button>
       </template>
     </b-modal>
   </div>

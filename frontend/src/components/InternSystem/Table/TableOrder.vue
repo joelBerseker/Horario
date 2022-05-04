@@ -6,7 +6,7 @@
         <b-row>
           <b-col cols="auto" class="pr-0">
             <b-button
-              variant="link "
+              variant="dark "
               class="c1 bg4 px-2 icon_menu_simulation"
               size="lg"
             >
@@ -21,8 +21,8 @@
               @click="detailProduct(item_new, 0)"
             >
               <small>
-                <b-icon icon="pencil-square" scale="0.9"></b-icon>
-                &nbsp;Cuenta
+                <b-icon icon="credit-card2-front" scale="0.9"></b-icon>
+                &nbsp;Finalizar
               </small>
             </b-button>
           </b-col>
@@ -62,11 +62,11 @@
       </b-row>
     </div>
     <div class="main-body">
-      <b-row>
-        <b-col cols="12" lg="6" xl="4" v-for="item in orderList" :key="item.id">
-          <OrderItem :item="item" :showTable="false" />
-        </b-col>
-      </b-row>
+      <div class="container-masonry">
+        <div v-for="item in orderList" :key="item.id" class="item-masonry">
+          <OrderItem :item="item" :showTable="true" />
+        </div>
+      </div >
     </div>
   </div>
 </template>

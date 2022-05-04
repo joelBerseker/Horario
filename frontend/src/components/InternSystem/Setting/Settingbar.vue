@@ -1,36 +1,39 @@
 <template>
   <div>
-    <div class="c1 main-title" body-class="">
-      <b-row>
-        <b-col class="text-aling-v-center">
-          <h5 class="m-0 p-0">
-            <b-icon icon="gear-fill"></b-icon>
-            &nbsp;Configuración
-          </h5></b-col
-        >
-      </b-row>
+    <div class="bg2">
+      <div class="c1 main-title" body-class="">
+        <b-row>
+          <b-col class="text-aling-v-center">
+            <h5 class="m-0 p-0">
+              <b-icon icon="gear-fill"></b-icon>
+              &nbsp;Configuración
+            </h5></b-col
+          >
+        </b-row>
+      </div>
+      <div class="mb-2 setting-bar">
+        <b-nav tabs fill class="setting-tabs">
+          <b-nav-item
+            class="nav-setting"
+            v-for="item in navItems"
+            :key="item.value"
+            :to="{ name: item.to }"
+            exact
+            exact-active-class="active active-item"
+            v-on:click="changeTitle()"
+          >
+            <span>
+              <b-icon :icon="item.icon" :scale="item.scale"></b-icon>
+              <div class="text-nav">{{ item.name }}</div>
+            </span>
+          </b-nav-item>
+        </b-nav>
+      </div>
     </div>
-    <div class="mb-2 setting-bar">
-      <b-nav tabs fill class="setting-tabs">
-        <b-nav-item
-          class="nav-setting"
-          v-for="item in navItems"
-          :key="item.value"
-          :to="{ name: item.to }"
-          exact
-          exact-active-class="active active-item"
-          v-on:click="changeTitle()"
-        >
-          <span>
-            <b-icon :icon="item.icon" :scale="item.scale"></b-icon>
-            <div class="text-nav">{{ item.name }}</div>
-          </span>
-        </b-nav-item>
-      </b-nav>
-    </div>
+
     <div class="setting-body">
       <transition name="t-setting-bar-title" mode="out-in">
-        <div class="bg3 c1 py-2 title-selected mb-2" v-if="showTitle">
+        <div class="c1 py-2 title-selected mb-2" v-if="showTitle">
           <span v-show="showTitleText">
             <b-icon
               :icon="navItemSelected.icon"
@@ -151,6 +154,8 @@ export default {
 .title-selected {
   padding-left: 0.75rem;
   padding-right: 0.75rem;
+  border-radius: 0.3rem;
+  background-color: var(--color-7);
 }
 .text-nav {
   position: absolute;
@@ -178,32 +183,35 @@ export default {
   color: var(--first-color) !important;
 }
 .active {
-  border: none !important;
+  border-color: var(--color-1) !important;
 }
 .setting-bar {
   /*background-color: #7c7c7c4b;*/
-  background-color: var(--color-2) !important;
+  background-color: var(--color-2);
   position: relative;
 }
 .setting-bar::before {
   content: "";
   position: absolute;
-  top:-1px;
-  background-color: var(--color-5); 
-  min-width: 0.3rem;
+  top: -1px;
+  background-color: var(--color-5);
+  min-width: 0.2rem;
   height: 100%;
-  margin-bottom: 3px ;
- 
+  margin-bottom: 3px;
 }
 .setting-body {
-  padding: 2rem;
+  padding: 1.5rem;
 }
 .setting-tabs {
-  padding-left: 2rem !important;
-  padding-right: 2rem;
-  border: none;
+  padding-left: 1.5rem !important;
+  padding-right: 1.5rem;
+  border-color: var(--color-1) !important;
 }
-
+.setting-tabs .nav-link:hover {
+  border-color: transparent !important;
+  background-color: rgba(255, 255, 255, 0.212);
+  color: var(--color-1);
+}
 @media only screen and (max-width: 1199px) {
   .setting-body {
     padding: 0.3rem;
@@ -237,12 +245,10 @@ export default {
 .t-setting-bar-title-enter {
   opacity: 0;
   transform: translateX(-3rem);
-  color: var(--color-2) !important;
 }
 
 .t-setting-bar-title-leave-to {
   opacity: 0;
   transform: translateX(3rem);
-  color: var(--color-2) !important;
 }
 </style>

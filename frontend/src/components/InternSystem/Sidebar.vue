@@ -1,18 +1,20 @@
 <template>
   <div>
-    <b-overlay :show="showOverlay" z-index="2000">
-      <template #overlay>
-        <div class="text-center c2 my-2">
+    <transition name="loading-system">
+      <div class="loading-system" v-if="showOverlay">
+        <div class="mx-auto center justify-content-center c2 my-2">
           <b-spinner class="align-middle"></b-spinner>&nbsp;
           <span>Espere por favor ...</span>
         </div>
-      </template>
-      <div>
+      </div>
+    </transition>
+    <div>
+      <div class="icon_menu_place">
         <b-button
           v-if="!sideBarOpen"
           @click="openNav"
           variant="dark "
-          class="c1 bg2 px-2 icon_menu"
+          class="px-2 icon_menu"
           size="lg"
         >
           <b-icon icon="list"></b-icon>
@@ -20,48 +22,46 @@
         <b-button
           v-else
           @click="closeNav"
-          variant="link "
+          variant="dark "
           size="lg"
-          class="text-white px-2 btn-none icon_menu"
+          class="px-2 icon_menu"
         >
           <b-icon icon="x"></b-icon>
         </b-button>
+      </div>
 
-        <div id="side-bar" class="py-5">
-          <div>
-            <Logo size="1.2" class="side-bar-item mb-4" />
-            <b-list-group flush>
-              <b-list-group-item
-                v-for="item in navItems"
-                :key="item.value"
-                class="bg2 c1 side-bar-item"
-                active-class="side-bar-active-item"
-                :to="{ name: item.to }"
-                v-on:click="closeNavAuto()"
-              >
-                <b-icon
-                  :icon="item.icon"
-                  class="im"
-                  :scale="item.scale"
-                ></b-icon>
+      <div id="side-bar" class="py-5">
+        <div>
+          <Logo size="1.2" class="side-bar-item mb-4" />
+          <b-list-group flush>
+            <b-list-group-item
+              v-for="item in navItems"
+              :key="item.value"
+              class="c1 side-bar-item"
+              active-class="side-bar-active-item"
+              :to="{ name: item.to }"
+              v-on:click="closeNavAuto()"
+            >
+              <b-icon :icon="item.icon" class="im" :scale="item.scale"></b-icon>
 
-                <span class=""> &nbsp; {{ item.name }} </span>
-              </b-list-group-item>
-            </b-list-group>
-          </div>
+              <span class=""> &nbsp; {{ item.name }} </span>
+            </b-list-group-item>
+          </b-list-group>
         </div>
       </div>
-      <transition name="t-side-bar-item">
-        <div
-          v-if="sideBarOpen && positionAbsolute"
-          class="side-bar-cover"
-          @click="closeNav"
-        ></div>
-      </transition>
-      <div id="main-side">
+    </div>
+    <transition name="t-side-bar-item">
+      <div
+        v-if="sideBarOpen && positionAbsolute"
+        class="side-bar-cover"
+        @click="closeNav"
+      ></div>
+    </transition>
+    <div id="main-side">
+      <transition name="t-main-side" mode="out-in">
         <router-view />
-      </div>
-    </b-overlay>
+      </transition>
+    </div>
   </div>
 </template>
 
@@ -84,7 +84,7 @@ export default {
           value: 1,
           icon: "person-fill",
           scale: 1,
-          name: "Jhon Mamani",
+          name: "Mi Perfil",
           to: "User",
         },
         {
@@ -177,6 +177,7 @@ export default {
   text-overflow: ellipsis;
   white-space: nowrap;
   border: none !important;
+  background-color: transparent !important;
 }
 
 .side-bar-cover {
@@ -194,7 +195,7 @@ export default {
   z-index: 100;
   top: 0;
   left: 0;
-  background-color: var(--color-2) !important;
+  background-color: var(--color-2);
   transition: width 0.2s;
 }
 
@@ -208,7 +209,7 @@ export default {
   top: 0;
   left: 0px;
   background-color: var(--color-5);
-  min-width: 0.3rem;
+  min-width: 0.2rem;
   height: 100%;
   margin-bottom: 3px;
 }
@@ -224,11 +225,21 @@ export default {
 }
 
 .t-side-bar-item-enter-active {
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
 }
 
 .t-side-bar-item-enter {
   opacity: 0;
+}
+
+.loading-system {
+  background-color: rgba(207, 207, 207, 0.781);
+  position: fixed;
+  z-index: 2000;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  display: flex;
 }
 @media only screen and (max-width: 1199px) {
   #main-side {
@@ -238,5 +249,27 @@ export default {
   #side-bar {
     width: 0px;
   }
+}
+
+.t-main-side-enter-active,
+.t-smain-side-leave-active {
+  transition: 0.3s;
+}
+.t-main-side-enter {
+  transform: translateY(-5vh);
+}
+.t-main-side-leave-to {
+  transform: translateY(3rem);
+}
+
+.t-loading-system-enter-active,
+.t-loading-system-leave-active {
+  transition: 0.3s;
+}
+.t-loading-system-enter {
+  opacity: 1;
+}
+.t-loading-system-leave-to {
+  opacity: 0;
 }
 </style>
